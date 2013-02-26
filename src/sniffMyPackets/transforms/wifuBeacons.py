@@ -24,7 +24,7 @@ __all__ = [
 
 #@superuser
 @configure(
-    label='Sniff for WiFi Beacon Frames',
+    label='Sniff for WiFi Beacon Frames [U]',
     description='Listens for wifi beacon frames on specified mon0 interface',
     uuids=[ 'sniffMyPackets.v2.sniffBeaconFrames' ],
     inputs=[ ( 'sniffMyPackets', monitorInterface ) ],

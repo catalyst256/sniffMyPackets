@@ -24,8 +24,8 @@ __all__ = [
 
 #@superuser
 @configure(
-    label='Sniffs for WiFi Probe Requests against a client',
-    description='Listens for wifi probe requests on specified mon0 interface',
+    label='Sniff for WiFi Probe Requests by a client [U]',
+    description='Listens for client wifi probe requests to previously connected wireless networks',
     uuids=[ 'sniffMyPackets.v2.sniffProbeRequests' ],
     inputs=[ ( 'sniffMyPackets', wifuClient ) ],
     debug=True
@@ -38,15 +38,16 @@ def dotransform(request, response):
     interface = 'mon0'
     
     def sniffBeacon(p):
-	  if p.haslayer(Dot11ProbeReq) and p.getlayer(Dot11).addr2 == clientMAC:
-		netName = p.getlayer(Dot11ProbeReq).info
-		mac = p.getlayer(Dot11).addr2
-		station = netName + ',' + mac
-		if station not in ap:
-		  ap.append(station)
+	  if p.haslayer(Dot11ProbeReq) and p.getlayer(Dot11).addr1 == clientMAC:
+	    print p
+		#netName = p.getlayer(Dot11ProbeReq).info
+		#mac = p.getlayer(Dot11).addr1
+		#station = netName, mac
+		#if station not in ap:
+		  #ap.append(station)
     
-    sniff(iface=interface, prn=sniffBeacon, count=500)
-    for x in ap:
-	  e = accessPoint(x)
-	  response += e
-    return response
+    sniff(iface=interface, prn=sniffBeacon, count=1000)
+    #for x in ap:
+	  #e = accessPoint(x)
+	  #response += e
+    #return response

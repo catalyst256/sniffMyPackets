@@ -36,6 +36,8 @@ class accessPoint(SniffmypacketsEntity):
     pass
   
 @EntityField(name='sniffMyPackets.monInt', propname='monInt', displayname='Monitor Interface', type=EntityFieldType.String)
+@EntityField(name='sniffMyPackets.clientSSID', propname='clientSSID', displayname='Client SSID', type=EntityFieldType.String)
+@EntityField(name='sniffMyPackets.clientBSSID', propname='clientBSSID', displayname='Client BSSID', type=EntityFieldType.String)
 class wifuClient(SniffmypacketsEntity):
     pass
   

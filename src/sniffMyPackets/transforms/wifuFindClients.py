@@ -24,7 +24,7 @@ __all__ = [
 
 #@superuser
 @configure(
-    label='Sniff for WiFi Clients',
+    label='Sniff for WiFi Clients [U]',
     description='Listens for wifi probe responses on specified mon0 interface',
     uuids=[ 'sniffMyPackets.v2.sniffProbeResponses' ],
     inputs=[ ( 'sniffMyPackets', monitorInterface ) ],
@@ -32,20 +32,23 @@ __all__ = [
 )
 def dotransform(request, response):
   
-    clientMAC = []
+    clients = []
     interface = request.value
     
     def sniffProbe(p):
 	  if p.haslayer(Dot11ProbeResp):
-		#netName = p.getlayer(Dot11ProbeReq).info
+		ssid = p.getlayer(Dot11ProbeResp).info
 		cmac = p.getlayer(Dot11).addr1
-		if cmac not in clientMAC:
-		  clientMAC.append(cmac)
+		bssid = p.getlayer(Dot11).addr2
+		entity = ssid, cmac, bssid
+		if entity not in clients:
+		  clients.append(entity)
     
     sniff(iface=interface, prn=sniffProbe, count=500)
-    for x in clientMAC:
-	  e = wifuClient(x)
-	  e.monInt = interface
-	  response += e
+    for ssid, cmac, bssid in clients:
+      e = wifuClient(cmac)
+      e.clientBSSID = bssid
+      e.monInt = interface
+      e.clientSSID = ssid
+      response += e
     return response
-
