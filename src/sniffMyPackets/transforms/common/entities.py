@@ -17,18 +17,21 @@ __all__ = [
     'monitorInterface',
     'accessPoints',
     'wifuClient',
-    'pcapFile'
+    'pcapFile',
+    'pcapStream',
+    'wiFiChannel'
 ]
 
 class SniffmypacketsEntity(Entity):
     namespace = 'sniffMyPackets'
     
-#@EntityField(name='sniffMyPackets.fieldN', propname='fieldN', displayname='Field N', matchingrule=MatchingRule.Loose)
 @EntityField(name='sniffMyPackets.count', propname='pktcount', displayname='Packet Count', type=EntityFieldType.Integer)
 class monitorInterface(SniffmypacketsEntity):
     pass
   
-@EntityField(name='sniffMyPackets.MAC', propname='macaddress', displayname='BSSID', type=EntityFieldType.String)
+@EntityField(name='sniffMyPackets.bssid', propname='apbssid', displayname='BSSID', type=EntityFieldType.String)
+@EntityField(name='sniffMyPackets.channel', propname='apchannel', displayname='Channel', type=EntityFieldType.String)
+@EntityField(name='sniffMyPackets.encryption', propname='apencryption', displayname='Encryption', type=EntityFieldType.String)
 class accessPoint(SniffmypacketsEntity):
     pass
   
@@ -41,3 +44,6 @@ class pcapFile(SniffmypacketsEntity):
   
 class pcapStream(SniffmypacketsEntity):
   pass
+
+class wiFiChannel(SniffmypacketsEntity):
+    pass

@@ -24,7 +24,7 @@ __all__ = [
 
 #@superuser
 @configure(
-    label='Sniffs for WiFi Clients',
+    label='Sniff for WiFi Clients',
     description='Listens for wifi probe responses on specified mon0 interface',
     uuids=[ 'sniffMyPackets.v2.sniffProbeResponses' ],
     inputs=[ ( 'sniffMyPackets', monitorInterface ) ],
@@ -38,7 +38,7 @@ def dotransform(request, response):
     def sniffProbe(p):
 	  if p.haslayer(Dot11ProbeResp):
 		#netName = p.getlayer(Dot11ProbeReq).info
-		cmac = p.getlayer(Dot11).addr2
+		cmac = p.getlayer(Dot11).addr1
 		if cmac not in clientMAC:
 		  clientMAC.append(cmac)
     
