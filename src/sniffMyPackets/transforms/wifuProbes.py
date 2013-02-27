@@ -3,6 +3,7 @@
 import logging
 logging.getLogger("scapy.runtime").setLevel(logging.ERROR)
 from scapy.all import *
+import os, sys
 from common.entities import SniffmypacketsEntity, monitorInterface, accessPoint, wifuClient
 from canari.maltego.utils import debug, progress
 from canari.framework import configure #, superuser
@@ -24,7 +25,7 @@ __all__ = [
 
 #@superuser
 @configure(
-    label='Sniff for WiFi Probe Requests by a client [U]',
+    label='Hunt down Probes [U]',
     description='Listens for client wifi probe requests to previously connected wireless networks',
     uuids=[ 'sniffMyPackets.v2.sniffProbeRequests' ],
     inputs=[ ( 'sniffMyPackets', wifuClient ) ],
@@ -32,20 +33,28 @@ __all__ = [
 )
 def dotransform(request, response):
 	
-	
     clientMAC = request.value
     ap = []
-    interface = 'mon0'
+    interface = ''
+    buff = request.fields
+    for key, value in buff.iteritems():
+	  if key == 'sniffMyPackets.monInt':
+		interface = value
     
+    print clientMAC
+    print interface
     def sniffBeacon(p):
-	  if p.haslayer(Dot11ProbeReq) and p.getlayer(Dot11).addr1 == clientMAC:
+	  if p.getlayer(Dot11).addr1 == clientMAC:
 	    print p
 		#netName = p.getlayer(Dot11ProbeReq).info
 		#mac = p.getlayer(Dot11).addr1
 		#station = netName, mac
 		#if station not in ap:
 		  #ap.append(station)
-    
+		  
+    #channel = random.randrange(1,15)
+    #os.system("iw dev %s set channel %d" % (interface, channel))
+    #time.sleep(1)
     sniff(iface=interface, prn=sniffBeacon, count=1000)
     #for x in ap:
 	  #e = accessPoint(x)

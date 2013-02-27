@@ -3,6 +3,8 @@
 import logging
 logging.getLogger("scapy.runtime").setLevel(logging.ERROR)
 from scapy.all import *
+import os, sys
+from multiprocessing import Process
 from common.entities import SniffmypacketsEntity, monitorInterface, accessPoint
 from canari.maltego.utils import debug, progress
 from canari.framework import configure #, superuser
@@ -18,7 +20,8 @@ __email__ = 'catalyst256@gmail.com'
 __status__ = 'Development'
 
 __all__ = [
-    'dotransform'
+    'dotransform',
+    'onterminate'
 ]
 
 
@@ -51,8 +54,20 @@ def dotransform(request, response):
         entity = ssid, bssid, str(channel), enc
         if entity not in aps:
 		  aps.append(entity)
-
+  
+  def channel_hopper():
+    channel = random.randrange(1,15)
+    os.system("iw dev %s set channel %d" % (interface, channel))
+    time.sleep(1)
+  
+  # Start the channel hopping
+  x = Process(target = channel_hopper)
+  x.start()
+  
+  # Start sniffing packets
   sniff(iface=interface, prn=sniffAP, count=500)
+  
+  # Iterate through stored APs and create a sniffMyPackets entity
   for ssid, bssid, channel, enc in aps:
 	e = accessPoint(ssid)
 	e.apbssid = bssid
@@ -61,4 +76,7 @@ def dotransform(request, response):
 	response += e
   return response
   
-
+def onterminate():
+  # Kill the channel hopping process
+  x.terminate()
+  sys.exit(0)

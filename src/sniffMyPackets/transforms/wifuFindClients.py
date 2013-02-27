@@ -3,13 +3,15 @@
 import logging
 logging.getLogger("scapy.runtime").setLevel(logging.ERROR)
 from scapy.all import *
+import os, sys
+from multiprocessing import Process
 from common.entities import SniffmypacketsEntity, monitorInterface, wifuClient
 from canari.maltego.utils import debug, progress
 from canari.framework import configure #, superuser
 
 __author__ = 'catalyst256'
 __copyright__ = 'Copyright 2013, Sniffmypackets Project'
-__credits__ = []
+__credits__ = 'The channel hopping technique was taken from the airoscapy project which can be found here: http://www.thesprawl.org/projects/airoscapy/'
 
 __license__ = 'GPL'
 __version__ = '0.1'
@@ -18,7 +20,8 @@ __email__ = 'catalyst256@gmail.com'
 __status__ = 'Development'
 
 __all__ = [
-    'dotransform'
+    'dotransform',
+    'onterminate'
 ]
 
 
@@ -44,6 +47,16 @@ def dotransform(request, response):
 		if entity not in clients:
 		  clients.append(entity)
     
+    def channel_hopper():
+      channel = random.randrange(1,15)
+      os.system("iw dev %s set channel %d" % (interface, channel))
+      time.sleep(1)
+  
+    # Start the channel hopping
+    x = Process(target = channel_hopper)
+    x.start()
+    
+    
     sniff(iface=interface, prn=sniffProbe, count=500)
     for ssid, cmac, bssid in clients:
       e = wifuClient(cmac)
@@ -52,3 +65,8 @@ def dotransform(request, response):
       e.clientSSID = ssid
       response += e
     return response
+    
+def onterminate():
+  # Kill the channel hopping process
+  x.terminate()
+  sys.exit(0)
