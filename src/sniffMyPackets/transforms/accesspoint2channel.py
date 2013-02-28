@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 
-from canari.maltego.utils import debug, progress
+#from canari.maltego.utils import debug, progress
 from canari.framework import configure #, superuser
-from common.entities import SniffmypacketsEntity, wiFiChannel, accessPoint
+from common.entities import wiFiChannel, accessPoint
 
 __author__ = 'catalyst256'
 __copyright__ = 'Copyright 2013, Sniffmypackets Project'
