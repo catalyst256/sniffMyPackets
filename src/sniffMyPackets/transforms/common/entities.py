@@ -32,6 +32,7 @@ class monitorInterface(SniffmypacketsEntity):
 @EntityField(name='sniffMyPackets.bssid', propname='apbssid', displayname='BSSID', type=EntityFieldType.String)
 @EntityField(name='sniffMyPackets.channel', propname='apchannel', displayname='Channel', type=EntityFieldType.String)
 @EntityField(name='sniffMyPackets.encryption', propname='apencryption', displayname='Encryption', type=EntityFieldType.String)
+@EntityField(name='sniffMyPackets.apmoninterface', propname='apmoninterface', displayname='Monitor Interface', type=EntityFieldType.String)
 class accessPoint(SniffmypacketsEntity):
     pass
   

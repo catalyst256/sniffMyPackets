@@ -73,6 +73,7 @@ def dotransform(request, response):
 	e.apbssid = bssid
 	e.apchannel = channel
 	e.apencryption = enc
+	e.apmoninterface = interface
 	response += e
   return response
   
