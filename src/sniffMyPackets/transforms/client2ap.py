@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
-from canari.maltego.utils import debug, progress
-from common.entities import SniffmypacketsEntity,  wifuClient, accessPoint
+#from canari.maltego.utils import debug, progress
+from common.entities import wifuClient, accessPoint
 from canari.framework import configure #, superuser
 
 __author__ = 'catalyst256'
