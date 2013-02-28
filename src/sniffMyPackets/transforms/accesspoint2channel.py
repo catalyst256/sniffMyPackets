@@ -27,11 +27,8 @@ __all__ = [
     debug=True
 )
 def dotransform(request, response):
+
+	if 'sniffMyPackets.channel' in request.fields:
+		response += wiFiChannel(request.fields['sniffMyPackets.channel'])		 
 	
-	buff = request.fields
-	for key, value in buff.iteritems():
-	  if key == 'sniffMyPackets.channel':
-		e = wiFiChannel(value)
-		response += e
-	  
-		return response
+	return response
