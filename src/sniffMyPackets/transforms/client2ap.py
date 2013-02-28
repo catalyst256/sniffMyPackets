@@ -29,11 +29,8 @@ __all__ = [
 )
 def dotransform(request, response):
   
-	buff = request.fields
-	for key, value in buff.iteritems():
-	  if key == 'sniffMyPackets.clientSSID':
-	    e = accessPoint(value)
-	    response += e
+	if 'sniffMyPackets.clientSSID' in request.fields:
+	    response += accessPoint(value)
 	  
 	return response
     
