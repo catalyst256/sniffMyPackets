@@ -4,8 +4,8 @@
 import logging
 logging.getLogger("scapy.runtime").setLevel(logging.ERROR)
 from scapy.all import *
-from common.entities import SniffmypacketsEntity, pcapFile, pcapStream, accessPoint
-from canari.maltego.utils import debug, progress
+from common.entities import pcapFile, accessPoint #, pcapStream
+#from canari.maltego.utils import debug, progress
 from canari.framework import configure #, superuser
 
 __author__ = 'catalyst256'
@@ -41,8 +41,6 @@ def dotransform(request, response):
 		ssid = pkt.getlayer(Dot11Beacon).info
 		if ssid not in beacons:
 		  beacons.append(ssid)
-	for x in beacons:
-	  e = accessPoint(x)
-	  response += e
+		  response += accessPoint(ssid)	  	   
 	  
 	return response
