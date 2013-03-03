@@ -24,7 +24,7 @@ __all__ = [
     description='Takes the sniffMyPackets Access Point and creates a channel entity',
     uuids=[ 'sniffMyPackets.v2.AccessPoint2Channel' ],
     inputs=[ ( 'sniffMyPackets', accessPoint ) ],
-    debug=True
+    debug=False
 )
 def dotransform(request, response):
 

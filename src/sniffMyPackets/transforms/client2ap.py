@@ -25,12 +25,12 @@ __all__ = [
     description='Runs a transform against a wireless client and creates an accesspoint entity',
     uuids=[ 'sniffMyPackets.v2.Client2AP' ],
     inputs=[ ( 'sniffMyPackets', wifuClient ) ],
-    debug=True
+    debug=False
 )
 def dotransform(request, response):
   
 	if 'sniffMyPackets.clientSSID' in request.fields:
-	    response += accessPoint(value)
+	    response += accessPoint(request.fields['sniffMyPackets.clientSSID'])
 	  
 	return response
     

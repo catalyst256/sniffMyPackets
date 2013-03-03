@@ -4,8 +4,9 @@ import logging
 logging.getLogger("scapy.runtime").setLevel(logging.ERROR)
 from scapy.all import *
 import os, sys
-from common.entities import SniffmypacketsEntity, monitorInterface, accessPoint, wifuClient
-from canari.maltego.utils import debug, progress
+from multiprocessing import Process
+from common.entities import monitorInterface, accessPoint, wifuClient
+#from canari.maltego.utils import debug, progress
 from canari.framework import configure #, superuser
 
 __author__ = 'catalyst256'
@@ -19,7 +20,8 @@ __email__ = 'catalyst256@gmail.com'
 __status__ = 'Development'
 
 __all__ = [
-    'dotransform'
+    'dotransform',
+    'onterminate'
 ]
 
 
@@ -33,30 +35,36 @@ __all__ = [
 )
 def dotransform(request, response):
 	
-    clientMAC = request.value
+    clientMAC = int(request.value)
     ap = []
-    interface = ''
-    buff = request.fields
-    for key, value in buff.iteritems():
-	  if key == 'sniffMyPackets.monInt':
-		interface = value
+    if 'sniffMyPackets.monInt' in request.fields:
+      interface = request.fields['sniffMyPackets.monInt']
     
-    print clientMAC
-    print interface
     def sniffBeacon(p):
-	  if p.getlayer(Dot11).addr1 == clientMAC:
-	    print p
-		#netName = p.getlayer(Dot11ProbeReq).info
-		#mac = p.getlayer(Dot11).addr1
-		#station = netName, mac
-		#if station not in ap:
-		  #ap.append(station)
+	  if p.haslayer(Dot11ProbeReq) and p.getlayer(Dot11).addr == clientMAC
+	    netName = p.getlayer(Dot11ProbeReq).info
+	    mac = p.getlayer(Dot11).addr2
+	    station = netName, mac
+	    if station not in ap:
+	      ap.append(station)
 		  
-    #channel = random.randrange(1,15)
-    #os.system("iw dev %s set channel %d" % (interface, channel))
-    #time.sleep(1)
+    def channel_hopper():
+      channel = random.randrange(1,15)
+      os.system("iw dev %s set channel %d" % (interface, channel))
+      time.sleep(1)
+  
+    # Start the channel hopping
+    x = Process(target = channel_hopper)
+    x.start()
+    
     sniff(iface=interface, prn=sniffBeacon, count=1000)
-    #for x in ap:
-	  #e = accessPoint(x)
-	  #response += e
-    #return response
+    for ssid, mac in ap:
+	  e = accessPoint(ssid)
+	  e.apbssid = mac
+	  response += e
+    return response
+
+def onterminate():
+  # Kill the channel hopping process
+  x.terminate()
+  sys.exit(0)

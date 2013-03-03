@@ -4,8 +4,8 @@ import logging
 import os
 logging.getLogger("scapy.runtime").setLevel(logging.ERROR)
 from scapy.all import *
-from common.entities import SniffmypacketsEntity, accessPoint, pcapFile
-from canari.maltego.utils import debug, progress
+from common.entities import accessPoint, pcapFile
+#from canari.maltego.utils import debug, progress
 from canari.framework import configure #, superuser
 
 __author__ = 'catalyst256'
@@ -35,16 +35,10 @@ def dotransform(request, response):
     
 	  WPAenc = []
 	  ssid = request.value
-	  buff = request.fields
-	  interface = ''
-	  channel = ''
-	  for key, value in buff.iteritems():
-		if key == 'sniffMyPackets.apmoninterface':
-		  interface = value
-		if key == 'sniffMyPackets.channel':
-		  channel = value
-	
-	  
+	  if 'sniffMyPackets.apmoninterface' in request.fields:
+	    interface = request.fields['sniffMyPackets.apmoninterface']
+	  if 'sniffMyPackets.channel' in request.fields:
+	    channel = request.fields['sniffMyPackets.channel']
   
 	  def captureWPA(pkts):
 		for x in pkts:
@@ -53,7 +47,7 @@ def dotransform(request, response):
 			  WPAenc.append(x)
 	
 	  os.system("iw dev %s set channel %s" % (interface, channel))
-	  sniff(iface=interface, prn=captureWPA, count=50000)
+	  sniff(iface=interface, prn=captureWPA, count=1000)
 		
 	  fileName = ssid+'.cap'
 	  wrpcap(fileName, WPAenc)

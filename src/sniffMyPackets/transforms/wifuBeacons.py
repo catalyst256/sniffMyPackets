@@ -5,8 +5,8 @@ logging.getLogger("scapy.runtime").setLevel(logging.ERROR)
 from scapy.all import *
 import os, sys
 from multiprocessing import Process
-from common.entities import SniffmypacketsEntity, monitorInterface, accessPoint
-from canari.maltego.utils import debug, progress
+from common.entities import monitorInterface, accessPoint
+#from canari.maltego.utils import debug, progress
 from canari.framework import configure #, superuser
 
 __author__ = 'catalyst256'
@@ -37,7 +37,7 @@ def dotransform(request, response):
   
   aps = []
   interface = request.value
-
+  
   def sniffAP(p):
     
     if p.haslayer(Dot11Beacon) or p.haslayer(Dot11ProbeResp):
@@ -65,7 +65,7 @@ def dotransform(request, response):
   x.start()
   
   # Start sniffing packets
-  sniff(iface=interface, prn=sniffAP, count=500)
+  sniff(iface=interface, prn=sniffAP, count=100)
   
   # Iterate through stored APs and create a sniffMyPackets entity
   for ssid, bssid, channel, enc in aps:

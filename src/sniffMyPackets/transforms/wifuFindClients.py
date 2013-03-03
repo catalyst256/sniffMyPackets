@@ -5,8 +5,8 @@ logging.getLogger("scapy.runtime").setLevel(logging.ERROR)
 from scapy.all import *
 import os, sys
 from multiprocessing import Process
-from common.entities import SniffmypacketsEntity, monitorInterface, wifuClient
-from canari.maltego.utils import debug, progress
+from common.entities import monitorInterface, wifuClient
+#from canari.maltego.utils import debug, progress
 from canari.framework import configure #, superuser
 
 __author__ = 'catalyst256'
@@ -57,7 +57,7 @@ def dotransform(request, response):
     x.start()
     
     
-    sniff(iface=interface, prn=sniffProbe, count=500)
+    sniff(iface=interface, prn=sniffProbe, count=300)
     for ssid, cmac, bssid in clients:
       e = wifuClient(cmac)
       e.clientBSSID = bssid
