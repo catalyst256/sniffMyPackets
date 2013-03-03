@@ -42,7 +42,7 @@ def dotransform(request, response):
   
 	  def captureWPA(pkts):
 		for x in pkts:
-		  if x.haslayer(Dot11AssoReq) or x.haslayer(EAPOL):
+		  if x.haslayer(Dot11AssoReq) and x.haslayer(EAPOL):
 			if x not in WPAenc:
 			  WPAenc.append(x)
 	

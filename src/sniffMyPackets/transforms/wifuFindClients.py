@@ -5,12 +5,12 @@ logging.getLogger("scapy.runtime").setLevel(logging.ERROR)
 from scapy.all import *
 import os, sys
 from multiprocessing import Process
-from common.entities import monitorInterface, wifuClient
+from common.entities import accessPoint, wifuClient
 #from canari.maltego.utils import debug, progress
 from canari.framework import configure #, superuser
 
 __author__ = 'catalyst256'
-__copyright__ = 'Copyright 2013, Sniffmypackets Project'
+__copyright__ = 'Copyright 2013, SniffMyPackets Project'
 __credits__ = 'The channel hopping technique was taken from the airoscapy project which can be found here: http://www.thesprawl.org/projects/airoscapy/'
 
 __license__ = 'GPL'
@@ -20,53 +20,48 @@ __email__ = 'catalyst256@gmail.com'
 __status__ = 'Development'
 
 __all__ = [
-    'dotransform',
-    'onterminate'
+    'dotransform'
 ]
 
 
 #@superuser
 @configure(
-    label='Sniff for WiFi Clients [U]',
-    description='Listens for wifi probe responses on specified mon0 interface',
+    label='Find connected clients [U]',
+    description='Listens for wifi probe responses to specified AP',
     uuids=[ 'sniffMyPackets.v2.sniffProbeResponses' ],
-    inputs=[ ( 'sniffMyPackets', monitorInterface ) ],
+    inputs=[ ( 'sniffMyPackets', accessPoint ) ],
     debug=True
 )
 def dotransform(request, response):
   
     clients = []
-    interface = request.value
+    APssid = request.value
+    if 'sniffMyPackets.apmoninterface' in request.fields:
+      interface = request.fields['sniffMyPackets.apmoninterface']
+    if 'sniffMyPackets.channel' in request.fields:
+      channel = request.fields['sniffMyPackets.channel']
+    if 'sniffMyPackets.bssid' in request.fields:
+      bssid = request.fields['sniffMyPackets.bssid']
     
     def sniffProbe(p):
-	  if p.haslayer(Dot11ProbeResp):
-		ssid = p.getlayer(Dot11ProbeResp).info
+	  if p.haslayer(Dot11ProbeReq) and p.getlayer(Dot11ProbeReq).info == APssid:
+		ssid = p.getlayer(Dot11ProbeReq).info
 		cmac = p.getlayer(Dot11).addr1
 		bssid = p.getlayer(Dot11).addr2
-		entity = ssid, cmac, bssid
+		#channel = int(ord(p[Dot11Elt:3].info))
+		entity = ssid, cmac, bssid, channel
 		if entity not in clients:
 		  clients.append(entity)
     
-    def channel_hopper():
-      channel = random.randrange(1,15)
-      os.system("iw dev %s set channel %d" % (interface, channel))
-      time.sleep(1)
-  
-    # Start the channel hopping
-    x = Process(target = channel_hopper)
-    x.start()
+    os.system("iw dev %s set channel %s" % (interface, channel))
     
+    sniff(iface=interface, prn=sniffProbe, count=500)
     
-    sniff(iface=interface, prn=sniffProbe, count=300)
-    for ssid, cmac, bssid in clients:
+    for ssid, cmac, bssid, channel in clients:
       e = wifuClient(cmac)
       e.clientBSSID = bssid
       e.monInt = interface
       e.clientSSID = ssid
+      e.clientChannel = channel
       response += e
     return response
-    
-def onterminate():
-  # Kill the channel hopping process
-  x.terminate()
-  sys.exit(0)

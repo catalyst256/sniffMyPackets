@@ -37,6 +37,8 @@ def dotransform(request, response):
   
   aps = []
   interface = request.value
+  if 'sniffMyPackets.count' in request.fields:
+    pktcount = request.fields['sniffMyPackets.count']
   
   def sniffAP(p):
     
@@ -65,7 +67,7 @@ def dotransform(request, response):
   x.start()
   
   # Start sniffing packets
-  sniff(iface=interface, prn=sniffAP, count=100)
+  sniff(iface=interface, prn=sniffAP, count=300)
   
   # Iterate through stored APs and create a sniffMyPackets entity
   for ssid, bssid, channel, enc in aps:
