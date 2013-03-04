@@ -19,7 +19,8 @@ __all__ = [
     'wifuClient',
     'pcapFile',
     'pcapStream',
-    'wiFiChannel'
+    'wiFiChannel',
+    'WirelessCard'
 ]
 
 class SniffmypacketsEntity(Entity):
@@ -50,4 +51,7 @@ class pcapStream(SniffmypacketsEntity):
   pass
 
 class wiFiChannel(SniffmypacketsEntity):
+    pass
+
+class WirelessCard(SniffmypacketsEntity):
     pass
