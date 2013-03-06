@@ -4,9 +4,10 @@ import logging
 logging.getLogger("scapy.runtime").setLevel(logging.ERROR)
 from scapy.all import *
 #from canari.maltego.utils import debug, progress
+from canari.maltego.message import Field, MatchingRule
 from canari.framework import configure #, superuser
 from common.ipaddrchanges import *
-from common.entities import WirelessCard
+from common.entities import WirelessCard, Gateway
 from canari.maltego.entities import IPv4Address
 
 __author__ = 'catalyst256'
@@ -29,12 +30,16 @@ __all__ = [
     label='ARP Scan [A]',
     description='Performs ARP scan when connected to wireless network',
     uuids=[ 'sniffMyPackets.v2.ARPScan' ],
-    inputs=[ ( 'sniffMyPackets', WirelessCard ) ],
+    inputs=[ ( 'sniffMyPackets', Gateway ) ],
     debug=True
 )
 def dotransform(request, response):
 	
-	interface = request.value
+	if 'sniffMyPackets.int2gw' in request.fields:
+	  interface = request.fields['sniffMyPackets.int2gw']
+	if 'sniffMyPackets.gwmac' in request.fields:
+	  gateway = request.fields['sniffMyPackets.gwmac']
+
 	conf.iface=interface
 	subnet = ''
 	network = ''
@@ -54,6 +59,8 @@ def dotransform(request, response):
 	for send,rcv in ans:
 	  e = IPv4Address(rcv.sprintf("%ARP.psrc%"))
 	  e.internal = True
+	  e += Field('ethernet.hwaddr', rcv.sprintf("%Ether.src%"), displayname='Hardware Address', matching_rule=MatchingRule.Strict)
+	  e += Field('gateway.hwaddr', gateway, displayname='Gateway Address', matching_rule=MatchingRule.Strict)
 	  response += e
 	return response
 

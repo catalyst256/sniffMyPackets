@@ -41,7 +41,7 @@ def dotransform(request, response):
       interface = request.fields['sniffMyPackets.monInt']
     
     def sniffBeacon(p):
-	  if p.haslayer(Dot11ProbeReq) and p.getlayer(Dot11).addr1 == clientMAC:
+	  if p.haslayer(Dot11ProbeReq) and p.getlayer(Dot11).addr2 == clientMAC:
 	    netName = p.getlayer(Dot11ProbeReq).info
 	    mac = p.getlayer(Dot11).addr2
 	    station = netName, mac
@@ -59,7 +59,10 @@ def dotransform(request, response):
     
     sniff(iface=interface, prn=sniffBeacon, count=500)
     for ssid, mac in ap:
-	  e = accessPoint(ssid)
+	  if ssid == '':
+		e = accessPoint('Broadcast')
+	  else:
+		e = accessPoint(ssid)
 	  e.apbssid = mac
 	  response += e
     return response

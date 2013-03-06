@@ -10,6 +10,9 @@ __maintainer__ = 'catalyst256'
 __email__ = 'catalyst256@gmail.com'
 __status__ = 'Development'
 __all__ = [
+    'portscan',
+    #'findGateway',
+    'dns2client',
     'resolve2IP',
     'arpscan',
     'deauthClient',
@@ -19,5 +22,6 @@ __all__ = [
     'wifuFindClients',
     'wifuBeacons',
     'wifuProbes',
+    'findGateway',
     'common'
 ]

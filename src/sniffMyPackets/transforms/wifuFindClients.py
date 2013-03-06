@@ -6,7 +6,6 @@ from scapy.all import *
 import os, sys
 from multiprocessing import Process
 from common.entities import accessPoint, wifuClient
-#from canari.maltego.utils import debug, progress
 from canari.framework import configure #, superuser
 
 __author__ = 'catalyst256'
@@ -41,17 +40,17 @@ def dotransform(request, response):
     if 'sniffMyPackets.channel' in request.fields:
       channel = request.fields['sniffMyPackets.channel']
     if 'sniffMyPackets.bssid' in request.fields:
-      bssid = request.fields['sniffMyPackets.bssid']
+      apbssid = request.fields['sniffMyPackets.bssid']
     
     def sniffProbe(p):
-	  if p.haslayer(Dot11ProbeReq) and p.getlayer(Dot11ProbeReq).info == APssid:
-		ssid = p.getlayer(Dot11ProbeReq).info
-		cmac = p.getlayer(Dot11).addr1
-		bssid = p.getlayer(Dot11).addr2
-		#channel = int(ord(p[Dot11Elt:3].info))
-		entity = ssid, cmac, bssid, channel
-		if entity not in clients:
-		  clients.append(entity)
+	  if p.haslayer(Dot11ProbeResp):
+		if p.getlayer(Dot11).addr2 == apbssid:
+		  ssid = p.getlayer(Dot11ProbeResp).info
+		  cmac = p.getlayer(Dot11).addr1
+		  bssid = p.getlayer(Dot11).addr2
+		  entity = ssid, cmac, bssid, channel
+		  if entity not in clients:
+			clients.append(entity)
     
     os.system("iw dev %s set channel %s" % (interface, channel))
     

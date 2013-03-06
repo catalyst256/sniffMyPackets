@@ -5,7 +5,7 @@ logging.getLogger("scapy.runtime").setLevel(logging.ERROR)
 from scapy.all import *
 import os, sys
 from multiprocessing import Process
-from common.entities import monitorInterface, accessPoint
+from common.entities import monitorInterface, accessPoint, WirelessCard
 #from canari.maltego.utils import debug, progress
 from canari.framework import configure #, superuser
 
@@ -27,7 +27,7 @@ __all__ = [
 
 #@superuser
 @configure(
-    label='Sniff for WiFi Beacon Frames [U]',
+    label='Search for wireless networks [U]',
     description='Listens for wifi beacon frames on specified mon0 interface',
     uuids=[ 'sniffMyPackets.v2.sniffBeaconFrames' ],
     inputs=[ ( 'sniffMyPackets', monitorInterface ) ],
@@ -82,4 +82,4 @@ def dotransform(request, response):
 def onterminate():
   # Kill the channel hopping process
   x.terminate()
-  sys.exit(0)
+  #sys.exit(0)

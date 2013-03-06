@@ -33,24 +33,26 @@ __all__ = [
 )
 def dotransform(request, response):
     
-	  WPAenc = []
+	  eapol_packets = []
 	  ssid = request.value
 	  if 'sniffMyPackets.apmoninterface' in request.fields:
 	    interface = request.fields['sniffMyPackets.apmoninterface']
 	  if 'sniffMyPackets.channel' in request.fields:
 	    channel = request.fields['sniffMyPackets.channel']
   
-	  def captureWPA(pkts):
-		for x in pkts:
-		  if x.haslayer(Dot11AssoReq) and x.haslayer(EAPOL):
-			if x not in WPAenc:
-			  WPAenc.append(x)
-	
+	  def sniffEAPOL(p):
+		if p.haslayer(Dot11Auth):
+		  eapol_packets.append(p)
+		if p.haslayer(EAPOL):
+		  eapol_packets.append(p)
+	  
 	  os.system("iw dev %s set channel %s" % (interface, channel))
-	  sniff(iface=interface, prn=captureWPA, count=1000)
-		
+	  
+	  for i in range(1, 10):
+		sniff(iface=interface, prn=sniffEAPOL, count=1000)
+	  
 	  fileName = ssid+'.cap'
-	  wrpcap(fileName, WPAenc)
+	  wrpcap(fileName, eapol_packets)
 		
 	  e = pcapFile(fileName)
 	  response += e
