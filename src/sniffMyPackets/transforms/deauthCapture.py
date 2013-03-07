@@ -49,7 +49,7 @@ def dotransform(request, response):
 	  os.system("iw dev %s set channel %s" % (interface, channel))
 	  
 	  for i in range(1, 10):
-		sniff(iface=interface, prn=sniffEAPOL, count=1000)
+		sniff(iface=interface, prn=sniffEAPOL, count=100)
 	  
 	  fileName = ssid+'.cap'
 	  wrpcap(fileName, eapol_packets)

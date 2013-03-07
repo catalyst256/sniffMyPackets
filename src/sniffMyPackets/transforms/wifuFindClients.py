@@ -32,9 +32,9 @@ __all__ = [
     debug=True
 )
 def dotransform(request, response):
-  
     clients = []
-    APssid = request.value
+    ssid = request.value
+    apbssid = ''
     if 'sniffMyPackets.apmoninterface' in request.fields:
       interface = request.fields['sniffMyPackets.apmoninterface']
     if 'sniffMyPackets.channel' in request.fields:
@@ -43,22 +43,22 @@ def dotransform(request, response):
       apbssid = request.fields['sniffMyPackets.bssid']
     
     def sniffProbe(p):
-	  if p.haslayer(Dot11ProbeResp):
-		if p.getlayer(Dot11).addr2 == apbssid:
+	  if p.haslayer(Dot11ProbeResp) and p.getlayer(Dot11).addr2 == apbssid:
+		#if p.getlayer(Dot11).addr2 == apbssid:
 		  ssid = p.getlayer(Dot11ProbeResp).info
 		  cmac = p.getlayer(Dot11).addr1
-		  bssid = p.getlayer(Dot11).addr2
-		  entity = ssid, cmac, bssid, channel
+		  #bssid = p.getlayer(Dot11).addr2
+		  entity = ssid, cmac, channel
 		  if entity not in clients:
 			clients.append(entity)
     
     os.system("iw dev %s set channel %s" % (interface, channel))
     
-    sniff(iface=interface, prn=sniffProbe, count=500)
+    sniff(iface=interface, prn=sniffProbe, count=300)
     
-    for ssid, cmac, bssid, channel in clients:
+    for ssid, cmac, channel in clients:
       e = wifuClient(cmac)
-      e.clientBSSID = bssid
+      e.clientBSSID = apbssid
       e.monInt = interface
       e.clientSSID = ssid
       e.clientChannel = channel
