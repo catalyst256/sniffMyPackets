@@ -34,11 +34,13 @@ __all__ = [
 def dotransform(request, response):
 	
 	target = request.value
+	e = Port
 	ans,uans = sr(IP(dst=target)/TCP(dport=[23,22,80,443,8080,3389,25]), timeout=10, verbose=0)
-	
+	#ans.show()
 	for send,rcv in ans:
 	  if rcv.getlayer(TCP).flags == 0x012:
-		e = Port(rcv.getlayer(TCP).sport)
-		e.PortState = 'Open'
-		response += e
+		x = Port((rcv.getlayer(TCP).sport), matching_rule=MatchingRule.Loose)
+		#x.PortNumber(rcv.getlayer(TCP).sport)
+		x.PortState = 'Open'
+		response += x
 	return response

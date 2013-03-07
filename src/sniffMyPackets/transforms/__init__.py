@@ -10,9 +10,10 @@ __maintainer__ = 'catalyst256'
 __email__ = 'catalyst256@gmail.com'
 __status__ = 'Development'
 __all__ = [
+
     'hunthidden',
+    'arp2dns',
     'portscan',
-    #'findGateway',
     'dns2client',
     'resolve2IP',
     'arpscan',

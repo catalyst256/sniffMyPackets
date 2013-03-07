@@ -65,6 +65,5 @@ class Gateway(SniffmypacketsEntity):
 
 
 @EntityField(name='sniffMyPackets.portstate', propname='PortState', displayname='Port State', type=EntityFieldType.String, matching_rule=MatchingRule.Loose)
-@EntityField(name='sniffMyPackets.Port', propname='Port', displayname='Port', type=EntityFieldType.String, matching_rule=MatchingRule.Loose)
 class Port(SniffmypacketsEntity):
     pass
