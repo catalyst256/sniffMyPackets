@@ -36,7 +36,7 @@ def dotransform(request, response):
     if 'sniffMyPackets.count' in request.fields:
       pktcount = request.fields['sniffMyPackets.count']
     else:
-      pktcount = 1000
+      pktcount = 300
     
     pkts = sniff(iface=interface, count=pktcount)
     fileName = interface+'.cap'
