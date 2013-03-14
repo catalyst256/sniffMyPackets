@@ -5,7 +5,7 @@ logging.getLogger("scapy.runtime").setLevel(logging.ERROR)
 from scapy.all import *
 import os, sys
 from multiprocessing import Process
-from common.entities import monitorInterface, accessPoint, WirelessCard
+from common.entities import monitorInterface, accessPoint
 #from canari.maltego.utils import debug, progress
 from canari.framework import configure #, superuser
 
@@ -37,6 +37,7 @@ def dotransform(request, response):
   
   aps = []
   interface = request.value
+  pkcount = ''
   if 'sniffMyPackets.count' in request.fields:
     pktcount = request.fields['sniffMyPackets.count']
   
@@ -67,7 +68,7 @@ def dotransform(request, response):
   x.start()
   
   # Start sniffing packets
-  sniff(iface=interface, prn=sniffAP, count=300)
+  sniff(iface=interface, prn=sniffAP, count=pkcount)
   
   # Iterate through stored APs and create a sniffMyPackets entity
   for ssid, bssid, channel, enc in aps:

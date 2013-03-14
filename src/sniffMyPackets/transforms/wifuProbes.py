@@ -59,12 +59,10 @@ def dotransform(request, response):
     
     sniff(iface=interface, prn=sniffBeacon, count=500)
     for ssid, mac in ap:
-	  if ssid == '':
-		e = accessPoint('Broadcast')
-	  else:
-		e = accessPoint(ssid)
-	  e.apbssid = mac
-	  response += e
+	  if ssid != '':
+	    e = accessPoint(ssid)
+	    e.apbssid = mac
+	    response += e
     return response
 
 def onterminate():
