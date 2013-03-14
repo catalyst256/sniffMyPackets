@@ -12,8 +12,6 @@ __status__ = 'Development'
 __all__ = [
     'arp2dns',
     'portscan',
-    #'findGateway',
-    'dns2client',
     'resolve2IP',
     'arpscan',
     'deauthClient',
