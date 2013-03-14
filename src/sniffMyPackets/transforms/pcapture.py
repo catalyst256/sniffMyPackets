@@ -3,6 +3,7 @@
 import logging
 logging.getLogger("scapy.runtime").setLevel(logging.ERROR)
 from scapy.all import *
+from time import time
 from common.entities import monitorInterface, pcapFile, WirelessCard
 #from canari.maltego.utils import debug, progress
 from canari.framework import configure #, superuser
@@ -39,8 +40,10 @@ def dotransform(request, response):
       pktcount = 300
     
     pkts = sniff(iface=interface, count=pktcount)
-    fileName = interface+'.cap'
+    t = time()
+    fileName = '/tmp/'+str(t)+'.cap'
     wrpcap(fileName, pkts)
     e = pcapFile(fileName)
     response += e
+    
     return response
