@@ -20,7 +20,7 @@ __all__ = [
     'deauthClient',
     'deauthCapture',
     'accesspoint2channel',
-    'pcapFile',
+    'pcap2DNS',
     'wifuFindClients',
     'wifuBeacons',
     'wifuProbes',
