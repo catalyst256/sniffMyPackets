@@ -1,0 +1,54 @@
+#!/usr/bin/env python
+
+
+import logging
+logging.getLogger("scapy.runtime").setLevel(logging.ERROR)
+from scapy.all import *
+from common.entities import pcapFile, accessPoint #, pcapStream
+from canari.maltego.message import UIMessage
+#from canari.maltego.utils import debug, progress
+from canari.framework import configure #, superuser
+
+__author__ = 'catalyst256'
+__copyright__ = 'Copyright 2013, Sniffmypackets Project'
+__credits__ = []
+
+__license__ = 'GPL'
+__version__ = '0.1'
+__maintainer__ = 'catalyst256'
+__email__ = 'catalyst256@gmail.com'
+__status__ = 'Development'
+
+__all__ = [
+    'dotransform'
+]
+
+#@superuser
+@configure(
+    label='Search pcap for DNS Entries [U/A]',
+    description='Reads a pcap file looks for DNS responses',
+    uuids=[ 'sniffmyPackets.v2.pcapFiletoDNS' ],
+    inputs=[ ( 'sniffMyPackets', pcapFile ) ],
+    debug=True
+)
+def dotransform(request, response):
+  
+	dns_results = []
+	
+	pcap = request.value
+	pkt = rdpcap(pcap)
+	#print pkt.summary()
+	
+	for pkts in pkt:
+	  if pkts.haslayer(DNS) and pkts.getlayer(DNS).qr == 0:
+		x = pkts.getlayer(DNS).qd.qname
+		if x not in dns_results:
+		  dns_results.append(x)
+	else:
+	  return response + UIMessage('No DNS packets found')
+	
+	print dns_results
+	for item in dns_results:
+		e = Website(item)
+		response += e
+	return response  
