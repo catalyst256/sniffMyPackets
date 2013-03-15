@@ -34,13 +34,12 @@ __all__ = [
 def dotransform(request, response):
 	
 	target = request.value
-	e = Port
-	ans,uans = sr(IP(dst=target)/TCP(dport=[23,22,80,443,8080,3389,25]), timeout=10, verbose=0)
-	#ans.show()
+	port = RandNum(1024,65535)
+	ans,uans = sr(IP(dst=target)/TCP(sport=port, dport=[23,22,80,443,8080,3389,25]), timeout=10, verbose=0)
 	for send,rcv in ans:
 	  if rcv.getlayer(TCP).flags == 0x012:
 		x = Port((rcv.getlayer(TCP).sport), matching_rule=MatchingRule.Loose)
-		#x.PortNumber(rcv.getlayer(TCP).sport)
+		x.SrcPort = rcv.getlayer(TCP).dport
 		x.PortState = 'Open'
 		response += x
 	return response
