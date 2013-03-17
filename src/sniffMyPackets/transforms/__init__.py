@@ -11,7 +11,6 @@ __email__ = 'catalyst256@gmail.com'
 __status__ = 'Development'
 __all__ = [
     'pcapture',
-
     'hunthidden',
     'arp2dns',
     'portscan',
@@ -20,7 +19,7 @@ __all__ = [
     'deauthClient',
     'deauthCapture',
     'accesspoint2channel',
-    'pcap2DNS',
+#    'pcap2DNS',
     'wifuFindClients',
     'wifuBeacons',
     'wifuProbes',
