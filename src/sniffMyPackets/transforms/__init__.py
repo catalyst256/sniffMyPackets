@@ -10,6 +10,8 @@ __maintainer__ = 'catalyst256'
 __email__ = 'catalyst256@gmail.com'
 __status__ = 'Development'
 __all__ = [
+    'pcap2convo',
+    'pcap2talkers',
     'pcap2wshark',
     'pcapture',
     'hunthidden',
@@ -20,7 +22,7 @@ __all__ = [
     'deauthClient',
     'deauthCapture',
     'accesspoint2channel',
-#    'pcap2DNS',
+    'pcap2DNS',
     'wifuFindClients',
     'wifuBeacons',
     'wifuProbes',

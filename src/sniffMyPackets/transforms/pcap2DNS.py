@@ -6,7 +6,7 @@ logging.getLogger("scapy.runtime").setLevel(logging.ERROR)
 from scapy.all import *
 from common.entities import pcapFile, accessPoint #, pcapStream
 from canari.maltego.message import UIMessage
-#from canari.maltego.utils import debug, progress
+from canari.maltego.entities import Website
 from canari.framework import configure #, superuser
 
 __author__ = 'catalyst256'
@@ -37,17 +37,12 @@ def dotransform(request, response):
 	
 	pcap = request.value
 	pkt = rdpcap(pcap)
-	#print pkt.summary()
 	
 	for pkts in pkt:
 	  if pkts.haslayer(DNS) and pkts.getlayer(DNS).qr == 0:
 		x = pkts.getlayer(DNS).qd.qname
 		if x not in dns_results:
 		  dns_results.append(x)
-	else:
-	  return response + UIMessage('No DNS packets found')
-	
-	print dns_results
 	for item in dns_results:
 		e = Website(item)
 		response += e
