@@ -6,7 +6,7 @@ from scapy.all import *
 #from canari.maltego.utils import debug, progress
 from common.entities import pcapFile
 from canari.maltego.entities import IPv4Address
-from canari.maltego.message import Field
+from canari.maltego.message import Field, Label
 from canari.framework import configure #, superuser
 
 __author__ = 'catalyst256'
@@ -41,22 +41,29 @@ def dotransform(request, response):
     if 'pcapsrc' in request.fields:
       pcap = request.fields['pcapsrc']
     pkts = rdpcap(pcap)
-    #pkts.summary()
+    destinationport = ''
     
     for x in pkts:
       if x.haslayer(IP) and x.getlayer(IP).src == srcip:
-	destip = x.getlayer(IP).dst
-	if x.haslayer(TCP):
-	  sport = x.getlayer(TCP).sport
-	  dport = x.getlayer(TCP).dport
-	  chatter = srcip, sport, destip, dport
-	  if chatter not in convo:
-	    convo.append(chatter)
+		destip = x.getlayer(IP).dst
+		if x.haslayer(TCP):
+		  sport = x.getlayer(TCP).sport
+		  dport = x.getlayer(TCP).dport
+		  chatter = srcip, sport, destip, dport
+		  if chatter not in convo:
+			convo.append(chatter)
     
     for source, sourceport, destination, destinationport in convo:
       e = IPv4Address(destination)
+      e += Label('Dst Port', destinationport)
+      e.linklabel = destinationport
+      if destinationport == 80:
+		e.linkcolor = 0x006600
+	  #elif destinationport == 443:
+		#e.linkcolor == 0xFF0000
       e += Field('convodst',destinationport, displayname='Destination Port', matchingrule='loose')
       e += Field('convosrc', sourceport, displayname='Source Port', matchingrule='loose')
+      e += Field('pcapsrc', pcap, displayname='Original pcap File', matchingrule='loose')
       response += e
     return response
 
