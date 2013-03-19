@@ -15,18 +15,6 @@ __all__ = [
     'pcap2talkers',
     'pcap2wshark',
     'pcapture',
-    'hunthidden',
-    'arp2dns',
-    'portscan',
-    'resolve2IP',
-    'arpscan',
-    'deauthClient',
-    'deauthCapture',
-    'accesspoint2channel',
     'pcap2DNS',
-    'wifuFindClients',
-    'wifuBeacons',
-    'wifuProbes',
-    'findGateway',
     'common'
 ]
