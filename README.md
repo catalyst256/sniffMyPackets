@@ -1,38 +1,20 @@
 # README - Sniffmypackets
 
-This is a canari package for wireless auditing and discovery and some general packet goodness.
+This is a canari package for pcap file analysis.
 
-Uses scapy a lot for the packet sniffing and dissection. I've only tested this on BackTrack R3.
+Uses scapy a lot for the packet sniffing and dissection. I've only tested this on BackTrack R3/Kali.
 
-Requires that you manually set your wireless card into monitor mode (this may change later).
+Currently focuses on TCP packets, will add others later.
 
-New entities will be installed under "sniffMyPackets". To get started set your wireless card in monitor mode.
-I've been using "airmon-ng start [interface]
+You can either add pcap files manually using the pcapFile entity (under sniffMyPackets) or you can add an Interface and run a packet capture directly. 
+Once you have a pcap file you run transforms to identify "TCP Talkers" which is based on the SYN flag being present in a packet.
+From there you can then identify all IP's that the "Talker" has well talked to. You can then split those streams off into seperate pcap files.
+There are currently transforms that will read a pcap file looking for HTTP traffic and dump the raw ASCII into an entity and text file. There is also a HTTP Scan transform
+that will search a pcap file and return a list of HTTP GET requests, this will dump to a text file (maybe an entity).
 
-Add the monitor interface entity into a new Maltego graph. If the monitor interface is not mon0 (which is the default)
-change the entity to match.
-
-You will then be able to run 2 transforms, one looks for beacon frames and returns a list of Access Point entities.
-The other one searches for clients by looking for Probe responses.
-
-The transforms capture 500 packets, depending on the amount of traffic this can take some time to complete. From an access point
-you can then pull out the channel information (which is stored in the entity) and from a client you can map them back to an
-access point.
-
-Any transform that has a "[U]" at the end means it will work when you are unauthenicated to the wireless network.
-
-Coming soon:
-
-[unauthenicated]
-Change the number of packets it sniffs by setting a field in the monitorInterface entity
-Perform deauth attacks
-Sniffing for deauth packets and capturing wpa/wep handshakes
-Sniff a client and look for probe requests belonging to other wireless networks previously connected to
-
-[authenicated]
-ARP scan to identify "live" clients
-DNS capture to identify clients activity
-Clear text password capture
-
+[Coming Soon]
+Will look at pulling out artifacts, such as exe files, images, etc. etc.
+Clear text password grabbing
+Email/attachment rebuild 
 
 
