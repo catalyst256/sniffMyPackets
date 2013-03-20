@@ -25,7 +25,7 @@ __all__ = [
 
 #@superuser
 @configure(
-    label='Search pcap for DNS Entries [pcap]',
+    label='Search for DNS Entries [pcap]',
     description='Reads a pcap file looks for DNS responses',
     uuids=[ 'sniffmyPackets.v2.pcapFiletoDNS' ],
     inputs=[ ( 'sniffMyPackets', pcapFile ) ],

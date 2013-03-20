@@ -24,7 +24,7 @@ __all__ = [
 
 #@superuser
 @configure(
-    label='Sniff packets and saves to pcap file [U/A]',
+    label='Sniff Packets [pcap]',
     description='Sniffs packets on interface and saves to file',
     uuids=[ 'sniffMyPackets.v2.interface2pcap' ],
     inputs=[ ( 'sniffMyPackets', Interface ) ],

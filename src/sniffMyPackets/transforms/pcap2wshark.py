@@ -22,7 +22,7 @@ __all__ = [
 
 #@superuser
 @configure(
-    label='Open file in Wireshark [pcap]',
+    label='Open in Wireshark [pcap]',
     description='Opens a pcap file in Wireshark',
     uuids=[ 'sniffMyPackets.v2.pcap2Wireshark' ],
     inputs=[ ( 'sniffMyPackets', pcapFile ) ],

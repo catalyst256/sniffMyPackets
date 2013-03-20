@@ -26,3 +26,8 @@ class pcapFile(SniffmypacketsEntity):
     
 class Interface(SniffmypacketsEntity):
     pass
+
+@EntityField(name='sniffMyPackets.filelocation', propname='filelocation', displayname='File Location', type=EntityFieldType.String)
+@EntityField(name='sniffMyPackets.rawdata', propname='rawdata', displayname='Raw Data', type=EntityFieldType.String)
+class FileDump(SniffmypacketsEntity):
+    pass

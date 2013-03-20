@@ -28,7 +28,7 @@ __all__ = [
 #@superuser
 @configure(
     label='Find TCP Convo [pcap]',
-    description='Looks for conversations between IP in pcap file',
+    description='Looks for conversations between IPs in pcap file',
     uuids=[ 'sniffMyPackets.v2.pcap2TCPConvo' ],
     inputs=[ ( 'sniffMyPackets', IPv4Address ) ],
     debug=True
