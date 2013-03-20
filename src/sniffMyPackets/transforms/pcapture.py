@@ -39,7 +39,7 @@ def dotransform(request, response):
     else:
       pktcount = 300
     
-    cmd = 'tshark -i ' + interface + ' -s 0 -c ' + pktcount + ' -w ' + fileName + ' -F libpcap'
+    cmd = 'tshark -i ' + interface + ' -F libpcap' + ' -s 0 -c ' + pktcount + ' -w ' + fileName
     os.system(cmd)
     e = pcapFile(fileName)
     response += e
