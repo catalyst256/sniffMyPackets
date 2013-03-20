@@ -31,3 +31,8 @@ class Interface(SniffmypacketsEntity):
 @EntityField(name='sniffMyPackets.rawdata', propname='rawdata', displayname='Raw Data', type=EntityFieldType.String)
 class FileDump(SniffmypacketsEntity):
     pass
+  
+@EntityField(name='sniffMyPackets.getdst', propname='getdst', displayname='Dst IP & Port', type=EntityFieldType.String)
+@EntityField(name='sniffMyPackets.getsrc', propname='getsrc', displayname='Src IP & Port', type=EntityFieldType.String)
+class httpScan(SniffmypacketsEntity):
+    pass

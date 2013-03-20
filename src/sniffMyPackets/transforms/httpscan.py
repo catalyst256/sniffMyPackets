@@ -1,9 +1,11 @@
 #!/usr/bin/env python
 
+import os
+import re
 import logging
 logging.getLogger("scapy.runtime").setLevel(logging.ERROR)
 from scapy.all import *
-from common.entities import pcapFile
+from common.entities import pcapFile, httpScan
 #from canari.maltego.utils import debug, progress
 from canari.framework import configure #, superuser
 
@@ -35,20 +37,28 @@ def dotransform(request, response):
 	pcap = request.value
 	get_requests = []
 	pkts = rdpcap(pcap)
-	
+		
 	for x in pkts:
 	  if x.haslayer(IP) and x.getlayer(TCP).dport == 80:
 		src = x.sprintf('%IP.src%')
 		dst = x.sprintf('%IP.dst%')
+		srcport = x.sprintf('%TCP.sport%')
 		dstport = x.sprintf('%TCP.dport%')
 		load = x.sprintf('%Raw.load%')
 		if 'GET' not in load:
 		  pass
 		else:
-		  traffic = src, dst, dstport, load
+		  traffic = src, srcport, dst, dstport, load
 		  if x.getlayer(TCP).sport not in get_requests:
 			get_requests.append(traffic)
 	
-	for srcip, dstip, dstport, raw in get_requests:
-	  print '[+] ' + srcip + ' ----> ' + dstip + ':' + dstport
-    #return response
+	for srcip, srcport, dstip, dstport, raw in get_requests:
+	  raw_output = re.search('(GET \S{43})', raw)
+	  if raw_output is None:
+		pass
+	  else:
+		e = httpScan(raw_output.group())
+		e.getsrc = srcip + ':' + srcport
+		e.getdst = dstip + ':' + dstport
+		response += e
+	return response
