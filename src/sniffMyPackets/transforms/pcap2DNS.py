@@ -4,7 +4,7 @@
 import logging
 logging.getLogger("scapy.runtime").setLevel(logging.ERROR)
 from scapy.all import *
-from common.entities import pcapFile, accessPoint #, pcapStream
+from common.entities import pcapFile
 from canari.maltego.message import UIMessage
 from canari.maltego.entities import Website
 from canari.framework import configure #, superuser
@@ -25,7 +25,7 @@ __all__ = [
 
 #@superuser
 @configure(
-    label='Search pcap for DNS Entries [U/A]',
+    label='Search pcap for DNS Entries [pcap]',
     description='Reads a pcap file looks for DNS responses',
     uuids=[ 'sniffmyPackets.v2.pcapFiletoDNS' ],
     inputs=[ ( 'sniffMyPackets', pcapFile ) ],

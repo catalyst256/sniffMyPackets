@@ -1,8 +1,7 @@
 #!/usr/bin/env python
 
-import logging
-logging.getLogger("scapy.runtime").setLevel(logging.ERROR)
-from scapy.all import *
+
+import os
 #from canari.maltego.utils import debug, progress
 from common.entities import pcapFile
 from canari.maltego.entities import IPv4Address
@@ -25,12 +24,24 @@ __all__ = [
 
 #@superuser
 @configure(
-    label='TCP Convo 2 pcap',
+    label='Write TCP Convo [pcap]',
     description='Takes a TCP convo and saves out to pcap file',
     uuids=[ 'sniffMyPackets.v2.TCPConvo2pcapfile' ],
     inputs=[ ( 'sniffMyPackets', IPv4Address ) ],
-    debug=True
+    debug=False
 )
 def dotransform(request, response):
-  
+	
+    pcap = request.fields['pcapsrc']
+    sport = request.fields['convosrc']
+    srcip = request.value
+    filename = '/tmp/' + str(srcip) + '.cap'
+    
+    sharkit = 'tshark -r ' + pcap + ' -R "ip.host=="' + str(srcip) + ' -w ' + filename + ' -F libpcap'
+    os.system(sharkit)
+    
+    e = pcapFile(filename)
+    response += e
     return response
+    
+	

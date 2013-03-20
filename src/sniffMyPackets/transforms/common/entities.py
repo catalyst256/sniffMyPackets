@@ -23,3 +23,6 @@ class SniffmypacketsEntity(Entity):
  
 class pcapFile(SniffmypacketsEntity):
     pass
+    
+class Interface(SniffmypacketsEntity):
+    pass

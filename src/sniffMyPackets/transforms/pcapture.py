@@ -4,7 +4,7 @@ import logging
 logging.getLogger("scapy.runtime").setLevel(logging.ERROR)
 from scapy.all import *
 from time import time
-from common.entities import monitorInterface, pcapFile, WirelessCard
+from common.entities import Interface, pcapFile
 #from canari.maltego.utils import debug, progress
 from canari.framework import configure #, superuser
 
@@ -26,8 +26,8 @@ __all__ = [
 @configure(
     label='Sniff packets and saves to pcap file [U/A]',
     description='Sniffs packets on interface and saves to file',
-    uuids=[ 'sniffMyPackets.v2.monitor2pcap', 'sniffMyPackets.v2.wirelesscard2pcap' ],
-    inputs=[ ( 'sniffMyPackets', monitorInterface ), ( 'sniffMyPackets', WirelessCard ) ],
+    uuids=[ 'sniffMyPackets.v2.interface2pcap' ],
+    inputs=[ ( 'sniffMyPackets', Interface ) ],
     debug=True
 )
 def dotransform(request, response):
