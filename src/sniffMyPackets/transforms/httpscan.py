@@ -53,7 +53,7 @@ def dotransform(request, response):
 			get_requests.append(traffic)
 	
 	for srcip, srcport, dstip, dstport, raw in get_requests:
-	  raw_output = re.search('(GET \S{43})', raw)
+	  raw_output = re.search('(GET \S{60})', raw)
 	  if raw_output is None:
 		pass
 	  else:

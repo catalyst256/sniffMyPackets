@@ -36,3 +36,6 @@ class FileDump(SniffmypacketsEntity):
 @EntityField(name='sniffMyPackets.getsrc', propname='getsrc', displayname='Src IP & Port', type=EntityFieldType.String)
 class httpScan(SniffmypacketsEntity):
     pass
+  
+class UserLogin(SniffmypacketsEntity):
+    pass

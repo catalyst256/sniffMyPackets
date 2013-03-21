@@ -1,12 +1,7 @@
 #!/usr/bin/env python
 
-import logging
-import re
-logging.getLogger("scapy.runtime").setLevel(logging.ERROR)
-from scapy.all import *
-from common.entities import pcapFile
-from canari.maltego.entities import Phrase
-#from canari.maltego.utils import debug, progress
+import re, os
+from common.entities import pcapFile, UserLogin
 from canari.framework import configure #, superuser
 
 __author__ = 'catalyst256'
@@ -29,18 +24,20 @@ __all__ = [
     description='Search pcap file for FTP creds',
     uuids=[ 'sniffMyPackets.v2.pcapFile2ftpCreds' ],
     inputs=[ ( 'sniffMyPackets', pcapFile ) ],
-    debug=True
+    debug=False
 )
 def dotransform(request, response):
-    
-    pcap = request.value
-    pkts = rdpcap(pcap)
-    pkts.summary()
-    last_user = ''
-    last_passwd = ''
-        
-    for x in pkts:
-      dport= x.sprintf("%IP.dport%")
-      raw = x.sprintf("%Raw.load%")
-      if dport == 21:
+  
+  pcap = request.value
+  user = []
+  pw = ''
+  
+  cmd = 'tshark -r ' + pcap + ' -R "ftp && tcp.dstport == 21" -z follow,tcp,ascii,0'
+  a = os.popen(cmd).read()
+  user = re.findall("(?i)USER (.*)",a)
+  pw = re.findall("(?i)PASS (.*)",a)
+  creds = 'UserName:' + user[0] + '\r\nPassword:' + pw[0]
 
+  e = UserLogin(creds)
+  response += e
+  return response

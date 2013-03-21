@@ -29,7 +29,7 @@ __all__ = [
     description='Reads a pcap file looks for DNS responses',
     uuids=[ 'sniffmyPackets.v2.pcapFiletoDNS' ],
     inputs=[ ( 'sniffMyPackets', pcapFile ) ],
-    debug=True
+    debug=False
 )
 def dotransform(request, response):
   

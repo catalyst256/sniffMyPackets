@@ -36,7 +36,7 @@ def dotransform(request, response):
     srcip = request.value
     filename = '/tmp/ftp-' + str(srcip) + '.cap'
     
-    sharkit = 'tshark -r ' + pcap + ' -R "ftp && ip.host=="' + str(srcip) + ' -w ' + filename + ' -F libpcap'
+    sharkit = 'tshark -r ' + pcap + ' -R "ftp || ftp-data && ip.host=="' + str(srcip) + ' -w ' + filename + ' -F libpcap'
     os.system(sharkit)
     
     e = pcapFile(filename)

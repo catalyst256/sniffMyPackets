@@ -27,7 +27,7 @@ __all__ = [
 
 #@superuser
 @configure(
-    label='Find TCP Convo [pcap]',
+    label='Find TCP/UDP Convo [pcap]',
     description='Looks for conversations between IPs in pcap file',
     uuids=[ 'sniffMyPackets.v2.pcap2TCPConvo' ],
     inputs=[ ( 'sniffMyPackets', IPv4Address ) ],
@@ -35,37 +35,43 @@ __all__ = [
 )
 def dotransform(request, response):
     
-    convo = []
-    pcap = ''
-    srcip = request.value
-    if 'pcapsrc' in request.fields:
-      pcap = request.fields['pcapsrc']
-    pkts = rdpcap(pcap)
-    destinationport = ''
-    
-    for x in pkts:
-      if x.haslayer(IP) and x.getlayer(IP).src == srcip:
-		destip = x.getlayer(IP).dst
-		if x.haslayer(TCP):
-		  sport = x.getlayer(TCP).sport
-		  dport = x.getlayer(TCP).dport
-		  chatter = srcip, sport, destip, dport
-		  if chatter not in convo:
-			convo.append(chatter)
-    
-    for source, sourceport, destination, destinationport in convo:
-      e = IPv4Address(destination)
-      e += Label('Dst Port', destinationport)
-      e.linklabel = destinationport
-      if destinationport == 80:
-		e.linkcolor = 0x006600
-	  #elif destinationport == 443:
-		#e.linkcolor == 0xFF0000
-      e += Field('convodst',destinationport, displayname='Destination Port', matchingrule='loose')
-      e += Field('convosrc', sourceport, displayname='Source Port', matchingrule='loose')
-      e += Field('pcapsrc', pcap, displayname='Original pcap File', matchingrule='loose')
-      response += e
-    return response
+  convo = []
+  pcap = ''
+  srcip = request.value
+  if 'pcapsrc' in request.fields:
+	pcap = request.fields['pcapsrc']
+  pkts = rdpcap(pcap)
+  destinationport = ''
+  
+  for x in pkts:
+	if x.haslayer(IP) and x.getlayer(IP).src == srcip:
+	  destip = x.getlayer(IP).dst
+	  if x.haslayer(TCP):
+		sport = x.getlayer(TCP).sport
+		dport = x.getlayer(TCP).dport
+		proto = 'tcp'
+		chatter = srcip, sport, destip, dport, proto
+		if chatter not in convo:
+		  convo.append(chatter)
+	  if x.haslayer(UDP):
+		sport = x.getlayer(UDP).sport
+		dport = x.getlayer(UDP).dport
+		proto = 'udp'
+		chatter = srcip, sport, destip, dport, proto
+		if chatter not in convo:
+		  convo.append(chatter)
+  
+  for source, sourceport, destination, destinationport, proto in convo:
+	e = IPv4Address(destination)
+	e += Label('Dst Port', destinationport)
+	e.linklabel = destinationport, proto
+	if proto == 'tcp':
+	  e.linkcolor = 0x0000FF
+	e += Field('convodst',destinationport, displayname='Destination Port', matchingrule='loose')
+	e += Field('convosrc', sourceport, displayname='Source Port', matchingrule='loose')
+	e += Field('pcapsrc', pcap, displayname='Original pcap File', matchingrule='loose')
+	response += e
+  return response
 
 
 
