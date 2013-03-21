@@ -32,9 +32,7 @@ class Interface(SniffmypacketsEntity):
 class FileDump(SniffmypacketsEntity):
     pass
   
-@EntityField(name='sniffMyPackets.getdst', propname='getdst', displayname='Dst IP & Port', type=EntityFieldType.String)
-@EntityField(name='sniffMyPackets.getsrc', propname='getsrc', displayname='Src IP & Port', type=EntityFieldType.String)
-class httpScan(SniffmypacketsEntity):
+class File(SniffmypacketsEntity):
     pass
   
 class UserLogin(SniffmypacketsEntity):

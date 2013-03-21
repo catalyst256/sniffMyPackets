@@ -55,6 +55,7 @@ def dotransform(request, response):
   for x, y in talkers:
 	e = IPv4Address(x)
 	e += Field('pcapsrc', request.value, displayname='Original pcap File', matchingrule='loose')
+	e += Field('convosrc', x, displayname='Source IP', matchingrule='loose')
 	e += Field('proto', y , displayname='Protocol', matchingrule='loose')
 	e.linklabel = y
 	if y == 'tcp':
