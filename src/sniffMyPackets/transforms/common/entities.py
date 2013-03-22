@@ -27,8 +27,8 @@ class pcapFile(SniffmypacketsEntity):
 class Interface(SniffmypacketsEntity):
     pass
 
-@EntityField(name='sniffMyPackets.filelocation', propname='filelocation', displayname='File Location', type=EntityFieldType.String)
-@EntityField(name='sniffMyPackets.rawdata', propname='rawdata', displayname='Raw Data', type=EntityFieldType.String)
+@EntityField(name='sniffMyPackets.cip', propname='cip', displayname='Remote IP', type=EntityFieldType.String)
+@EntityField(name='sniffMyPackets.cport', propname='cport', displayname='Local Port', type=EntityFieldType.String)
 class FileDump(SniffmypacketsEntity):
     pass
   

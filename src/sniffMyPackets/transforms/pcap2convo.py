@@ -67,8 +67,8 @@ def dotransform(request, response):
 	e.linklabel = destinationport, proto
 	if proto == 'tcp':
 	  e.linkcolor = 0x0000FF
-	e += Field('convodst',destinationport, displayname='Destination Port', matchingrule='loose')
-	e += Field('convosrc', sourceport, displayname='Source Port', matchingrule='loose')
+	e += Field('convodst',destinationport, displayname='Destination Port', matchingrule='strict')
+	e += Field('convosrc', sourceport, displayname='Source Port', matchingrule='strict')
 	e += Field('pcapsrc', pcap, displayname='Original pcap File', matchingrule='loose')
 	response += e
   return response

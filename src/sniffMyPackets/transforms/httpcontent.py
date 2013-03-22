@@ -1,7 +1,11 @@
 #!/usr/bin/env python
 
-import os
-from common.entities import pcapFile
+import os, re
+import logging
+logging.getLogger("scapy.runtime").setLevel(logging.ERROR)
+from scapy.all import *
+from common.entities import pcapFile, FileDump
+from canari.maltego.message import Field
 #from canari.maltego.utils import debug, progress
 from canari.framework import configure #, superuser
 
@@ -31,8 +35,31 @@ __all__ = [
 def dotransform(request, response):
     
     pcap = request.value
-    cmd = 'tshark -R "http.response and http.content_type contains application" -z "proto,colinfo,http.content_length,http.content_length" -z "proto,colinfo,http.content_type,http.content_type" -r ' + pcap
-    a = os.popen(cmd).read()
-    print a
+    pkts = rdpcap(pcap)
+    content_type = []
+    ctype = ''
+    dstip = ''
+    srcport = ''
     
-    #return response
+    for x in pkts:
+	  if x.haslayer(TCP) and x.haslayer(Raw):
+		raw = x.getlayer(Raw).load
+		dstip = x.getlayer(IP).src
+		srcport = x.getlayer(TCP).dport
+		for s in re.finditer('Content-Type:*\S*\D\S*', raw):
+		  if s is not None:
+			ctype = s.group()
+		  content = ctype, dstip, srcport
+		  if content not in content_type:
+			content_type.append(content)
+	
+	  for ctype, cip, cport in content_type:
+		e = FileDump(ctype)
+		e.cip = cip
+		e.cport = cport
+		e += Field('pcapsrc', request.value, displayname='Original pcap File', matchingrule='loose')
+		response += e
+		return response
+	  
+	
+    

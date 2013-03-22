@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-
+import os
 import logging
 logging.getLogger("scapy.runtime").setLevel(logging.ERROR)
 from scapy.all import *
@@ -36,7 +36,7 @@ def dotransform(request, response):
   
   talkers = []
   pkts = rdpcap(request.value)
-    
+  
   for x in pkts:
 	if x.haslayer(TCP) and x.getlayer(TCP).flags == 0x002:
 	  src = x.getlayer(IP).src
@@ -44,8 +44,9 @@ def dotransform(request, response):
 	  if talker not in talkers:
 		talkers.append(talker)
 	
+	
   for z in pkts:
-	if z.haslayer(UDP):
+	if z.haslayer(IP) and z.haslayer(UDP):
 	  src = z.getlayer(IP).src
 	  dport = z.getlayer(UDP).dport
 	  talker = src, 'udp'
@@ -55,8 +56,8 @@ def dotransform(request, response):
   for x, y in talkers:
 	e = IPv4Address(x)
 	e += Field('pcapsrc', request.value, displayname='Original pcap File', matchingrule='loose')
-	e += Field('convosrc', x, displayname='Source IP', matchingrule='loose')
-	e += Field('proto', y , displayname='Protocol', matchingrule='loose')
+	e += Field('convosrc', x, displayname='Source IP', matchingrule='strict')
+	e += Field('proto', y , displayname='Protocol', matchingrule='strict')
 	e.linklabel = y
 	if y == 'tcp':
 	  e.linkcolor = 0x0000FF
