@@ -31,8 +31,9 @@ class Interface(SniffmypacketsEntity):
 @EntityField(name='sniffMyPackets.cport', propname='cport', displayname='Local Port', type=EntityFieldType.String)
 class FileDump(SniffmypacketsEntity):
     pass
-  
-class File(SniffmypacketsEntity):
+
+@EntityField(name='sniffMyPackets.ftype', propname='ftype', displayname='File Type', type=EntityFieldType.String)
+class RebuiltFile(SniffmypacketsEntity):
     pass
   
 class UserLogin(SniffmypacketsEntity):

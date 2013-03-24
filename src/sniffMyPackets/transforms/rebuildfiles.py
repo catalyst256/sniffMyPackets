@@ -1,10 +1,11 @@
 #!/usr/bin/env python
 
-import logging
+import logging, os, glob, uuid, re
 logging.getLogger("scapy.runtime").setLevel(logging.ERROR)
 import scapy.all as scapy
-#from canari.maltego.utils import debug, progress
-from common.entities import pcapFile, File
+from common.dissectors.dissector import *
+from canari.maltego.message import Field, Label
+from common.entities import pcapFile, RebuiltFile
 from canari.framework import configure #, superuser
 
 __author__ = 'catalyst256'
@@ -23,7 +24,7 @@ __all__ = [
 
 #@superuser
 @configure(
-    label='Rebuild Files from HTTP [pcap]',
+    label='Rebuild files from pcap [pcap]',
     description='Rebuilds files from within pcap file',
     uuids=[ 'sniffMyPackets.v2.rebuildFilesFrompcap' ],
     inputs=[ ( 'sniffMyPackets', pcapFile ) ],
@@ -31,7 +32,39 @@ __all__ = [
 )
 def dotransform(request, response):
     
-    pcap = request.value
+    tmpfolder = '/tmp/'+str(uuid.uuid4())
+    if not os.path.exists(tmpfolder): os.makedirs(tmpfolder)
     
+    list_files = []
+    file_types = []
+    objects = []
     
+    dissector = Dissector() # instance of dissector class
+    dissector.change_dfolder(tmpfolder)
+    pkts = dissector.dissect_pkts(request.value)
+    list_files = glob.glob(tmpfolder+'/*')
     
+    for i in list_files:
+      cmd = 'file ' + i
+      x = os.popen(cmd).read()
+      if x not in file_types:
+	file_types.append(x)
+      #print file_types
+      
+    for x in file_types:
+      for t in re.finditer('^([^:]*)',x):
+	fpath = t.group(1)
+	for s in re.finditer('([^:]*)(\s)',x):
+	  ftype = s.group(1)
+	  z = fpath, ftype
+	  if z not in objects:
+	    objects.append(z)
+    
+    for fpath, ftype in objects:
+      e = RebuiltFile(fpath)
+      e.ftype = ftype
+      e += Field('pcapsrc', request.value, displayname='Original pcap File', matchingrule='loose')
+      e.linklabel = ftype
+      e.linkcolor = 0xFF9900
+      response += e
+    return response

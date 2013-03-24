@@ -57,15 +57,15 @@ def dotransform(request, response):
 		    if content not in content_type:
 			content_type.append(content)
 	
-	  for ctype, cip, cport, clength in content_type:
-		e = FileDump(ctype)
-		e.cip = cip
-		e.cport = cport
-		e += Field('pcapsrc', request.value, displayname='Original pcap File', matchingrule='loose')
-		e.linklabel = clength
-		e.linkcolor = 0x33CC33
-		response += e
-		return response
+    for ctype, cip, cport, clength in content_type:
+	  e = FileDump(ctype)
+	  e.cip = cip
+	  e.cport = cport
+	  e += Field('pcapsrc', request.value, displayname='Original pcap File', matchingrule='loose')
+	  e.linklabel = clength
+	  e.linkcolor = 0x33CC33
+	  response += e
+    return response
 	  
 	
     
