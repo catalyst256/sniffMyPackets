@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 
-import os, re
+import re
 import logging
 logging.getLogger("scapy.runtime").setLevel(logging.ERROR)
 from scapy.all import *
 from common.entities import pcapFile, FileDump
-from canari.maltego.message import Field
+from canari.maltego.message import Field, Label
 #from canari.maltego.utils import debug, progress
 from canari.framework import configure #, superuser
 
@@ -40,6 +40,7 @@ def dotransform(request, response):
     ctype = ''
     dstip = ''
     srcport = ''
+    clength = ''
     
     for x in pkts:
 	  if x.haslayer(TCP) and x.haslayer(Raw):
@@ -49,15 +50,20 @@ def dotransform(request, response):
 		for s in re.finditer('Content-Type:*\S*\D\S*', raw):
 		  if s is not None:
 			ctype = s.group()
-		  content = ctype, dstip, srcport
-		  if content not in content_type:
+		  for t in re.finditer('Content-Length:*\S*\D\S*', raw):
+		    if t is not None:
+			clength = t.group()
+		    content = ctype, dstip, srcport, clength
+		    if content not in content_type:
 			content_type.append(content)
 	
-	  for ctype, cip, cport in content_type:
+	  for ctype, cip, cport, clength in content_type:
 		e = FileDump(ctype)
 		e.cip = cip
 		e.cport = cport
 		e += Field('pcapsrc', request.value, displayname='Original pcap File', matchingrule='loose')
+		e.linklabel = clength
+		e.linkcolor = 0x33CC33
 		response += e
 		return response
 	  
