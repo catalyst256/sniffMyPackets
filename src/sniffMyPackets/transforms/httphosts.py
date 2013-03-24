@@ -40,8 +40,8 @@ def dotransform(request, response):
 		for s in re.finditer('Host:(\S*\D\S*)', raw):
 		  if s is not None:
 		    rhost = s.group(1)
-		  if rhost not in get_requests:
-		    get_requests.append(rhost)
+		    if rhost not in get_requests:
+		      get_requests.append(rhost)
       
     for i in get_requests:
       e = Website(i)
