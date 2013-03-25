@@ -32,14 +32,14 @@ def dotransform(request, response):
   
     interface = request.value
     tstamp = int(time())
-    fileName = '/tmp/'+str(tstamp)+'.pcap'
+    fileName = '/tmp/'+str(tstamp)+'.pcap' 
     
     if 'sniffMyPackets.count' in request.fields:
       pktcount = request.fields['sniffMyPackets.count']
     else:
       pktcount = 300
     
-    cmd = 'tshark -i ' + interface + ' -F libpcap' + ' -s 0 -c ' + pktcount + ' -w ' + fileName
+    cmd = 'tshark -i ' + interface + ' -s 0 -c ' + str(pktcount) + ' -w ' + fileName
     os.system(cmd)
     cmd2 = 'editcap ' + fileName + ' -F libpcap ' + fileName
     os.system(cmd2)
