@@ -27,23 +27,21 @@ __all__ = [
     description='Read a pcap file and return list of Hosts from GET requests',
     uuids=[ 'sniffMyPackets.v2.httpgetrequests2domain' ],
     inputs=[ ( 'sniffMyPackets', pcapFile ) ],
-    debug=True
+    debug=False
 )
 def dotransform(request, response):
     
-    pkts = rdpcap(request.value)
+    pcap = request.value
     get_requests = []
     
-    for x in pkts:
-	  if x.haslayer(TCP) and x.haslayer(Raw):
-		raw = x.getlayer(Raw).load
-		for s in re.finditer('Host:(\S*\D\S*)', raw):
-		  if s is not None:
-		    rhost = s.group(1)
-		    if rhost not in get_requests:
-		      get_requests.append(rhost)
-      
-    for i in get_requests:
-      e = Website(i)
+    cmd = 'tshark -r ' + pcap + ' -R "http.request.method == GET" -T fields -e http.host'
+    a = os.popen(cmd).readlines()
+    
+    for host in a:
+	  if host not in get_requests:
+		get_requests.append(host)
+   
+    for host in get_requests:
+      e = Website(host)
       response += e
-      return response
+    return response
