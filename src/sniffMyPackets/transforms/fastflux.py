@@ -49,7 +49,10 @@ def dotransform(request, response):
   for pkt in pkts:
     handlePkt(pkt)
   for item in dnsRecords:
-    if int(len(dnsRecords[item])) >= 5:
+    x = int(len(dnsRecords[item]))
+    if x >= 10:
 	  e = Website(item)
-	  e += Field('pcapsrc', request.value, displayname='Original pcap File', matchingrule='loose')
-      e.linklabel = ftype 
+	  e.linklabel = 'Unique IPs:\n' + str(x)
+	  e.linkcolor = 0x9933FF
+	  response += e
+  return response
