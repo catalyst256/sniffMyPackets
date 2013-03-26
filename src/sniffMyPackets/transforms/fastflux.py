@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import os
 import logging
 logging.getLogger("scapy.runtime").setLevel(logging.ERROR)
 from scapy.all import *
@@ -33,26 +34,23 @@ __all__ = [
 )
 def dotransform(request, response):
 	
-  dnsRecords = {}
-  def handlePkt(pkt):
-    if pkt.haslayer(DNSRR):
-        rrname = pkt.getlayer(DNSRR).rrname
-        rdata = pkt.getlayer(DNSRR).rdata
-        if dnsRecords.has_key(rrname):
-            if rdata not in dnsRecords[rrname]:
-                dnsRecords[rrname].append(rdata)
-        else:
-            dnsRecords[rrname] = []
-            dnsRecords[rrname].append(rdata)
-	
-  pkts = rdpcap(request.value)
+  pcap = request.value
+  dnsresp = []
+  dnsip = []
+  pkts = rdpcap(pcap)
+  
   for pkt in pkts:
-    handlePkt(pkt)
-  for item in dnsRecords:
-    x = int(len(dnsRecords[item]))
-    if x >= 10:
-	  e = Website(item)
-	  e.linklabel = 'Unique IPs:\n' + str(x)
-	  e.linkcolor = 0x9933FF
-	  response += e
-  return response
+	if pkt.haslayer(DNSRR):
+	  rrname = pkt.getlayer(DNSRR).rrname
+	  if rrname not in dnsresp:
+		dnsresp.append(rrname)
+  
+  for domain in dnsresp:
+	print dnsresp
+	  
+  
+	  #e = Website(item)
+	  #e.linklabel = 'Unique IPs:\n' + str(x)
+	  #e.linkcolor = 0x9933FF
+	  #response += e
+  #return response
