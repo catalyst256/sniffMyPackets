@@ -49,7 +49,6 @@ def dotransform(request, response):
       x = os.popen(cmd).read()
       if x not in file_types:
 	file_types.append(x)
-      #print file_types
       
     for x in file_types:
       for t in re.finditer('^([^:]*)',x):

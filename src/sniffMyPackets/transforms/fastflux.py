@@ -42,11 +42,16 @@ def dotransform(request, response):
   for pkt in pkts:
 	if pkt.haslayer(DNSRR):
 	  rrname = pkt.getlayer(DNSRR).rrname
-	  if rrname not in dnsresp:
-		dnsresp.append(rrname)
-  
-  for domain in dnsresp:
-	print dnsresp
+	  rdata = pkt.getlayer(DNSRR).rdata
+	  dnsreq = rrname, rdata
+	  if rdata not in dnsresp:
+		dnsresp.append(dnsreq)
+	
+ 
+ 
+ 
+  for domain, ip in dnsresp:
+	print domain, ip
 	  
   
 	  #e = Website(item)
