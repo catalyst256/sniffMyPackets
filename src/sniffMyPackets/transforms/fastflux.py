@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
-import os, sys
-import logging
+import os, sys, re
+import logging, os, glob, uuid, re
 logging.getLogger("scapy.runtime").setLevel(logging.ERROR)
 from scapy.all import *
 from common.entities import pcapFile
@@ -34,43 +34,24 @@ __all__ = [
 )
 def dotransform(request, response):
 	
-  pkts = rdpcap(request.value)
-  dnsDict = {}
-  dnsCount = {}
+  pcap = request.value
+  pkts = rdpcap(pcap)
+  dnsHost = []
   
-  for pkt in pkts:
-	if pkt.haslayer(DNSRR):
-	  rrname = pkt.getlayer(DNSQR).qname
-	  rdata = pkt.getlayer(DNSRR).rdata
-	  if rrname in dnsDict:
-		rlist = dnsDict[rrname]
-		if (rlist):
-		  if (rdata not in rlist):
-			rlist.append(rdata)
-			dnsDict[rrname]=rlist
-	  else:
-		rlist = []
-		rlist.append(rdata)
-		dnsDict[rrname] = rlist
-		
-	  rlist = dnsDict[rrname]
-	  if (rlist):
-		dnsCount[rrname] = len(rlist)
-	  else:
-		dnsCount[rrname] = 0
-		
-  items = [(v,k) for k, v in dnsCount.items()]
-  items.sort()
-  items.reverse()
-  items = [(k,v) for v,k in items]
+  for x in pkts:
+    if x.haslayer(DNS) and x.haslayer(DNSRR):
+      ancount = x.getlayer(DNS).ancount
+      qname = x.getlayer(DNSRR).rrname
+      if ancount >= 7:
+	dnsrec = qname, ancount
+	if dnsrec not in dnsHost:
+	  dnsHost.append(dnsrec)
   
-  for item in items:
-	print '[+] Host: ' +str(item[0]) +' ,Unique IP Addresses: '+str(item[1])
-	##print 
-
   
-	  #e = Website(item)
-	  #e.linklabel = 'Unique IPs:\n' + str(x)
-	  #e.linkcolor = 0x9933FF
-	  #response += e
-  #return response
+  for dnsv, dnsc in dnsHost:
+      e = Website('Fast Flux?: ' + dnsv)
+      e.linklabel = 'Unique IPs:\n' + str(dnsc)
+      e += Field('dnsv', dnsv, displayname='Original DNS Name', matchingrule='loose')
+      e.linkcolor = 0x9933FF
+      response += e
+  return response
