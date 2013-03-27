@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import os
+import os, sys
 import logging
 logging.getLogger("scapy.runtime").setLevel(logging.ERROR)
 from scapy.all import *
@@ -34,25 +34,40 @@ __all__ = [
 )
 def dotransform(request, response):
 	
-  pcap = request.value
-  dnsresp = []
-  dnsip = []
-  pkts = rdpcap(pcap)
+  pkts = rdpcap(request.value)
+  dnsDict = {}
+  dnsCount = {}
   
   for pkt in pkts:
 	if pkt.haslayer(DNSRR):
-	  rrname = pkt.getlayer(DNSRR).rrname
+	  rrname = pkt.getlayer(DNSQR).qname
 	  rdata = pkt.getlayer(DNSRR).rdata
-	  dnsreq = rrname, rdata
-	  if rdata not in dnsresp:
-		dnsresp.append(dnsreq)
-	
- 
- 
- 
-  for domain, ip in dnsresp:
-	print domain, ip
-	  
+	  if rrname in dnsDict:
+		rlist = dnsDict[rrname]
+		if (rlist):
+		  if (rdata not in rlist):
+			rlist.append(rdata)
+			dnsDict[rrname]=rlist
+	  else:
+		rlist = []
+		rlist.append(rdata)
+		dnsDict[rrname] = rlist
+		
+	  rlist = dnsDict[rrname]
+	  if (rlist):
+		dnsCount[rrname] = len(rlist)
+	  else:
+		dnsCount[rrname] = 0
+		
+  items = [(v,k) for k, v in dnsCount.items()]
+  items.sort()
+  items.reverse()
+  items = [(k,v) for v,k in items]
+  
+  for item in items:
+	print '[+] Host: ' +str(item[0]) +' ,Unique IP Addresses: '+str(item[1])
+	##print 
+
   
 	  #e = Website(item)
 	  #e.linklabel = 'Unique IPs:\n' + str(x)

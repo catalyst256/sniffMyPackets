@@ -33,18 +33,14 @@ __all__ = [
 def dotransform(request, response):
     
     pkts = rdpcap(request.value)
+    passwd = 0 # no password set
+    appledevice = []
     
     for pkt in pkts:
       if pkt.haslayer(UDP) and pkt.getlayer(UDP).sport == 5353:
-	raw = pkt.getlayer(Raw).load
-	srcip = pkt.getlayer(IP).src
-	hwaddr = pkt.getlayer(Ether).src
-	passwd = ''
-	for pwd in re.finditer('pw=1', raw):
-	  if pwd.group() == 1:
-	    passwd = 'True'
-	  else:
-	    passwd = 'False'
-	  
-	print passwd
+		raw = pkt.getlayer(Raw).load
+		srcip = pkt.getlayer(IP).src
+		hwaddr = pkt.getlayer(Ether).src
+		print raw
+		
     #return response
