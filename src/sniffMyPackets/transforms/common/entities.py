@@ -15,6 +15,11 @@ __status__ = 'Development'
 __all__ = [
     'SniffmypacketsEntity',
     'pcapFile',
+    'Interface',
+    'FileDump',
+    'RebuiltFile',
+    'UserLogin',
+    'Port'
 ]
 
 class SniffmypacketsEntity(Entity):
@@ -38,3 +43,10 @@ class RebuiltFile(SniffmypacketsEntity):
   
 class UserLogin(SniffmypacketsEntity):
     pass
+
+@EntityField(name='sniffMyPackets.dstport', propname='dstport', displayname='Dst Port', type=EntityFieldType.String, matchingrule='loose')
+@EntityField(name='sniffMyPackets.srcport', propname='srcport', displayname='Src Port', type=EntityFieldType.String)
+@EntityField(name='sniffMyPackets.dstip', propname='dstip', displayname='Dst IP', type=EntityFieldType.String)
+@EntityField(name='sniffMyPackets.srcip', propname='srcip', displayname='Src IP', type=EntityFieldType.String)
+class port(SniffmypacketsEntity):
+  pass  
