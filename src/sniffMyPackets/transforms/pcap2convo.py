@@ -52,11 +52,11 @@ def dotransform(request, response):
       proto = 'tcp'
       talk = sport, dport
       if talk not in chitchat:
-	chitchat.append(talk)
-	for s in chitchat:
-	  chatter = srcip, sport, destip, dport, proto
-	  if chatter not in convo:
-	    convo.append(chatter)
+		chitchat.append(talk)
+		for s in chitchat:
+		  chatter = srcip, sport, destip, dport, proto
+		  if chatter not in convo:
+			convo.append(chatter)
 
       #if x.haslayer(UDP):
 	#sport = x.getlayer(UDP).sport

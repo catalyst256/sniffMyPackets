@@ -6,7 +6,7 @@ logging.getLogger("scapy.runtime").setLevel(logging.ERROR)
 from scapy.all import *
 from common.entities import pcapFile
 from canari.maltego.message import UIMessage
-from canari.maltego.entities import Website
+from canari.maltego.entities import Domain
 from canari.framework import configure #, superuser
 
 __author__ = 'catalyst256'
@@ -44,6 +44,6 @@ def dotransform(request, response):
 		if x not in dns_results:
 		  dns_results.append(x)
 	for item in dns_results:
-		e = Website(item)
+		e = Domain(item)
 		response += e
 	return response  

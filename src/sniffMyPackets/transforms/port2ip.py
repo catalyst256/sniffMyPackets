@@ -22,11 +22,11 @@ __all__ = [
 
 #@superuser
 @configure(
-    label='Port to IP',
+    label='Port to IP [pcap]',
     description='Matches a port to an Destination IP',
     uuids=[ 'sniffMyPackets.v2.port2ip' ],
     inputs=[ ( 'sniffMyPackets', port ) ],
-    debug=True
+    debug=False
 )
 def dotransform(request, response):
   

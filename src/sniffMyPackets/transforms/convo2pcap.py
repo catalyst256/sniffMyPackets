@@ -24,11 +24,11 @@ __all__ = [
 
 #@superuser
 @configure(
-    label='Write TCP/UDP Convo [pcap]',
+    label='Write Convo [pcap]',
     description='Takes a TCP/UDP convo and saves out to pcap file',
     uuids=[ 'sniffMyPackets.v2.TCPConvo2pcapfile' ],
     inputs=[ ( 'sniffMyPackets', port ) ],
-    debug=True
+    debug=False
 )
 def dotransform(request, response):
 	
