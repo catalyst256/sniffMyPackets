@@ -38,9 +38,6 @@ def dotransform(request, response):
   convo = []
   chitchat = []
   pcap = request.value
-  #srcip = request.value
-  #if 'pcapsrc' in request.fields:
-	#pcap = request.fields['pcapsrc']
   pkts = rdpcap(pcap)
   
   for x in pkts:
@@ -58,13 +55,14 @@ def dotransform(request, response):
 		  if chatter not in convo:
 			convo.append(chatter)
 
-      #if x.haslayer(UDP):
-	#sport = x.getlayer(UDP).sport
-	#dport = x.getlayer(UDP).dport
-	#proto = 'udp'
-	#chatter = srcip, sport, destip, dport, proto
-	#if chatter not in convo:
-	  #convo.append(chatter)
+  for y in pkts:
+	if y.haslayer(UDP):
+	  sport = y.getlayer(UDP).sport
+	  dport = y.getlayer(UDP).dport
+	  proto = 'udp'
+	  chatter = srcip, sport, destip, dport, proto
+	  if chatter not in convo:
+		convo.append(chatter)
 
   for source, sourceport, destination, destinationport, proto in convo:
     portlabel = 'scrip: ' + str(source) + '\n' + 'srcport: ' + str(sourceport) + '\n' + 'dstip: ' + str(destination) + '\n' + 'dstport: ' + str(destinationport)
@@ -73,9 +71,12 @@ def dotransform(request, response):
     e.srcport = sourceport
     e.dstip = destination
     e.srcip = source
-    #e.linklabel = sourceport, proto
     if proto == 'tcp':
       e.linkcolor = 0x0000FF
+      e.linklabel = 'tcp'
+    if proto == 'udp':
+	  e.linkcolor = 0xFE2E2E
+	  e.linklabel = 'udp'
     e += Field('pcapsrc', pcap, displayname='Original pcap File', matchingrule='strict')
     response += e
   return response
