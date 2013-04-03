@@ -19,7 +19,9 @@ __all__ = [
     'FileDump',
     'RebuiltFile',
     'UserLogin',
-    'Port'
+    'port',
+    'Host',
+    'AppleTV'
 ]
 
 class SniffmypacketsEntity(Entity):
@@ -55,4 +57,7 @@ class port(SniffmypacketsEntity):
 @EntityField(name='sniffMyPackets.hostsport', propname='hostsport', displayname='Source Port', type=EntityFieldType.String, matching_rule=MatchingRule.Loose)
 @EntityField(name='sniffMyPackets.hostdport', propname='hostdport', displayname='Destination Port', type=EntityFieldType.String, matching_rule=MatchingRule.Loose)
 class Host(SniffmypacketsEntity):
-  pass  
+  pass
+
+class AppleTV(SniffmypacketsEntity):
+    pass

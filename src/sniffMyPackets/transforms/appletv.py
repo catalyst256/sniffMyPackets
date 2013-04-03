@@ -3,7 +3,8 @@
 import logging, re
 logging.getLogger("scapy.runtime").setLevel(logging.ERROR)
 from scapy.all import *
-from common.entities import pcapFile
+from common.entities import pcapFile, AppleTV
+from canari.maltego.message import Field
 #from canari.maltego.utils import debug, progress
 from canari.framework import configure #, superuser
 
@@ -32,21 +33,38 @@ __all__ = [
 )
 def dotransform(request, response):
     
-    pkts = rdpcap(request.value)
-    passwd = 0 # no password set
-    appledevice = []
-    raw_mdns = []
-    
-    for pkt in pkts:
-      if pkt.haslayer(UDP) and pkt.getlayer(UDP).sport == 5353:
-	raw = pkt.getlayer(Raw).load
-	srcip = pkt.getlayer(IP).src
-	hwaddr = pkt.getlayer(Ether).src
-	if raw not in raw_mdns:
-	  raw_mdns.append(raw)
+  pkts = rdpcap(request.value)
+  passwd = 'True'
+  model = ''
+  hwaddr = ''
+  srcip = ''
+  name = ''
+  raw_mdns = []
+  
+  for pkt in pkts:
+    if pkt.haslayer(UDP) and pkt.getlayer(UDP).sport == 5353:
+      raw = pkt.getlayer(Raw).load
+      srcip = pkt.getlayer(IP).src
+      hwaddr = pkt.getlayer(Ether).src
+      if raw not in raw_mdns:
+	raw_mdns.append(raw)
 	  
-    for x in raw_mdns:
-      for s in re.search('pw=0', x):
-	print s.group()
-		
-    #return response
+  for x in raw_mdns:
+    for s in re.finditer('pw=false', x):
+      if s is not None:
+	passwd = 'False'
+      else:
+	passwd = 'True'
+    for s in re.finditer('model=(\w*?!)', x):
+      if s is not None:
+	model = s.group(1)
+    for s in re.finditer('Name=(.*)', x):
+      if s is not None:
+	name = s.group(1)
+      
+  appletv = 'Name:' + name + '\npwd:' + passwd
+  e = AppleTV(appletv)
+  e += Field('appleip', srcip, displayname='AppleTV IP', matchingrule='loose')
+  e += Field('applemac', hwaddr, displayname='AppleTV MAC', matchingrule='loose')
+  response += e
+  return response
