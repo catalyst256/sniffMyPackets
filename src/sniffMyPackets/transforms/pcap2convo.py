@@ -3,10 +3,8 @@
 import logging
 logging.getLogger("scapy.runtime").setLevel(logging.ERROR)
 from scapy.all import *
-#from canari.maltego.utils import debug, progress
-from common.entities import pcapFile, port
-#from canari.maltego.entities import IPv4Address
-from canari.maltego.message import Field, Label
+from common.entities import pcapFile, Host
+from canari.maltego.message import Field, Label, MatchingRule
 from canari.framework import configure #, superuser
 
 __author__ = 'catalyst256'
@@ -28,58 +26,57 @@ __all__ = [
 #@superuser
 @configure(
     label='Find TCP/UDP Convo [pcap]',
-    description='Maps TCP/UDP ports to Source IPs',
+    description='Maps TCP/UDP Conversations',
     uuids=[ 'sniffMyPackets.v2.pcap2TCPConvo' ],
-    inputs=[ ( 'sniffMyPackets', pcapFile ) ],
+    inputs=[ ( 'sniffMyPackets', Host ) ],
     debug=True
 )
 def dotransform(request, response):
     
   convo = []
-  chitchat = []
-  pcap = request.value
+  
+  srcip = request.value
+  dstip = request.fields['sniffMyPackets.hostdst']
+  pcap = request.fields['pcapsrc']
+  srcport = request.fields['sniffMyPackets.hostsport']
+  dstport = request.fields['sniffMyPackets.hostdport']
+  
   pkts = rdpcap(pcap)
   
   for x in pkts:
-    if x.haslayer(IP) and x.haslayer(TCP):
-      destip = x.getlayer(IP).dst
-      srcip = x.getlayer(IP).src
-      sport = str(x.getlayer(TCP).sport)
-      dport = x.getlayer(TCP).dport
-      proto = 'tcp'
-      talk = sport, dport
-      if talk not in chitchat:
-		chitchat.append(talk)
-		for s in chitchat:
-		  chatter = srcip, sport, destip, dport, proto
-		  if chatter not in convo:
-			convo.append(chatter)
-
-  for y in pkts:
-	if y.haslayer(UDP):
-	  sport = y.getlayer(UDP).sport
-	  dport = y.getlayer(UDP).dport
-	  proto = 'udp'
-	  chatter = srcip, sport, destip, dport, proto
+	if x.haslayer(IP) and x.haslayer(TCP) and x.getlayer(TCP).sport == int(srcport) and x.getlayer(TCP).dport == int(dstport):
+	  src = x.getlayer(IP).src
+	  dst = x.getlayer(IP).dst
+	  sport = x.getlayer(TCP).sport
+	  dport = x.getlayer(TCP).dport
+	  chatter = src, dst, sport, dport, 'tcp'
 	  if chatter not in convo:
 		convo.append(chatter)
-
-  for source, sourceport, destination, destinationport, proto in convo:
-    portlabel = 'scrip: ' + str(source) + '\n' + 'srcport: ' + str(sourceport) + '\n' + 'dstip: ' + str(destination) + '\n' + 'dstport: ' + str(destinationport)
-    e = port(portlabel)
-    e.dstport = destinationport
-    e.srcport = sourceport
-    e.dstip = destination
-    e.srcip = source
-    if proto == 'tcp':
-      e.linkcolor = 0x0000FF
-      e.linklabel = 'tcp'
-    if proto == 'udp':
-	  e.linkcolor = 0xFE2E2E
-	  e.linklabel = 'udp'
-    e += Field('pcapsrc', pcap, displayname='Original pcap File', matchingrule='strict')
-    response += e
-  return response
-
-
+  
+  for y in pkts:
+	if y.haslayer(IP) and y.haslayer(UDP) and y.getlayer(UDP).sport == int(srcport) and y.getlayer(UDP).dport == int(dstport):
+	  src = y.getlayer(IP).src
+	  dst = y.getlayer(IP).dst
+	  sport = y.getlayer(UDP).sport
+	  dport = y.getlayer(UDP).dport
+	  chatter = src, dst, sport, dport, 'udp'
+	  if chatter not in convo:
+		convo.append(chatter)
+  
+  
+  for src, dst, sport, dport, proto in convo:
+	if int(srcport) == int(sport):
+	  e = Host(dstip)
+	  e.hostdst = srcip
+	  e.hostsport = dstport
+	  e.hostdport = srcport
+	  e.linklabel = proto, dst, dstport, src, srcport
+	  if proto == 'tcp':
+		e.linkcolor = 0x2314CA
+	  if proto == 'udp':
+		e.linkcolor = 0x0E7323
+	  e += Field('pcapsrc', pcap, displayname='Original pcap File')
+	  response += e
+  
+	return response
 

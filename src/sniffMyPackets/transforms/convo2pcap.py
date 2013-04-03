@@ -3,7 +3,7 @@
 
 import os
 #from canari.maltego.utils import debug, progress
-from common.entities import pcapFile, port
+from common.entities import pcapFile, Host
 from canari.maltego.entities import IPv4Address
 from canari.maltego.message import Field
 from canari.framework import configure #, superuser
@@ -27,16 +27,16 @@ __all__ = [
     label='Write Convo [pcap]',
     description='Takes a TCP/UDP convo and saves out to pcap file',
     uuids=[ 'sniffMyPackets.v2.TCPConvo2pcapfile' ],
-    inputs=[ ( 'sniffMyPackets', port ) ],
+    inputs=[ ( 'sniffMyPackets', Host ) ],
     debug=False
 )
 def dotransform(request, response):
 	
     pcap = request.fields['pcapsrc']
-    dstip = request.fields['sniffMyPackets.dstip']
-    srcip = request.fields['sniffMyPackets.srcip']
-    sport = request.fields['sniffMyPackets.srcport']
-    dport = request.fields['sniffMyPackets.dstport']
+    dstip = request.fields['sniffMyPackets.hostdst']
+    srcip = request.value
+    sport = request.fields['sniffMyPackets.hostsport']
+    dport = request.fields['sniffMyPackets.hostdport']
     filename = '/tmp/' + str(srcip) + '-' + str(sport) + '.cap'
     
     sharkit = 'tshark -r ' + pcap + ' -R "ip.dst==' + str(dstip) + ' and ip.src==' + str(srcip) + ' and tcp.dstport==' + str(dport) + ' and tcp.srcport==' + str(sport) + '"' + ' -w ' + filename + ' -F libpcap'

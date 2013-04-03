@@ -44,9 +44,15 @@ class RebuiltFile(SniffmypacketsEntity):
 class UserLogin(SniffmypacketsEntity):
     pass
 
-@EntityField(name='sniffMyPackets.dstport', propname='dstport', displayname='Dst Port', type=EntityFieldType.String, matchingrule='loose')
+@EntityField(name='sniffMyPackets.dstport', propname='dstport', displayname='Dst Port', type=EntityFieldType.String, matching_rule=MatchingRule.Loose)
 @EntityField(name='sniffMyPackets.srcport', propname='srcport', displayname='Src Port', type=EntityFieldType.String)
 @EntityField(name='sniffMyPackets.dstip', propname='dstip', displayname='Dst IP', type=EntityFieldType.String)
 @EntityField(name='sniffMyPackets.srcip', propname='srcip', displayname='Src IP', type=EntityFieldType.String)
 class port(SniffmypacketsEntity):
+  pass
+
+@EntityField(name='sniffMyPackets.hostdst', propname='hostdst', displayname='Destination IP', type=EntityFieldType.String, matching_rule=MatchingRule.Loose)
+@EntityField(name='sniffMyPackets.hostsport', propname='hostsport', displayname='Source Port', type=EntityFieldType.String, matching_rule=MatchingRule.Loose)
+@EntityField(name='sniffMyPackets.hostdport', propname='hostdport', displayname='Destination Port', type=EntityFieldType.String, matching_rule=MatchingRule.Loose)
+class Host(SniffmypacketsEntity):
   pass  
