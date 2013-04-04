@@ -5,6 +5,7 @@ logging.getLogger("scapy.runtime").setLevel(logging.ERROR)
 from scapy.all import *
 from common.entities import pcapFile
 from canari.maltego.entities import IPv4Address
+from canari.maltego.message import Label
 from canari.framework import configure #, superuser
 
 __author__ = 'catalyst256'
@@ -43,5 +44,6 @@ def dotransform(request, response):
   
   for x in hosts:
 	e = IPv4Address(x)
+	e.linklabel = 'ARP'
 	response += e
   return response
