@@ -70,11 +70,11 @@ def dotransform(request, response):
 	  e.hostdst = srcip
 	  e.hostsport = dstport
 	  e.hostdport = srcport
-	  #e.linklabel = proto, dst, dstport, src, srcport
-	  #if proto == 'tcp':
-		#e.linkcolor = 0x2314CA
-	  #if proto == 'udp':
-		#e.linkcolor = 0x0E7323
+	  e.linklabel = proto, dst, dstport, src, srcport
+	  if proto == 'tcp':
+		e.linkcolor = 0x2314CA
+	  if proto == 'udp':
+		e.linkcolor = 0x0E7323
 	  e += Field('pcapsrc', pcap, displayname='Original pcap File')
 	  response += e
   
