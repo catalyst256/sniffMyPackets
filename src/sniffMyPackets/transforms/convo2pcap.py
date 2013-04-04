@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 
-
-import os
-#from canari.maltego.utils import debug, progress
+import logging, os, hashlib, sys
+logging.getLogger("scapy.runtime").setLevel(logging.ERROR)
+from scapy.all import *
 from common.entities import pcapFile, Host
 from canari.maltego.entities import IPv4Address
-from canari.maltego.message import Field
+from canari.maltego.message import Field, Label
 from canari.framework import configure #, superuser
 
 __author__ = 'catalyst256'
@@ -28,7 +28,7 @@ __all__ = [
     description='Takes a TCP/UDP convo and saves out to pcap file',
     uuids=[ 'sniffMyPackets.v2.TCPConvo2pcapfile' ],
     inputs=[ ( 'sniffMyPackets', Host ) ],
-    debug=False
+    debug=True
 )
 def dotransform(request, response):
 	
@@ -39,10 +39,25 @@ def dotransform(request, response):
     dport = request.fields['sniffMyPackets.hostdport']
     filename = '/tmp/' + str(srcip) + '-' + str(sport) + '.cap'
     
+    # Filter the traffic based on the entity values and save the pcap file with new name
     sharkit = 'tshark -r ' + pcap + ' -R "ip.dst==' + str(dstip) + ' and ip.src==' + str(srcip) + ' and tcp.dstport==' + str(dport) + ' and tcp.srcport==' + str(sport) + '"' + ' -w ' + filename + ' -F libpcap'
     os.system(sharkit)
     
+    # Count the number of packets in the file
+    pktcount = ''
+    pkts = rdpcap(filename)
+    pktcount = len(pkts)
+    
+    # Hash the file and return a SHA1 sum
+    sha1sum = ''
+    fh = open(filename, 'rb')
+    sha1sum = hashlib.sha1(fh.read()).hexdigest()
+    
     e = pcapFile(filename)
+    e.sha1hash = sha1sum
+    e += Field('pktcnt', pktcount, displayname='Number of packets', matchingrule='loose')
+    e.linklabel = '# of pkts:' + str(pktcount)
+    e.linkcolor = 0x669900
     response += e
     return response
     
