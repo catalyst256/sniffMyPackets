@@ -13,7 +13,6 @@ __all__ = [
     'arplistener',
     'smtpauth',
     'pcap2talkers',
-    'port2ip',
     'appletv',
     'fastflux',
     'httphosts',
