@@ -53,9 +53,11 @@ class UserLogin(SniffmypacketsEntity):
 class port(SniffmypacketsEntity):
   pass
 
-@EntityField(name='sniffMyPackets.hostdst', propname='hostdst', displayname='Destination IP', type=EntityFieldType.String, matching_rule=MatchingRule.Loose)
-@EntityField(name='sniffMyPackets.hostsport', propname='hostsport', displayname='Source Port', type=EntityFieldType.String, matching_rule=MatchingRule.Loose)
-@EntityField(name='sniffMyPackets.hostdport', propname='hostdport', displayname='Destination Port', type=EntityFieldType.String, matching_rule=MatchingRule.Loose)
+@EntityField(name='sniffMyPackets.hostsrc', propname='hostsrc', displayname='Source IP', type=EntityFieldType.String)
+@EntityField(name='sniffMyPackets.hostdst', propname='hostdst', displayname='Destination IP', type=EntityFieldType.String)
+@EntityField(name='sniffMyPackets.hostsport', propname='hostsport', displayname='Source Port', type=EntityFieldType.String)
+@EntityField(name='sniffMyPackets.hostdport', propname='hostdport', displayname='Destination Port', type=EntityFieldType.String)
+
 class Host(SniffmypacketsEntity):
   pass
 

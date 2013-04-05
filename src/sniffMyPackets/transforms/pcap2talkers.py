@@ -60,7 +60,9 @@ def dotransform(request, response):
   
   
   for src, dst, sport, dport, proto in talkers:
-	e = Host(src)
+	talker = src, sport
+	e = Host(talker)
+	e.hostsrc = src
 	e.hostdst = dst
 	e.hostsport = sport
 	e.hostdport = dport

@@ -66,17 +66,19 @@ def dotransform(request, response):
   
   for src, dst, sport, dport, proto in convo:
 	if int(srcport) == int(sport):
-	  e = Host(dstip)
-	  e.hostdst = srcip
-	  e.hostsport = dstport
-	  e.hostdport = srcport
-	  e.linklabel = proto, dst, dstport, src, srcport
+	  talker = dst, dport
+	  e = Host(talker)
+	  e.hostsrc = dst
+	  e.hostdst = src
+	  e.hostsport = dport
+	  e.hostdport = sport
+	  e.linklabel = proto
 	  if proto == 'tcp':
 		e.linkcolor = 0x2314CA
 	  if proto == 'udp':
 		e.linkcolor = 0x0E7323
 	  e += Field('pcapsrc', pcap, displayname='Original pcap File')
 	  response += e
-  
-	return response
+
+  return response
 
