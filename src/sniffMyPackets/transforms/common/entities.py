@@ -54,3 +54,7 @@ class Host(SniffmypacketsEntity):
 
 class AppleTV(SniffmypacketsEntity):
     pass
+
+@EntityField(name='sniffMyPackets.emailhash', propname='emailhash', displayname='SHA1 Hash', type=EntityFieldType.String)
+class EmailMessage(SniffmypacketsEntity):
+    pass

@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import logging, os, glob, uuid, re
+import logging, os, glob, uuid, re, hashlib
 logging.getLogger("scapy.runtime").setLevel(logging.ERROR)
 import scapy.all as scapy
 from common.dissectors.dissector import *
@@ -63,6 +63,7 @@ def dotransform(request, response):
       e = RebuiltFile(fpath)
       e.ftype = ftype
       e += Field('pcapsrc', request.value, displayname='Original pcap File', matchingrule='loose')
+      e += Field('tmpfolder', tmpfolder, displayname='Folder Location')
       e.linklabel = ftype
       e.linkcolor = 0xFF9900
       response += e

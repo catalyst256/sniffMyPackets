@@ -34,8 +34,7 @@ __all__ = [
 )
 def dotransform(request, response):
     
-    pcap = request.value
-    pkts = rdpcap(pcap)
+    pkts = rdpcap(request.value)
     content_type = []
     ctype = ''
     dstip = ''
