@@ -3,6 +3,7 @@
 import os, sys, email, errno, mimetypes, hashlib
 from random import randint
 from common.entities import EmailMessage, RebuiltFile
+from canari.maltego.message import Field, Label
 from canari.framework import configure #, superuser
 
 __author__ = 'catalyst256'

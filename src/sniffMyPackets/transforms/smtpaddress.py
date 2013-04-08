@@ -4,7 +4,7 @@
 import logging, base64, re
 from common.entities import pcapFile, RebuiltFile
 from canari.maltego.entities import EmailAddress
-from canari.maltego.message import Field, Label
+from canari.maltego.message import Field, Label, MatchingRule
 from canari.framework import configure #, superuser
 
 __author__ = 'catalyst256'
@@ -34,6 +34,7 @@ __all__ = [
 def dotransform(request, response):
   
   headerdata = []
+  emailaddr = []
   msgfile = request.value
   lookFor = 'DATA'
   tmpfolder = request.fields['tmpfolder']
@@ -44,8 +45,22 @@ def dotransform(request, response):
     reader = msgfile.read()
     for i, part in enumerate(reader.split(lookFor)):
       if i == 0:
-	headerdata.append(part)
+		headerdata.append(part)
   
-  for x in headerdata:
-    if s in re.finditer('(MAIL FROM: )(\S*) ', x):
-      print s.group(1)
+  header = str(headerdata)
+  #print header
+
+  for s in re.finditer('(MAIL FROM: )(<\S*>)', header):
+	addr = (s.group(2).strip('<>').strip('>')), 'mail_from'
+	emailaddr.append(addr)
+	
+  for s in re.finditer('(RCPT TO: )(<\S*>)', header):
+	addr = (s.group(2).strip('<>').strip('>')), 'rcpt_to'
+	emailaddr.append(addr)
+	
+  for addr, addrfield in emailaddr:
+	e = EmailAddress(addr)
+	e += Field('filelocation', request.value, displayname='File Location', matchingrule='loose')
+	e += Field('emailaddr', addrfield, displayname='Header Info')
+	response += e
+  return response
