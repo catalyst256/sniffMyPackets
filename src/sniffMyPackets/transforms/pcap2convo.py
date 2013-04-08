@@ -79,6 +79,5 @@ def dotransform(request, response):
 		e.linkcolor = 0x0E7323
 	  e += Field('pcapsrc', pcap, displayname='Original pcap File')
 	  response += e
-
   return response
 
