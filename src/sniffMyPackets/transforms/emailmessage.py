@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import os, sys, email, errno, mimetypes, hashlib
+import os, sys, email, errno, mimetypes, hashlib, re
 from random import randint
 from common.entities import EmailMessage, RebuiltFile
 from canari.maltego.message import Field, Label
@@ -8,8 +8,7 @@ from canari.framework import configure #, superuser
 
 __author__ = 'catalyst256'
 __copyright__ = 'Copyright 2013, Sniffmypackets Project'
-__credits__ = 'Big thanks to Jeremy Rossi for his findsmtpinfo.py script that was the inspiration for this transform. The code here is mine but based on his original script'
-
+__credits__ = []
 __license__ = 'GPL'
 __version__ = '0.1'
 __maintainer__ = 'catalyst256'
@@ -23,7 +22,7 @@ __all__ = [
 
 #@superuser
 @configure(
-    label='Strip email attachments [pcap]',
+    label='Find SMTP Attachments [pcap]',
     description='Looks for email attachments in rebuilt files and rebuilds them',
     uuids=[ 'sniffMyPackets.v2.unpackattachment2folder' ],
     inputs=[ ( 'sniffMyPackets', RebuiltFile ) ],
@@ -82,8 +81,16 @@ def dotransform(request, response):
       fh = open(savefile, 'rb')
       sha1sum = hashlib.sha1(fh.read()).hexdigest()
       
+      # Determine the file type and use as link label
+      cmd = 'file ' + savefile
+      x = os.popen(cmd).read()
+      for s in re.finditer('([^:]*)(\s)',x):
+		ftype = s.group(1)
+      
       e = EmailMessage(savefile)
       e.emailhash = sha1sum
+      e.emailtype = ftype
       e += Field('newfolder', newfolder, displayname='Folder Location')
+      e.linklabel = ftype
       response += e
     return response

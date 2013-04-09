@@ -47,21 +47,26 @@ def dotransform(request, response):
     for i in list_files:
       cmd = 'file ' + i
       x = os.popen(cmd).read()
-      if x not in file_types:
-	file_types.append(x)
+      fhash = ''
+      fh = open(i, 'rb')
+      fhash = hashlib.sha1(fh.read()).hexdigest()
+      file_details = x, fhash
+      if file_details not in file_types:
+		file_types.append(file_details)
       
-    for x in file_types:
+    for x, fhash in file_types:
       for t in re.finditer('^([^:]*)',x):
-	fpath = t.group(1)
-	for s in re.finditer('([^:]*)(\s)',x):
-	  ftype = s.group(1)
-	  z = fpath, ftype
-	  if z not in objects:
-	    objects.append(z)
+		fpath = t.group(1)
+		for s in re.finditer('([^:]*)(\s)',x):
+		  ftype = s.group(1)
+		  z = fpath, ftype, fhash
+		  if z not in objects:
+			objects.append(z)
     
-    for fpath, ftype in objects:
+    for fpath, ftype, fhash in objects:
       e = RebuiltFile(fpath)
       e.ftype = ftype
+      e.fhash = fhash
       e += Field('pcapsrc', request.value, displayname='Original pcap File', matchingrule='loose')
       e += Field('tmpfolder', tmpfolder, displayname='Folder Location')
       e.linklabel = ftype

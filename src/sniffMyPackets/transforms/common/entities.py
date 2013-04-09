@@ -38,6 +38,7 @@ class Interface(SniffmypacketsEntity):
 class FileDump(SniffmypacketsEntity):
     pass
 
+@EntityField(name='sniffMyPackets.fhash', propname='fhash', displayname='File Hash', type=EntityFieldType.String)
 @EntityField(name='sniffMyPackets.ftype', propname='ftype', displayname='File Type', type=EntityFieldType.String)
 class RebuiltFile(SniffmypacketsEntity):
     pass
@@ -56,5 +57,9 @@ class AppleTV(SniffmypacketsEntity):
     pass
 
 @EntityField(name='sniffMyPackets.emailhash', propname='emailhash', displayname='SHA1 Hash', type=EntityFieldType.String)
+@EntityField(name='sniffMyPackets.emailtype', propname='emailtype', displayname='Attachment Type', type=EntityFieldType.String)
 class EmailMessage(SniffmypacketsEntity):
+    pass
+
+class GenericFile(SniffmypacketsEntity):
     pass
