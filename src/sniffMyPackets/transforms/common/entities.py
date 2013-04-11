@@ -63,3 +63,10 @@ class EmailMessage(SniffmypacketsEntity):
 
 class GenericFile(SniffmypacketsEntity):
     pass
+
+@EntityField(name='sniffMyPackets.dhcpdomain', propname='dhcpdomain', displayname='Domain Name', type=EntityFieldType.String)
+@EntityField(name='sniffMyPackets.dhcpns', propname='dhcpns', displayname='DNS Server Address', type=EntityFieldType.String)
+@EntityField(name='sniffMyPackets.dhcpgw', propname='dhcpgw', displayname='Gateway Address', type=EntityFieldType.String)
+@EntityField(name='sniffMyPackets.dhcpsubnet', propname='dhcpsubnet', displayname='Subnet Address', type=EntityFieldType.String)
+class DHCPServer(SniffmypacketsEntity):
+    pass
