@@ -20,7 +20,11 @@ __all__ = [
     'RebuiltFile',
     'UserLogin',
     'Host',
-    'AppleTV'
+    'AppleTV',
+    'EmailMessage',
+    'DHCPServer',
+    'GenericFile',
+    'AccessPoint'
 ]
 
 class SniffmypacketsEntity(Entity):
@@ -70,3 +74,9 @@ class GenericFile(SniffmypacketsEntity):
 @EntityField(name='sniffMyPackets.dhcpsubnet', propname='dhcpsubnet', displayname='Subnet Address', type=EntityFieldType.String)
 class DHCPServer(SniffmypacketsEntity):
     pass
+
+@EntityField(name='sniffMyPackets.apbssid', propname='apbssid', displayname='BSSID', type=EntityFieldType.String)
+@EntityField(name='sniffMyPackets.apchannel', propname='apchannel', displayname='Channel', type=EntityFieldType.String)
+@EntityField(name='sniffMyPackets.apenc', propname='apenc', displayname='Encryption', type=EntityFieldType.String)
+class AccessPoint(SniffmypacketsEntity):
+  pass
