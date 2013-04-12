@@ -43,8 +43,6 @@ def dotransform(request, response):
 	    station.append(p.getlayer(Dot11).addr2)
 	    
   
-  #print deauth_packets
-  #print station
   for x in station:
     e = WarningAlert('Deauth Attack:' + str(x))
     e.linklabel = '# of pkts: ' + str(deauth_packets.count(x))

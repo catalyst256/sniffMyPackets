@@ -4,8 +4,7 @@ import os, sys, re
 import logging, os, glob, uuid, re
 logging.getLogger("scapy.runtime").setLevel(logging.ERROR)
 from scapy.all import *
-from common.entities import pcapFile
-from canari.maltego.entities import Domain
+from common.entities import pcapFile, WarningAlert
 from canari.maltego.message import Field, Label
 from canari.framework import configure #, superuser
 
@@ -49,9 +48,8 @@ def dotransform(request, response):
   
   
   for dnsv, dnsc in dnsHost:
-      e = Domain('Fast Flux?: ' + dnsv)
+      e = WarningAlert('Fast Flux?: ' + dnsv)
       e.linklabel = 'Unique IPs:\n' + str(dnsc)
-      e += Field('dnsv', dnsv, displayname='Original DNS Name', matchingrule='loose')
-      e.linkcolor = 0x9933FF
+      e.linkcolor = 0xFF0000
       response += e
   return response
