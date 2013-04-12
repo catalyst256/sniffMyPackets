@@ -46,7 +46,7 @@ def dotransform(request, response):
 	  dport = x.getlayer(TCP).dport
 	  talker = src, dst, sport, dport, 'tcp'
 	  if talker not in talkers:
-		talkers.append(talker)
+	    talkers.append(talker)
   
   for y in pkts:
 	if y.haslayer(IP) and y.haslayer(UDP):
@@ -55,8 +55,8 @@ def dotransform(request, response):
 	  sport = y.getlayer(UDP).sport
 	  dport = y.getlayer(UDP).dport
 	  chatter = src, dst, sport, dport, 'udp'
-	  if talker not in talkers:
-		talkers.append(talker)
+	  if chatter not in talkers:
+		talkers.append(chatter)
   
   
   for src, dst, sport, dport, proto in talkers:
