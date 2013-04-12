@@ -4,6 +4,7 @@ import logging
 logging.getLogger("scapy.runtime").setLevel(logging.ERROR)
 from scapy.all import *
 from common.entities import pcapFile, AccessPoint
+from canari.maltego.message import Label
 from canari.framework import configure #, superuser
 
 __author__ = 'catalyst256'
@@ -53,5 +54,7 @@ def dotransform(request, response):
     e.apbssid = bssid
     e.apchannel = channel
     e.apenc = enc
+    e.linklabel = 'Channel:' + channel + '\nEncryption:' + enc
+    e.linkcolor = 0xFF4000
     response += e
   return response  

@@ -24,7 +24,9 @@ __all__ = [
     'EmailMessage',
     'DHCPServer',
     'GenericFile',
-    'AccessPoint'
+    'AccessPoint',
+    'WifiClient',
+    'WarningAlert'
 ]
 
 class SniffmypacketsEntity(Entity):
@@ -80,3 +82,10 @@ class DHCPServer(SniffmypacketsEntity):
 @EntityField(name='sniffMyPackets.apenc', propname='apenc', displayname='Encryption', type=EntityFieldType.String)
 class AccessPoint(SniffmypacketsEntity):
   pass
+
+@EntityField(name='sniffMyPackets.clientSSID', propname='clientSSID', displayname='Client SSID', type=EntityFieldType.String)
+class WifiClient(SniffmypacketsEntity):
+    pass
+  
+class WarningAlert(SniffmypacketsEntity):
+    pass
