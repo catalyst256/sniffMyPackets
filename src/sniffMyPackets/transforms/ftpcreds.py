@@ -20,7 +20,7 @@ __all__ = [
 
 #@superuser
 @configure(
-    label='Look for FTP Creds [pcap]',
+    label='Find FTP Creds [pcap]',
     description='Search pcap file for FTP creds',
     uuids=[ 'sniffMyPackets.v2.pcapFile2ftpCreds' ],
     inputs=[ ( 'sniffMyPackets', pcapFile ) ],

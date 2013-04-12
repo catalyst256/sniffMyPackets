@@ -50,7 +50,7 @@ def dotransform(request, response):
 	aps.append(entity)
   
   for ssid, bssid, channel, enc in aps:
-    e = AccessPoint(ssid)
+    e = AccessPoint(ssid + ':' + bssid)
     e.apbssid = bssid
     e.apchannel = channel
     e.apenc = enc

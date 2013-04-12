@@ -26,7 +26,7 @@ __all__ = [
 
 #@superuser
 @configure(
-    label='Find Wifi Probes [pcap]',
+    label='Find Wireless Probes [pcap]',
     description='Looks for Wifi Probes and maps to client',
     uuids=[ 'sniffMyPackets.v2.pcapfindwifiprobes' ],
     inputs=[ ( 'sniffMyPackets', pcapFile ) ],
@@ -52,6 +52,6 @@ def dotransform(request, response):
 	e = WifiClient(mac)
 	e.clientSSID = ssid
 	e.linklabel = ssid
-	e.linkcolour = 0xFF00FF
+	e.linkcolor = 0xFF00FF
 	response += e
   return response

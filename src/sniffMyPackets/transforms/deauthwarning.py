@@ -24,7 +24,7 @@ __all__ = [
 
 #@superuser
 @configure(
-    label='Find suspected DeAuth Attack [pcap]',
+    label='Find DeAuth Attack [pcap]',
     description='Looks for large numbers of Deauth Packets',
     uuids=[ 'sniffMyPackets.v2.Findwifi_deatuhattack' ],
     inputs=[ ( 'sniffMyPackets', pcapFile ) ],
@@ -38,15 +38,16 @@ def dotransform(request, response):
   
   for p in pkts:
 	if p.haslayer(Dot11) and p.haslayer(Dot11Deauth):
-	  station.append(p.getlayer(Dot11).addr2)
-	  rcode = p.getlayer(Dot11Deauth).reason
-	  if p.getlayer(Dot11).addr2 == station and p.getlayer(Dot11Deauth).reason == rcode:
-		deauth_packets.append(station)
+	  deauth_packets.append(p.getlayer(Dot11).addr2)
+	  if p.getlayer(Dot11).addr2 not in station:
+	    station.append(p.getlayer(Dot11).addr2)
+	    
   
-  #for x in deauth_packets:
-  print station
-  print deauth_packets.count(station)
-  
-	
-	  
-  
+  #print deauth_packets
+  #print station
+  for x in station:
+    e = WarningAlert('Deauth Attack:' + str(x))
+    e.linklabel = '# of pkts: ' + str(deauth_packets.count(x))
+    e.linkcolor = 0xFF0000
+    response += e
+  return response
