@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 
-import os
+import logging, hashlib
+logging.getLogger("scapy.runtime").setLevel(logging.ERROR)
+from scapy.all import *
 from time import time
 from common.entities import Interface, pcapFile
 #from canari.maltego.utils import debug, progress
@@ -35,14 +37,19 @@ def dotransform(request, response):
     fileName = '/tmp/'+str(tstamp)+'.pcap' 
     
     if 'sniffMyPackets.count' in request.fields:
-      pktcount = request.fields['sniffMyPackets.count']
+      pktcount = int(request.fields['sniffMyPackets.count'])
     else:
       pktcount = 300
     
-    cmd = 'tshark -i ' + interface + ' -s 0 -c ' + str(pktcount) + ' -w ' + fileName
-    os.system(cmd)
-    cmd2 = 'editcap ' + fileName + ' -F libpcap ' + fileName
-    os.system(cmd2)
+    pkts = sniff(iface=interface, count=pktcount)
+    
+    wrpcap(fileName, pkts)
+    
+    sha1hash = ''
+    fh = open(fileName, 'rb')
+    sha1hash = hashlib.sha1(fh.read()).hexdigest()
+        
     e = pcapFile(fileName)
+    e.sha1hash = sha1hash
     response += e
     return response
