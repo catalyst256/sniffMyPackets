@@ -28,7 +28,7 @@ __all__ = [
 @configure(
     label='Find DHCP Servers [pcap]',
     description='Reads pcap file and returns DHCP servers and options',
-    uuids=[ 'TODO something.v2.SomethingToPhrase_HelloWorld' ],
+    uuids=[ 'sniffMyPackets.v2.pcap2dhcpserver' ],
     inputs=[ ( 'sniffMyPackets', pcapFile ) ],
     debug=True
 )
