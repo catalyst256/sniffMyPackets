@@ -4,7 +4,7 @@ import logging
 logging.getLogger("scapy.runtime").setLevel(logging.ERROR)
 from scapy.all import *
 from common.entities import pcapFile,DHCPServer
-from canari.maltego.message import Label, Field
+from canari.maltego.message import Label, Field, UIMessage
 from canari.framework import configure #, superuser
 
 __author__ = 'catalyst256'
@@ -49,18 +49,13 @@ def dotransform(request, response):
 		for line in raw:
 		  dhcp_raw.append(line[1])
   
-  
-  x = dhcp_raw[6]
-  for s in re.finditer('(^\w*\.\w*)', x):
-	domain = s.group()
-  
-  
-  # Create the new DHCP server entity
-  e = DHCPServer(dhcp_raw[1])
-  e.dhcpsubnet = dhcp_raw[3]
-  e.linklabel = dhcp_raw[2]
-  e.dhcpdomain = domain
-  e.dhcpns = dhcp_raw[5]
-  e.dhcpgw = dhcp_raw[4]
-  response += e
-  return response
+  if len(dhcp_raw) != 0:
+    e = DHCPServer(dhcp_raw[1])
+    e.dhcpsubnet = dhcp_raw[3]
+    e.linklabel = dhcp_raw[2]
+    e.dhcpns = dhcp_raw[5]
+    e.dhcpgw = dhcp_raw[4]
+    response += e
+    return response
+  else:
+    return response + UIMessage('No DHCP Servers found!!')
