@@ -69,7 +69,7 @@ def dotransform(request, response):
     for s in re.finditer('(\'lease_time\'\, )(\d*)', x):
      lease = s.group(2)
     for s in re.finditer('(\'domain\'\, )(\S*)', x):
-     domain = s.group(2)
+     domain = s.group(2)[1:-6]
     
     e = DHCPServer(serverid)
     e.dhcpsubnet = subnet
