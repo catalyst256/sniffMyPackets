@@ -45,16 +45,38 @@ def dotransform(request, response):
 	if x.haslayer(BOOTP) and x.haslayer(DHCP) and x.getlayer(BOOTP).op == 0x02:
 	  raw = x.getlayer(DHCP).options
 	  if 0x05 in raw[0]:
-		#print raw
 		for line in raw:
-		  dhcp_raw.append(line[1])
+		  dhcp_raw.append(line)
   
   if len(dhcp_raw) != 0:
-    e = DHCPServer(dhcp_raw[1])
-    e.dhcpsubnet = dhcp_raw[3]
-    e.linklabel = dhcp_raw[2]
-    e.dhcpns = dhcp_raw[5]
-    e.dhcpgw = dhcp_raw[4]
+    x =  '\n'.join(map(str, dhcp_raw))
+    
+    #print x
+    serverid = ''
+    subnet = ''
+    lease = ''
+    gateway = ''
+    domain = str('')
+    dnsserver = ''
+    for s in re.finditer('(\'server_id\'\, \')(\d*.\d*.\d*.\d*)', x):
+      serverid = s.group(2)
+    for s in re.finditer('(\'subnet_mask\'\, \')(\d*.\d*.\d*.\d*)', x):
+     subnet = s.group(2)
+    for s in re.finditer('(\'router\'\, \')(\d*.\d*.\d*.\d*)', x):
+     gateway = s.group(2)
+    for s in re.finditer('(\'name_server\'\, \')(\d*.\d*.\d*.\d*)', x):
+     dnsserver = s.group(2)
+    for s in re.finditer('(\'lease_time\'\, )(\d*)', x):
+     lease = s.group(2)
+    for s in re.finditer('(\'domain\'\, )(\S*)', x):
+     domain = s.group(2)
+    
+    e = DHCPServer(serverid)
+    e.dhcpsubnet = subnet
+    e.linklabel = lease
+    e.dhcpns = dnsserver
+    e.dhcpgw = gateway
+    e.dhcpdomain = domain
     response += e
     return response
   else:

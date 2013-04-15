@@ -17,8 +17,7 @@ __email__ = 'catalyst256@gmail.com'
 __status__ = 'Development'
 
 __all__ = [
-    'dotransform',
-    'onterminate'
+    'dotransform'
 ]
 
 

@@ -5,7 +5,7 @@ import logging
 logging.getLogger("scapy.runtime").setLevel(logging.ERROR)
 from scapy.all import *
 from common.entities import pcapFile
-from canari.maltego.message import UIMessage
+from canari.maltego.message import UIMessage, Field
 from canari.maltego.entities import Domain
 from canari.framework import configure #, superuser
 
@@ -40,10 +40,13 @@ def dotransform(request, response):
 	
 	for pkts in pkt:
 	  if pkts.haslayer(DNS) and pkts.getlayer(DNS).qr == 0:
-		x = pkts.getlayer(DNS).qd.qname
+		drec = pkts.getlayer(DNS).qd.qname
+		srcip = pkts.getlayer(IP).src
+		x = drec, srcip
 		if x not in dns_results:
 		  dns_results.append(x)
-	for item in dns_results:
-		e = Domain(item)
+	for drec, srcip in dns_results:
+		e = Domain(drec)
+		e += Field('hostsrc', srcip, displayname='Source IP')
 		response += e
 	return response  

@@ -10,6 +10,8 @@ __maintainer__ = 'catalyst256'
 __email__ = 'catalyst256@gmail.com'
 __status__ = 'Development'
 __all__ = [
+    'map2ip',
+    'portscan',
     'deauthwarning',
     'wifiprobes',
     'wifiwaps',
