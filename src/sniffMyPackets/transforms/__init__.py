@@ -11,7 +11,7 @@ __email__ = 'catalyst256@gmail.com'
 __status__ = 'Development'
 __all__ = [
     'map2ip',
-    'portscan',
+    'tcpportscan',
     'deauthwarning',
     'wifiprobes',
     'wifiwaps',

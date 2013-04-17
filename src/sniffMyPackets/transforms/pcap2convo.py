@@ -4,6 +4,7 @@ import logging
 logging.getLogger("scapy.runtime").setLevel(logging.ERROR)
 from scapy.all import *
 from common.entities import pcapFile, Host
+from canari.maltego.entities import IPv4Address
 from canari.maltego.message import Field, Label, MatchingRule
 from canari.framework import configure #, superuser
 
@@ -28,50 +29,43 @@ __all__ = [
     label='Find TCP/UDP Convo [pcap]',
     description='Maps TCP/UDP Conversations',
     uuids=[ 'sniffMyPackets.v2.pcap2TCPConvo' ],
-    inputs=[ ( 'sniffMyPackets', Host ) ],
+    inputs=[ ( 'sniffMyPackets', IPv4Address ) ],
     debug=True
 )
 def dotransform(request, response):
     
   convo = []
-  
-  srcip = request.value
-  dstip = request.fields['sniffMyPackets.hostdst']
+  target = request.value
   pcap = request.fields['pcapsrc']
-  srcport = request.fields['sniffMyPackets.hostsport']
-  dstport = request.fields['sniffMyPackets.hostdport']
-  
   pkts = rdpcap(pcap)
   
-  for x in pkts:
-	if x.haslayer(IP) and x.haslayer(TCP) and x.getlayer(TCP).sport == int(srcport) and x.getlayer(TCP).dport == int(dstport):
-	  src = x.getlayer(IP).src
-	  dst = x.getlayer(IP).dst
-	  sport = x.getlayer(TCP).sport
-	  dport = x.getlayer(TCP).dport
-	  chatter = src, dst, sport, dport, 'tcp'
-	  if chatter not in convo:
-		convo.append(chatter)
+  for p in pkts:
+		if p.haslayer(TCP) and p.getlayer(IP).src == target:
+			srcip = p.getlayer(IP).src
+			dstip = p.getlayer(IP).dst
+			sport = p.getlayer(TCP).sport
+			dport = p.getlayer(TCP).dport
+			talker = srcip, dstip, sport, dport, pcap, 'tcp'
+			if talker not in convo:
+				convo.append(talker)
+
+	# for x in pkts:
+		if p.haslayer(IP) and p.haslayer(UDP) and p.getlayer(IP).src == target:
+			srcip = p.getlayer(IP).src
+			dstip = p.getlayer(IP).dst
+			sport = p.getlayer(UDP).sport
+			dport = p.getlayer(UDP).dport
+			talker = srcip, dstip, sport, dport, pcap, 'udp'
+			if talker not in convo:
+				convo.append(talker)
   
-  for y in pkts:
-	if y.haslayer(IP) and y.haslayer(UDP) and y.getlayer(UDP).sport == int(srcport) and y.getlayer(UDP).dport == int(dstport):
-	  src = y.getlayer(IP).src
-	  dst = y.getlayer(IP).dst
-	  sport = y.getlayer(UDP).sport
-	  dport = y.getlayer(UDP).dport
-	  chatter = src, dst, sport, dport, 'udp'
-	  if chatter not in convo:
-		convo.append(chatter)
-  
-  
-  for src, dst, sport, dport, proto in convo:
-	if int(srcport) == int(sport):
-	  talker = dst, dport
-	  e = Host(talker)
-	  e.hostsrc = dst
-	  e.hostdst = src
-	  e.hostsport = dport
-	  e.hostdport = sport
+  for src, dst, sport, dport, pcap, proto in convo:
+	  # talker = dst, dport
+	  e = Host(dst)
+	  e.hostsrc = src
+	  e.hostdst = dst
+	  e.hostsport = sport
+	  e.hostdport = dport
 	  e.linklabel = proto
 	  if proto == 'tcp':
 		e.linkcolor = 0x2314CA

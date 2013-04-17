@@ -51,7 +51,7 @@ def dotransform(request, response):
   if len(dhcp_raw) != 0:
     x =  '\n'.join(map(str, dhcp_raw))
     
-    #print x
+    
     serverid = ''
     subnet = ''
     lease = ''

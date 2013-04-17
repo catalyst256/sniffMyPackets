@@ -24,7 +24,7 @@ __all__ = [
 
 #@superuser
 @configure(
-    label='Find Port Scan [pcap]',
+    label='Find TCP Port Scan [pcap]',
     description='Looks through pcap file and identities possible port scan attacks',
     uuids=[ 'sniffMyPackets.v2.findSYNattacks' ],
     inputs=[ ( 'sniffMyPackets', pcapFile ) ],
@@ -54,6 +54,4 @@ def dotransform(request, response):
     e.linklabel = '# of connections: ' + str(con.count(x))
     e.linkcolor = 0xFF0000
     response += e
-  return response
-  
   return response

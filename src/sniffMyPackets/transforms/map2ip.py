@@ -25,18 +25,20 @@ __all__ = [
     label='Map to IPv4Address [pcap]',
     description='Maps entity to single IP address to show relationships',
     uuids=[ 'sniffMyPackets.v2.map2ip_domain', 'sniffMyPackets.v2.map2ip_host' ],
-    inputs=[ ( 'sniffMyPackets', Domain ), ( 'sniffMyPackets', Host ) ],
+    inputs=[ ( 'sniffMyPackets', Host ) ],
     debug=True
 )
 def dotransform(request, response):
 
+  pcap = request.fields['pcapsrc']
   try:
-    srcip = request.fields['hostsrc']
+    srcip = request.fields['hostdst']
   except:
-    srcip = request.fields['sniffMyPackets.hostsrc']
+    srcip = request.fields['sniffMyPackets.hostdst']
 
   if srcip is not None:
     e = IPv4Address(srcip)
+    e += Field('pcapsrc', pcap, displayname='Original pcap File')
     response += e
     return response
   else:
