@@ -33,16 +33,17 @@ __all__ = [
 def dotransform(request, response):
 	
     pcap = request.fields['pcapsrc']
+    proto = request.fields['proto']
     dstip = request.fields['sniffMyPackets.hostdst']
     srcip = request.fields['sniffMyPackets.hostsrc']
     sport = request.fields['sniffMyPackets.hostsport']
     dport = request.fields['sniffMyPackets.hostdport']
-    filename = '/tmp/' + str(srcip) + '-' + str(sport) + '.cap'
-    
+    filename = '/tmp/' + str(srcip) + '-' + str(sport) + '.pcap'
+   
     # Filter the traffic based on the entity values and save the pcap file with new name
-    sharkit = 'tshark -r ' + pcap + ' -R "ip.host==' + str(dstip) + ' and tcp.port==' + str(sport) + '"' + ' -w ' + filename + ' -F libpcap'
+    sharkit = 'tcpdump -r ' + pcap + ' host ' + srcip + ' and port ' + sport + ' -w ' + filename
     os.system(sharkit)
-    
+
     # Count the number of packets in the file
     pktcount = ''
     pkts = rdpcap(filename)
@@ -60,5 +61,3 @@ def dotransform(request, response):
     e.linkcolor = 0x669900
     response += e
     return response
-    
-	

@@ -24,7 +24,7 @@ __all__ = [
 @configure(
     label='Map to IPv4Address [pcap]',
     description='Maps entity to single IP address to show relationships',
-    uuids=[ 'sniffMyPackets.v2.map2ip_domain', 'sniffMyPackets.v2.map2ip_host' ],
+    uuids=[ 'sniffMyPackets.v2.map2ip_host' ],
     inputs=[ ( 'sniffMyPackets', Host ) ],
     debug=True
 )

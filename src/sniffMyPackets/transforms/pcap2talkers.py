@@ -41,7 +41,7 @@ def dotransform(request, response):
   convo = []
 
   for p in pkts:
-    if p.haslayer(TCP) and p.getlayer(TCP).flags == 0x002:
+    if p.haslayer(TCP):
       tcp_srcip.append(p.getlayer(IP).src)
     if p.haslayer(IP) and p.haslayer(UDP):
       udp_srcip.append(p.getlayer(IP).src)
@@ -59,6 +59,7 @@ def dotransform(request, response):
   for srcip, count, proto in convo:
     e = IPv4Address(srcip)
     e.linkcolor = 0x2314CA
+    e.linklabel = proto
     e += Field('pcapsrc', pcap, displayname='Original pcap File')
     e += Field('proto', proto, displayname='Protocol')
     response += e

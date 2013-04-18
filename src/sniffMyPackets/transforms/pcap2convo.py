@@ -49,7 +49,6 @@ def dotransform(request, response):
 			if talker not in convo:
 				convo.append(talker)
 
-	# for x in pkts:
 		if p.haslayer(IP) and p.haslayer(UDP) and p.getlayer(IP).src == target:
 			srcip = p.getlayer(IP).src
 			dstip = p.getlayer(IP).dst
@@ -60,7 +59,6 @@ def dotransform(request, response):
 				convo.append(talker)
   
   for src, dst, sport, dport, pcap, proto in convo:
-	  # talker = dst, dport
 	  e = Host(dst)
 	  e.hostsrc = src
 	  e.hostdst = dst
@@ -72,6 +70,7 @@ def dotransform(request, response):
 	  if proto == 'udp':
 		e.linkcolor = 0x0E7323
 	  e += Field('pcapsrc', pcap, displayname='Original pcap File')
+	  e += Field('proto', proto, displayname='Protocol')
 	  response += e
   return response
 

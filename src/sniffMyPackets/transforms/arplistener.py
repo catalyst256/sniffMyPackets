@@ -5,7 +5,7 @@ logging.getLogger("scapy.runtime").setLevel(logging.ERROR)
 from scapy.all import *
 from common.entities import pcapFile
 from canari.maltego.entities import IPv4Address
-from canari.maltego.message import Label
+from canari.maltego.message import Label, Field
 from canari.framework import configure #, superuser
 
 __author__ = 'catalyst256'
@@ -33,17 +33,19 @@ __all__ = [
 )
 def dotransform(request, response):
   
-  pkts = rdpcap(request.value)
+  pcap = request.value
+  pkts = rdpcap(pcap)
   hosts = []
   
   for p in pkts:
-	if p.haslayer(ARP):
-	  src = p.getlayer(ARP).psrc
-	  if src not in hosts:
-		hosts.append(src)
+    if p.haslayer(ARP):
+      src = p.getlayer(ARP).psrc
+      if src not in hosts:
+        hosts.append(src)
   
   for x in hosts:
-	e = IPv4Address(x)
-	e.linklabel = 'ARP'
-	response += e
+    e = IPv4Address(x)
+    e.linklabel = 'ARP'
+    e += Field('pcapsrc', pcap, displayname='Original pcap File')
+    response += e
   return response
