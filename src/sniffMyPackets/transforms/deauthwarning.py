@@ -4,6 +4,7 @@ import logging
 logging.getLogger("scapy.runtime").setLevel(logging.ERROR)
 from scapy.all import *
 from common.entities import pcapFile, WarningAlert
+from canari.maltego.message import Label
 from canari.framework import configure #, superuser
 
 __author__ = 'catalyst256'
