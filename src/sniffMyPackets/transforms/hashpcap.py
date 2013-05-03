@@ -33,7 +33,7 @@ def dotransform(request, response):
 	pcap = request.value
 	
 	filehash = ''
-	fh = open(pcap, 'rb')
+	fh = open(pcap, 'r')
 	filehash = hashlib.sha1(fh.read()).hexdigest() 
 
 	e = pcapFile(pcap)
