@@ -46,51 +46,51 @@ def dotransform(request, response):
   outfile2 = open(pdffile , 'w')
 
   for x in pkts:
-		if x.haslayer(Raw):
-			raw = x.getlayer(Raw).load
-			if artifact in raw:
-				ack = str(x.getlayer(TCP).ack)
-		
-	for p in pkts:
-		if p.haslayer(TCP) and p.haslayer(Raw) and (p.getlayer(TCP).ack == int(ack) or p.getlayer(TCP).seq == int(ack)):
-			raw = p.getlayer(Raw).load
-			cfile.append(raw)
+    if x.haslayer(Raw):
+      raw = x.getlayer(Raw).load
+      if artifact in raw:
+        ack = str(x.getlayer(TCP).ack)
+	
+  for p in pkts:
+    if p.haslayer(TCP) and p.haslayer(Raw) and (p.getlayer(TCP).ack == int(ack) or p.getlayer(TCP).seq == int(ack)):
+      raw = p.getlayer(Raw).load
+      cfile.append(raw)
 
-	x = ''.join(cfile)
+  x = ''.join(cfile)
 
-# Write the file out to outfile variable
-	outfile.writelines(x)
-	outfile.close()
+  # Write the file out to outfile variable
+  outfile.writelines(x)
+  outfile.close()
 
-	# Open the temp file, cut the HTTP headers out and then save it again as a PDF
-	total_lines = ''
-	firstcut = ''
-	secondcut = ''
-	final_cut = ''
+  # Open the temp file, cut the HTTP headers out and then save it again as a PDF
+  total_lines = ''
+  firstcut = ''
+  secondcut = ''
+  final_cut = ''
 
-	f = open(tmpfile, 'r').readlines()
+  f = open(tmpfile, 'r').readlines()
 
-	total_lines = len(f)
-	print total_lines
+  total_lines = len(f)
 
-	for x, line in enumerate(f):
-		if start in line:
-			firstcut = int(x)
+  for x, line in enumerate(f):
+    if start in line:
+      firstcut = int(x)
 
-	for y, line in enumerate(f):	
-	 	if end in line:
-			secondcut = int(y) + 1
+  for y, line in enumerate(f):	
+    if end in line:
+      secondcut = int(y) + 1
 
-	print firstcut
-	f = f[firstcut:]
+  f = f[firstcut:]
 
-	if int(total_lines) - int(secondcut) != 0:
-		final_cut = int(total_lines) - int(secondcut)
-		f = f[:-final_cut]
-	else:
-		outfile2.writelines(f)
-		outfile2.close()
+  if int(total_lines) - int(secondcut) != 0:
+    final_cut = int(total_lines) - int(secondcut)
+    f = f[:-final_cut]
+    outfile2.writelines(f)
+    outfile2.close()
+  else:
+    outfile2.writelines(f)
+    outfile2.close()
 
-	e = RebuiltFile(pdffile)
-	response += e
+  e = RebuiltFile(pdffile)
+  response += e
   return response
