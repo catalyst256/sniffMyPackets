@@ -4,6 +4,7 @@ import os, logging, uuid
 logging.getLogger("scapy.runtime").setLevel(logging.ERROR)
 from scapy.all import *
 from common.entities import pcapFile, RebuiltFile
+from canari.maltego.message import Field, Label
 from canari.framework import configure #, superuser
 
 __author__ = 'catalyst256'
@@ -92,5 +93,9 @@ def dotransform(request, response):
     outfile2.close()
 
   e = RebuiltFile(pdffile)
+  e.linklabel = 'PDF File'
+  e += Field('pcapsrc', request.value, displayname='Original pcap File', matchingrule='loose')
+  e += Field('tmpfolder', tmpfolder, displayname='Folder Location')
+  e.linkcolor = 0xFF9900
   response += e
   return response
