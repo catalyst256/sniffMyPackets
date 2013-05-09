@@ -45,21 +45,16 @@ def dotransform(request, response):
   outfile = open(tmpfile, 'w')
   outfile2 = open(pdffile , 'w')
 
-  def find_artifact(pkts):
-	  for x in pkts:
-			if x.haslayer(Raw):
-				raw = x.getlayer(Raw).load
-				if artifact in raw:
-					ack = str(x.getlayer(TCP).ack)
+  for x in pkts:
+		if x.haslayer(Raw):
+			raw = x.getlayer(Raw).load
+			if artifact in raw:
+				ack = str(x.getlayer(TCP).ack)
 		
-	def find_pdfpackets(pkts):
-		for p in pkts:
-			if p.haslayer(TCP) and p.haslayer(Raw) and (p.getlayer(TCP).ack == int(ack) or p.getlayer(TCP).seq == int(ack)):
-				raw = p.getlayer(Raw).load
-				cfile.append(raw)
-
-	find_artifact(pkts)
-	find_pdfpackets(pkts)
+	for p in pkts:
+		if p.haslayer(TCP) and p.haslayer(Raw) and (p.getlayer(TCP).ack == int(ack) or p.getlayer(TCP).seq == int(ack)):
+			raw = p.getlayer(Raw).load
+			cfile.append(raw)
 
 	x = ''.join(cfile)
 

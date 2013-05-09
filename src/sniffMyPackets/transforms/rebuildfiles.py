@@ -57,11 +57,11 @@ def dotransform(request, response):
     for x, fhash in file_types:
       for t in re.finditer('^([^:]*)',x):
         fpath = t.group(1)
-    for s in re.finditer('([^:]*)(\s)',x):
-      ftype = s.group(1)
-      z = fpath, ftype, fhash
-      if z not in objects:
-        objects.append(z)
+      for s in re.finditer('([^:]*)(\s)',x):
+        ftype = s.group(1)
+        z = fpath, ftype, fhash
+        if z not in objects:
+          objects.append(z)
     
     for fpath, ftype, fhash in objects:
       e = RebuiltFile(fpath)
