@@ -41,15 +41,17 @@ def dotransform(request, response):
     if x.haslayer(DNS) and x.haslayer(DNSRR):
       ancount = x.getlayer(DNS).ancount
       qname = x.getlayer(DNSRR).rrname
-      if ancount >= 7:
-	dnsrec = qname, ancount
-	if dnsrec not in dnsHost:
-	  dnsHost.append(dnsrec)
+      ttl = x.getlayer(DNSRR).ttl
+      if ancount >= 7 or ttl == 0:
+        dnsrec = qname, ancount, ttl
+        if dnsrec not in dnsHost:
+          dnsHost.append(dnsrec)
   
   
-  for dnsv, dnsc in dnsHost:
+  for dnsv, dnsc, ttl in dnsHost:
       e = WarningAlert('Fast Flux?: ' + dnsv)
-      e.linklabel = 'Unique IPs:\n' + str(dnsc)
+      e.linklabel = 'Unique IPs: ' + str(dnsc)
+      e += Field('dnsttl', ttl, displayname='TTL')
       e.linkcolor = 0xFF0000
       response += e
   return response
