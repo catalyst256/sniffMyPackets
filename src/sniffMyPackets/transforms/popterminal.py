@@ -20,14 +20,15 @@ __all__ = [
 
 #@superuser
 @configure(
-    label='Pop Open Window [pcap]',
-    description='Opens a window to the folder location',
-    uuids=[ 'sniffMyPackets.v2.Openswindow_2_folderlocation' ],
+    label='Pop Open Terminal [pcap]',
+    description='Opens a terminal to the folder location',
+    uuids=[ 'sniffMyPackets.v2.opentermina_2_folderlocation' ],
     inputs=[ ( 'sniffMyPackets', RebuiltFile ) ],
     debug=False
 )
 def dotransform(request, response):
 
     folder = request.fields['tmpfolder']
-    subprocess.Popen(['xdg-open', folder])
+    cmd_variable = '--working-directory=' + folder
+    subprocess.Popen(['gnome-terminal',cmd_variable])
     return response
