@@ -2,6 +2,7 @@
 
 import re, os
 from common.entities import pcapFile, UserLogin
+from canari.maltego.message import UIMessage
 from canari.framework import configure #, superuser
 
 __author__ = 'catalyst256'
@@ -40,4 +41,4 @@ def dotransform(request, response):
 
   e = UserLogin(creds)
   response += e
-  return response
+  return responsel

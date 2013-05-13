@@ -36,23 +36,30 @@ def dotransform(request, response):
   pkts = rdpcap(request.value)
   tcpflags = {'SYN': 0x002, 'FIN': 0x001, 'XMAS': 0x029, 'ACK': 0x010, 'NULL': 0x000}
   senders = []
-  con = []
-  flagset = ''
+  talkers = []
+ 
 
   for p in pkts:
     for key, value in tcpflags.iteritems():
       if p.haslayer(TCP) and p.getlayer(TCP).flags == int(value):
-        sport = p.getlayer(TCP).sport
+        dport = p.getlayer(TCP).dport
         srcip = p.getlayer(IP).src
         flagset = key
+        talker = srcip, dport, flagset
+        if talker not in talkers:
+          talkers.append(talker)
         if srcip not in senders:
           senders.append(srcip)
-        if sport not in con:
-          con.append(srcip)
   
+  counter = 0
   for x in senders:
-    e = WarningAlert(str(flagset) + ' scan from: ' + str(x))
-    e.linklabel = '# of connections: ' + str(con.count(x))
+    for y in talkers:
+      if x in y:
+        src = y[0]
+        counter += y.count(y[1])
+        flag = y[2]
+    e = WarningAlert(str(flag) + ' scan from: ' + str(src))
+    e.linklabel = '# of connections: ' + str(counter)
     e.linkcolor = 0xFF0000
     response += e
   return response
