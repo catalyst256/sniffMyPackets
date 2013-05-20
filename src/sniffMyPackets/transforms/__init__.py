@@ -10,7 +10,7 @@ __maintainer__ = 'catalyst256'
 __email__ = 'catalyst256@gmail.com'
 __status__ = 'Development'
 __all__ = [
-    'popmapbrowser',
+   # 'popmapbrowser',
     'location2ip',
     'ip2geoloc',
     'pcap2maps',

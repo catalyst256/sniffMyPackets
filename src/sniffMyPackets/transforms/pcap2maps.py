@@ -33,28 +33,31 @@ __all__ = [
 )
 def dotransform(request, response):
 
-    geo_header = """<html><head>
+    geo_header = """<html>
+    <head>
+    <script type="text/javascript" src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=AIzaSyDEMaaLU6t3XuijBcO484BBhUoluqpnFa4"></script>
+    <div style="width:740px;height:240px;" id="map_60aa"></div>
     <script type="text/javascript" src="http://www.google.com/jsapi"></script>
     <script type="text/javascript">
-        google.load('visualization', '1', {packages: ['geomap']});
+    google.load('visualization', '1', {packages: ['geomap']});
     </script>
-    <script type="text/javascript">
-        function drawVisualization() {
-        // Create and populate the data table.
-        var data = new google.visualization.DataTable();
-        data.addColumn('string', '', 'Country');
-        data.addColumn('number', 'Hosts');
-        """
+    <script>
+    google.load("visualization", "1", {packages:["map"]});
+    google.setOnLoadCallback(drawMap);
+    function drawMap() {
+    var data = new google.visualization.DataTable();
+    data.addColumn('number','Lat');
+    data.addColumn('number','Lon');
+    data.addColumn('string','IP');
+    """
 
     geo_footer = """
-        var geomap = new google.visualization.GeoMap(document.getElementById('geo_map'));
-        geomap.draw(data, null);
-        }
-    google.setOnLoadCallback(drawVisualization);
+    var chart = new google.visualization.Map(document.getElementById('map_60aa'));
+    chart.draw(data, {showTip:true});
+    }
     </script>
     </head>
     <body>
-    <div id="geo_map"></div>
     </body>
     </html>"""
 
@@ -78,45 +81,47 @@ def dotransform(request, response):
                 ip_list.append(src)
     
     
-    countries = {}
-    
+    coordinates = []
+    ip_exclusions = ['192.168.', '172.16.', '10.']
+
     for ip in ip_list:
-        try:
-            rec = gi.record_by_addr(ip)
-        except:
-            continue
-        if rec == None:
-            continue
-        if 'country_code' not in rec.keys():
-            continue
-        if rec['country_code'] in countries.keys():
-            countries[rec['country_code']] += 1
+        if ip_exclusions[0] in ip or ip_exclusions[1] in ip or ip_exclusions[2] in ip:
+            pass
         else:
-            countries[rec['country_code']] = 1
-    
-    map_code.append("    data.addRows(%d);" % (len(countries)) + '\n')
+            rec = gi.record_by_addr(ip)
+            lng = rec['longitude']
+            lat = rec['latitude']
+            coords = str(lng), str(lat), ip
+            # print coords
+            if coords not in coordinates:
+                coordinates.append(coords)
+            # print coords
+    map_code.append("    data.addRows(%d);" % (len(coordinates)) + '\n')
         
     c = 0
-    for country, value in countries.items():
-        map_code.append("    data.setValue(%d, 0, '%s');" % (c, country) + '\n')
-        map_code.append("    data.setValue(%d, 1, %d);" % (c, value) + '\n')
+    print coordinates
+
+    for src, lng, lat in coordinates:
+        map_code.append("    data.setValue(%d, 0, '%s');" % (c, lat) + '\n')
+        map_code.append("    data.setValue(%d, 1, %s);" % (c, lng) + '\n')
+        map_code.append("    data.setValue(%d, 2, %s);" % (c, src) + '\n')
         c += 1
 
-    # Create the text output for a html file to save
+    # # Create the text output for a html file to save
     s = str(geo_header) + ' '.join(map_code) + str(geo_footer)
 
-    # Create the file and save the output from s using time as a filename
+    # # Create the file and save the output from s using time as a filename
     t = int(ttime())
     filename = '/tmp/' + str(t) + '.html'
-    # print filename
+    print filename
     f = open(filename, 'w')
     f.write(s)
     f.close()
 
-    # cmd = 'xdg-open ' + filename
-    # os.system(cmd)
+    # # cmd = 'xdg-open ' + filename
+    # # os.system(cmd)
 
-    # Return a GeoMap entity with the path to the html file
-    e = GeoMap(filename)
-    response += e
-    return response
+    # # Return a GeoMap entity with the path to the html file
+    # e = GeoMap(filename)
+    # response += e
+    # return response
