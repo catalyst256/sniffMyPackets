@@ -26,7 +26,8 @@ __all__ = [
     'GenericFile',
     'AccessPoint',
     'WifiClient',
-    'WarningAlert'
+    'WarningAlert',
+    'GeoMap'
 ]
 
 class SniffmypacketsEntity(Entity):
@@ -88,4 +89,7 @@ class WifiClient(SniffmypacketsEntity):
     pass
   
 class WarningAlert(SniffmypacketsEntity):
+    pass
+  
+class GeoMap(SniffmypacketsEntity):
     pass
