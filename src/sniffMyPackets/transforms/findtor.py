@@ -69,8 +69,7 @@ def dotransform(request, response):
 	if int(sport) != int(dport):
 	  for f in tor_traffic:
 		if dnsrec == f:
-		  talker = srcip, sport
-		  e = Host(talker)
+		  e = Host(dstip)
 		  e.hostsrc = srcip
 		  e.hostdst = dstip
 		  e.hostsport = sport
