@@ -5,7 +5,7 @@ import pygeoip, sys, logging
 logging.getLogger("scapy.runtime").setLevel(logging.ERROR)
 from scapy.all import *
 from common.entities import pcapFile, GeoMap
-from canari.maltego.message import UIMessage
+from canari.maltego.message import UIMessage, Label
 from canari.framework import configure #, superuser
 
 __author__ = 'catalyst256'
@@ -118,5 +118,6 @@ def dotransform(request, response):
 
     # Return a GeoMap entity with the path to the html file
     e = GeoMap(filename)
+    e.linkcolor = 0x2314CA
     response += e
     return response
