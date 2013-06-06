@@ -82,10 +82,10 @@ def dotransform(request, response):
     
     
     coordinates = []
-    ip_exclusions = ['192.168.', '172.16.', '10.']
+    ip_exclusions = ['192.168.', '172.', '10.', '127.']
 
     for ip in ip_list:
-        if ip_exclusions[0] in ip or ip_exclusions[1] in ip or ip_exclusions[2] in ip:
+        if ip_exclusions[0] in ip or ip_exclusions[1] in ip or ip_exclusions[2] in ip or ip_exclusions[3] in ip:
             pass
         else:
             rec = gi.record_by_addr(ip)
