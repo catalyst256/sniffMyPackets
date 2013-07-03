@@ -33,19 +33,21 @@ __all__ = [
 )
 def dotransform(request, response):
   
-  pcap = request.value
-  pkts = rdpcap(pcap)
+  pkts = rdpcap(request.value)
   hosts = []
   
   for p in pkts:
     if p.haslayer(ARP):
       src = p.getlayer(ARP).psrc
+      dst = p.getlayer(ARP).pdst
       if src not in hosts:
         hosts.append(src)
+      if dst not in hosts:
+        hosts.append(dst)
   
   for x in hosts:
     e = IPv4Address(x)
     e.linklabel = 'ARP'
-    e += Field('pcapsrc', pcap, displayname='Original pcap File')
+    e += Field('pcapsrc', request.value, displayname='Original pcap File')
     response += e
   return response
