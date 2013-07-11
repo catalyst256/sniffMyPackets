@@ -27,7 +27,8 @@ __all__ = [
     'AccessPoint',
     'WifiClient',
     'WarningAlert',
-    'GeoMap'
+    'GeoMap',
+    'MacAddress'
 ]
 
 class SniffmypacketsEntity(Entity):
@@ -92,4 +93,7 @@ class WarningAlert(SniffmypacketsEntity):
     pass
   
 class GeoMap(SniffmypacketsEntity):
+    pass
+
+class MacAddress(SniffmypacketsEntity):
     pass
