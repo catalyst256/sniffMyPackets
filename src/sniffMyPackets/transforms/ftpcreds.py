@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 
 import re, os
+import logging, re
+logging.getLogger("scapy.runtime").setLevel(logging.ERROR)
+from scapy.all import *
 from common.entities import pcapFile, UserLogin
 from canari.maltego.message import UIMessage
 from canari.framework import configure #, superuser
@@ -29,16 +32,31 @@ __all__ = [
 )
 def dotransform(request, response):
   
-  pcap = request.value
-  user = []
-  pw = ''
-  
-  cmd = 'tshark -r ' + pcap + ' -R "ftp && tcp.dstport == 21" -z follow,tcp,ascii,0'
-  a = os.popen(cmd).read()
-  user = re.findall("(?i)USER (.*)",a)
-  pw = re.findall("(?i)PASS (.*)",a)
-  creds = 'UserName:' + user[0] + '\r\nPassword:' + pw[0]
+  pkts = rdpcap(request.value)
+  ftp_user = 'USER'
+  ftp_pass = 'PASS'
+  user_lookup = []
+  pass_lookup = []
 
-  e = UserLogin(creds)
-  response += e
+  for p in pkts:
+    if p.haslayer(TCP) and p.haslayer(Raw) and p.getlayer(TCP).dport == 21:
+      load = p.getlayer(Raw).load
+      sport = p.getlayer(TCP).sport
+      if ftp_user in load:
+        for s in re.finditer('USER (\w*)', load):
+          user = s.group(1)
+          tmp_user = user, sport
+          user_lookup.append(tmp_user)
+      if ftp_pass in load:
+        for t in re.finditer('PASS (\w*)', load):
+          passwd = t.group(1)
+          tmp_passwd = passwd, sport
+          pass_lookup.append(tmp_passwd)
+
+  for xuser, xport in user_lookup:
+    for xpass, uport in pass_lookup:
+      if xport == uport:
+        creds = 'Username: ' + xuser + '\r\nPassword: ' + xpass
+        e = UserLogin(creds)
+        response += e
   return response
