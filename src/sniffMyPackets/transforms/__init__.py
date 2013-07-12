@@ -12,7 +12,7 @@ __status__ = 'Development'
 __all__ = [
     'arpspoofalert',
     'nbtannounce',
-   # 'popmapbrowser',
+    'popmapbrowser',
     'location2ip',
     'ip2geoloc',
     'pcap2maps',

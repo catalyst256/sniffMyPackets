@@ -113,11 +113,13 @@ def dotransform(request, response):
     f.write(s)
     f.close()
 
-    cmd = 'xdg-open ' + filename
-    os.system(cmd)
+    # cmd = 'xdg-open ' + filename
+    # os.system(cmd)
 
     # Return a GeoMap entity with the path to the html file
     e = GeoMap(filename)
     e.linkcolor = 0x2314CA
+    e.linklabel = 'GeoMap'
     response += e
     return response
+    
