@@ -64,7 +64,7 @@ def dotransform(request, response):
 	  e.hostdst = dst
 	  e.hostsport = sport
 	  e.hostdport = dport
-	  e.linklabel = proto
+	  e.linklabel = proto + '\n' + str(sport) + ':' + str(dport)
 	  if proto == 'tcp':
 		e.linkcolor = 0x2314CA
 	  if proto == 'udp':
