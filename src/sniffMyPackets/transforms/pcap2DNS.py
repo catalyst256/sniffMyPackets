@@ -25,8 +25,8 @@ __all__ = [
 
 #@superuser
 @configure(
-    label='Find DNS Entries [pcap]',
-    description='Reads a pcap file looks for DNS responses',
+    label='Find DNS Queries [pcap]',
+    description='Reads a pcap file looks for DNS queries',
     uuids=[ 'sniffmyPackets.v2.pcapFiletoDNS' ],
     inputs=[ ( 'sniffMyPackets', pcapFile ) ],
     debug=False
@@ -48,5 +48,6 @@ def dotransform(request, response):
 	for drec, srcip in dns_results:
 		e = Domain(drec)
 		e += Field('hostsrc', srcip, displayname='Source IP')
+		e += Field('pcapsrc', pcap, displayname='Original pcap File')
 		response += e
 	return response  

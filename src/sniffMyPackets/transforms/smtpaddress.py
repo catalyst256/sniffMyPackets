@@ -53,9 +53,9 @@ def dotransform(request, response):
   
 	
   for addr, addrfield in emailaddr:
-	e = EmailAddress(addr)
-  e.linklabel = addrfield
-	e += Field('filelocation', request.value, displayname='File Location', matchingrule='loose')
-	e += Field('emailaddr', addrfield, displayname='Header Info')
-	response += e
+    e = EmailAddress(addr)
+    e.linklabel = addrfield
+    e += Field('filelocation', request.value, displayname='File Location', matchingrule='loose')
+    e += Field('emailaddr', addrfield, displayname='Header Info')
+    response += e
   return response
