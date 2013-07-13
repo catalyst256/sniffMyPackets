@@ -33,30 +33,24 @@ __all__ = [
 )
 def dotransform(request, response):
   
-  headerdata = []
   emailaddr = []
   msgfile = request.value
-  lookFor = 'DATA'
+  lookFor = ['To', 'From']
   tmpfolder = request.fields['tmpfolder']
   
-  
-  # split the original file into two parts, message and header and save as lists
   with open(msgfile, mode='r') as msgfile:
     reader = msgfile.read()
-    for i, part in enumerate(reader.split(lookFor)):
-      if i == 0:
-		headerdata.append(part)
-  
-  header = str(headerdata)
-  #print header
+    reader = str(reader)
+    for x in lookFor:
+        if x in reader:
+          for s in re.finditer('RCPT TO:<([\w.-]+@[\w.-]+)>', reader):
+            to_addr = s.group(1), 'mail_to'
+            emailaddr.append(to_addr)
+          for t in re.finditer('MAIL FROM:<([\w.-]+@[\w.-]+)>', reader):
+            from_addr = t.group(1), 'mail_from'
+            emailaddr.append(from_addr)
 
-  for s in re.finditer('(MAIL FROM: )(<\S*>)', header):
-	addr = (s.group(2).strip('<>').strip('>')), 'mail_from'
-	emailaddr.append(addr)
-	
-  for s in re.finditer('(RCPT TO: )(<\S*>)', header):
-	addr = (s.group(2).strip('<>').strip('>')), 'rcpt_to'
-	emailaddr.append(addr)
+  
 	
   for addr, addrfield in emailaddr:
 	e = EmailAddress(addr)
