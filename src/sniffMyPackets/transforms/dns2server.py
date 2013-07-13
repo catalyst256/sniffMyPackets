@@ -43,12 +43,12 @@ def dotransform(request, response):
         if p.haslayer(DNS) and p.haslayer(DNSRR):
             src_name = p.getlayer(DNSQR).qname
             src_ip = p.getlayer(DNSRR).rdata
-            dnsrec = src_name, src_ip
+            dtype = p.getlayer(DNSRR).type
+            dnsrec = src_name, src_ip, dtype
             domains.append(dnsrec)
 
-
-    for dname, dip in domains:
-        if dname == domain:
+    for dname, dip, dtype in domains:
+        if dname == domain and dtype == 1:
             e = IPv4Address(dip)
             e += Field('pcapsrc', pcap, displayname='Original pcap File')
             e.linklabel = 'Server'
