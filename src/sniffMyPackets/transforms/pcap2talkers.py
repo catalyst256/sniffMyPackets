@@ -30,7 +30,7 @@ __all__ = [
     description='Search a pcap file and return all TCP/UDP',
     uuids=[ 'sniffMyPackets.v2.pcap2talkers' ],
     inputs=[ ( 'sniffMyPackets', pcapFile ) ],
-    debug=True
+    debug=False
 )
 def dotransform(request, response):
   

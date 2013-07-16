@@ -1,0 +1,11 @@
+machine("sniffMyPackets.releasepackets", 
+        displayName:"Release the packets", 
+        author:"Adam Maxwell",
+        description: "") {
+
+    start {
+        run("sniffMyPackets.v2.pcap2talkers")
+        run("sniffMyPackets.v2.pcap2TCPConvo")
+
+    }
+}

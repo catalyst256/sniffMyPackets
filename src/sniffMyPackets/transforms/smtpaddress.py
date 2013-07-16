@@ -29,7 +29,7 @@ __all__ = [
     description='Reads a file and looks for email addresses',
     uuids=[ 'sniffMyPackets.v2.smtpemailaddress' ],
     inputs=[ ( 'sniffMyPackets', RebuiltFile ) ],
-    debug=True
+    debug=False
 )
 def dotransform(request, response):
   
@@ -42,13 +42,13 @@ def dotransform(request, response):
     reader = msgfile.read()
     reader = str(reader)
     for x in lookFor:
-        if x in reader:
-          for s in re.finditer('RCPT TO:<([\w.-]+@[\w.-]+)>', reader):
-            to_addr = s.group(1), 'mail_to'
-            emailaddr.append(to_addr)
-          for t in re.finditer('MAIL FROM:<([\w.-]+@[\w.-]+)>', reader):
-            from_addr = t.group(1), 'mail_from'
-            emailaddr.append(from_addr)
+      if x in reader:
+        for s in re.finditer('RCPT TO: <([\w.-]+@[\w.-]+)>', reader):
+          to_addr = s.group(1), 'mail_to'
+          emailaddr.append(to_addr)
+        for t in re.finditer('MAIL FROM: <([\w.-]+@[\w.-]+)>', reader):
+          from_addr = t.group(1), 'mail_from'
+          emailaddr.append(from_addr)
 
   
 	

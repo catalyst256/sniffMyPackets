@@ -29,7 +29,7 @@ __all__ = [
     description='Reads a pcap file and looks for NBT Announcements',
     uuids=[ 'sniffMyPackets.v2.findnbtannouncements' ],
     inputs=[ ( 'sniffMyPackets', pcapFile ) ],
-    debug=True
+    debug=False
 )
 def dotransform(request, response):
 

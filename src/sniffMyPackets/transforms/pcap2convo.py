@@ -30,7 +30,7 @@ __all__ = [
     description='Maps TCP/UDP Conversations',
     uuids=[ 'sniffMyPackets.v2.pcap2TCPConvo' ],
     inputs=[ ( 'sniffMyPackets', IPv4Address ) ],
-    debug=True
+    debug=False
 )
 def dotransform(request, response):
     
