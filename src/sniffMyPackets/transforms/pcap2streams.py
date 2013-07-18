@@ -1,8 +1,7 @@
 #!/usr/bin/env python
-import logging, os, uuid, hashlib
+import os, uuid, hashlib
 from common.entities import pcapFile
 from canari.maltego.message import Field, Label
-from canari.maltego.utils import debug, progress
 from canari.framework import configure #, superuser
 
 __author__ = 'catalyst256'

@@ -29,7 +29,8 @@ __all__ = [
     'WarningAlert',
     'GeoMap',
     'MacAddress',
-    'SMTPEmail'
+    'SMTPEmail',
+    'pcapInfo'
 ]
 
 class SniffmypacketsEntity(Entity):
@@ -100,4 +101,13 @@ class MacAddress(SniffmypacketsEntity):
     pass
 
 class SMTPEmail(SniffmypacketsEntity):
+    pass
+
+@EntityField(name='sniffMyPackets.pcapmd5', propname='pcapmd5', displayname='MD5 Hash', type=EntityFieldType.String)
+@EntityField(name='sniffMyPackets.pcapsha1', propname='pcapsha1', displayname='SHA1 Hash', type=EntityFieldType.String)
+@EntityField(name='sniffMyPackets.endtime', propname='endtime', displayname='End Time', type=EntityFieldType.String)
+@EntityField(name='sniffMyPackets.starttime', propname='starttime', displayname='Start Time', type=EntityFieldType.String)
+@EntityField(name='sniffMyPackets.duration', propname='duration', displayname='Capture Duration', type=EntityFieldType.String)   
+@EntityField(name='sniffMyPackets.pktcount', propname='pktcount', displayname='Packet Count', type=EntityFieldType.String)
+class pcapInfo(SniffmypacketsEntity):
     pass
