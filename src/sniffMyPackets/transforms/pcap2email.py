@@ -1,9 +1,10 @@
 #!/usr/bin/env python
 
-import logging, re
+import logging, re, uuid, glob
 logging.getLogger("scapy.runtime").setLevel(logging.ERROR)
-from scapy.all import *
-from common.entities import pcapFile
+import scapy.all as scapy
+from common.dissectors.dissector import *
+from common.entities import pcapFile, SMTPEmail
 from canari.framework import configure #, superuser
 
 __author__ = 'catalyst256'
@@ -32,28 +33,40 @@ def dotransform(request, response):
     
     pcap = request.value
     pkts = rdpcap(pcap)
-    records = []
-    smtp_ports = [25, 587]
+    
+    tmpfolder = '/tmp/'+str(uuid.uuid4())
+    if not os.path.exists(tmpfolder): os.makedirs(tmpfolder)
+
+    streams = []
+
+    smtp_ports = ['25', '587']
 
     for p in pkts:
-        for x in smtp_ports:
-            if p.haslayer(TCP) and p.getlayer(TCP).sport == x:
-                dst = p.getlayer(IP).dst
-                src = p.getlayer(IP).src
-                dport = p.getlayer(TCP).dport
-                sport = p.getlayer(TCP).sport
-                record = src, dst, sport, dport, ack
-                if record not in records:
-                    records.append(record)
-               
-    for a, b, c, d, e in records:
-        for p in pkts:
-            if (a == p.getlayer(IP).src or p.getlayer(IP).dst) and (c == p.getlayer(TCP).sport or p.getlayer(TCP).dport) and (int(e) == p.getlayer(TCP).seq or p.getlayer(TCP).ack):
-                load = p.getlayer(Raw).load
-                # if load not in email_body:
-                #     email_body.append
+        for s in smtp_ports:
+            if p.haslayer(TCP) and p.getlayer(TCP).sport or p.getlayer(TCP).dport == s:
+                streams.append(p)
+
+    print len(streams)
+
+    fh = open('/tmp/dump.pcap', 'w')
+    for x in streams:
+        fh.write(str(x))
+    fh.close()
+
+    dissector = Dissector() # instance of dissector class
+    dissector.change_dfolder(tmpfolder)
+    pkts = dissector.dissect_pkts('/tmp/dump.pcap')
+    list_files = glob.glob(tmpfolder+'/*')
+
+    print list_files
 
 
-    print records
-    print ack
+                # load = p.getlayer(Raw).load
+                # ack = p.getlayer(TCP).ack
+                # print load
+
+
+      
+
+
     # return response
