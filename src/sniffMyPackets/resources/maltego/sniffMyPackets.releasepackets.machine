@@ -10,6 +10,8 @@ machine("sniffMyPackets.releasepackets",
          run("sniffMyPackets.v2.pcapfile_2_streams")
          run("sniffMyPackets.v2.pcap2talkers")
          run("sniffMyPackets.v2.pcap2TCPConvo")
+         run("sniffMyPackets.v2.identify_2_service")
+
         
 
     }

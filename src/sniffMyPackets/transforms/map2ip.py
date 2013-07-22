@@ -26,7 +26,7 @@ __all__ = [
     description='Maps entity to single IP address to show relationships',
     uuids=[ 'sniffMyPackets.v2.map2ip_host' ],
     inputs=[ ( 'sniffMyPackets', Host ) ],
-    debug=True
+    debug=False
 )
 def dotransform(request, response):
 

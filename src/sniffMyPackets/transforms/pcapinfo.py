@@ -25,7 +25,7 @@ __all__ = [
     description='Generate info about the pcap file',
     uuids=[ 'sniffMyPackets.v2.readpcap_2_info' ],
     inputs=[ ( 'sniffMyPackets', pcapFile ) ],
-    debug=True
+    debug=False
 )
 def dotransform(request, response):
     
@@ -35,7 +35,6 @@ def dotransform(request, response):
 
     cmd = 'capinfos ' + pcap
     p = os.popen(cmd).readlines()
-    print len(p)
 
     filename = pcap
     pktcount = p[4].strip('\n').split(' ')[5]
@@ -45,11 +44,15 @@ def dotransform(request, response):
     sha1 = p[14].strip('\n').split(' ')[16]
     md5 = p[16].strip('\n').split(' ')[17]
 
-    e = pcapInfo(filename)
+    # Create the banner for the Maltego entity to display the information
+    banner = 'PktCount: ' + str(pktcount) + '\r\nDuration: ' + ' '.join(duration) + '\r\nStart Time: ' + ' '.join(start) + '\r\nEnd Time: ' + ' '.join(end) + '\r\nMD5 Hash: ' + md5 + '\r\nSHA1 Hash: ' + sha1
+
+    e = pcapInfo(banner)
+    e.pcapname = filename
     e.pktcount = pktcount
-    e.duration = duration
-    e.starttime = start
-    e.endtime = end
+    e.duration = ' '.join(duration)
+    e.starttime = ' '.join(start)
+    e.endtime = ' '.join(end)
     e.pcapsha1 = sha1
     e.pcapmd5 = md5
     response += e
