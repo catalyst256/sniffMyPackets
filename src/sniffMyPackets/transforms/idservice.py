@@ -32,7 +32,7 @@ __all__ = [
 def dotransform(request, response):
     
     services = csv.reader(open('sniffMyPackets/transforms/common/services.csv', 'r'))
-
+    pcap = request.fields['pcapsrc']
     dport = request.fields['sniffMyPackets.hostdport']
     proto = request.fields['proto']
 
@@ -44,8 +44,10 @@ def dotransform(request, response):
 
 
     e = Service(s_name)
-    e.linklabel = 'Service'
+    e.linklabel = proto + ':' + dport
     e.linkcolor = 0x0B615E
+    e += Field('pcapsrc', pcap, displayname='Original pcap File')
+    e += Field('id_dport', dport, displayname='Original Destination port')
     response += e
 
     return response

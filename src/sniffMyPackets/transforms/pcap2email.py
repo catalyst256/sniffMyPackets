@@ -42,31 +42,8 @@ def dotransform(request, response):
     smtp_ports = ['25', '587']
 
     for p in pkts:
-        for s in smtp_ports:
-            if p.haslayer(TCP) and p.getlayer(TCP).sport or p.getlayer(TCP).dport == s:
-                streams.append(p)
-
-    print len(streams)
-
-    fh = open('/tmp/dump.pcap', 'w')
-    for x in streams:
-        fh.write(str(x))
-    fh.close()
-
-    dissector = Dissector() # instance of dissector class
-    dissector.change_dfolder(tmpfolder)
-    pkts = dissector.dissect_pkts('/tmp/dump.pcap')
-    list_files = glob.glob(tmpfolder+'/*')
-
-    print list_files
-
-
-                # load = p.getlayer(Raw).load
-                # ack = p.getlayer(TCP).ack
-                # print load
-
-
-      
-
-
-    # return response
+        for x in smtp_ports:
+            if p.haslayer(TCP) and (p.getlayer(TCP).dport or p.getlayer(TCP).sport == x):
+                if p.haslayer(Raw):
+                    load = p.getlayer(Raw).load
+                    print load
