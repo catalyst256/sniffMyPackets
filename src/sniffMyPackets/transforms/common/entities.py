@@ -36,7 +36,9 @@ __all__ = [
 
 class SniffmypacketsEntity(Entity):
     namespace = 'sniffMyPackets'
-    
+
+@EntityField(name='sniffMyPackets.outputfld', propname='outputfld', displayname='Output Folder', type=EntityFieldType.String)
+@EntityField(name='sniffMyPackets.md5hash', propname='md5hash', displayname='MD5 Hash', type=EntityFieldType.String)   
 @EntityField(name='sniffMyPackets.sha1hash', propname='sha1hash', displayname='SHA1 Hash', type=EntityFieldType.String)
 class pcapFile(SniffmypacketsEntity):
     pass
