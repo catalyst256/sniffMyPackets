@@ -27,7 +27,7 @@ __all__ = [
     description='Looks to match a service to a port',
     uuids=[ 'sniffMyPackets.v2.identify_2_service' ],
     inputs=[ ( 'sniffMyPackets', Host ) ],
-    debug=True
+    debug=False
 )
 def dotransform(request, response):
     
