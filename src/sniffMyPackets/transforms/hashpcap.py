@@ -26,7 +26,7 @@ __all__ = [
     description='Generates a SHA1 hash on a pcap file from a external source',
     uuids=[ 'sniffMyPackets.v2.pcap2sha1_hash' ],
     inputs=[ ( 'sniffMyPackets', pcapFile ) ],
-    debug=True
+    debug=False
 )
 def dotransform(request, response):
 

@@ -20,11 +20,11 @@ __all__ = [
 
 #@superuser
 @configure(
-    label='Rebuild pcap streams [pcap]',
+    label='Extract TCP Streams [pcap]',
     description='Takes a pcap file and pulls out the streams',
     uuids=[ 'sniffMyPackets.v2.pcapfile_2_streams' ],
     inputs=[ ( 'sniffMyPackets', pcapFile ) ],
-    debug=True
+    debug=False
 )
 def dotransform(request, response):
     
@@ -46,8 +46,8 @@ def dotransform(request, response):
     try:
         for y in stream_index:
             y = y.strip('\n')
-            dumpfile = tmpfolder + '/stream' + y + '.dump'
-            if 'stream.dump' in dumpfile:
+            dumpfile = tmpfolder + '/tcp-stream' + y + '.dump'
+            if 'tcp-stream.dump' in dumpfile:
                 pass
             else:
                 cmd = 'tshark -r ' + pcap + ' tcp.stream eq ' + y + ' -w ' + dumpfile
@@ -59,7 +59,7 @@ def dotransform(request, response):
 
     # Now for the long bit...
     for s in stream_file:
-        cut = tmpfolder + '/stream' + s[48:-5] + '.pcap'
+        cut = tmpfolder + '/tcp-stream' + s[52:-5] + '.pcap'
         cmd = 'editcap ' + s + ' -F libpcap ' + cut
         os.popen(cmd)
         remove = 'rm ' + s
@@ -78,7 +78,7 @@ def dotransform(request, response):
         e.sha1hash = sha1sum
         e += Field('pcapsrc', request.value, displayname='Original pcap File', matchingrule='loose')
         e += Field('pktcnt', pktcount, displayname='Number of packets', matchingrule='loose')
-        e.linklabel = '# of pkts:' + str(pktcount)
+        e.linklabel = 'TCP - # of pkts:' + str(pktcount)
         response += e
 
     return response

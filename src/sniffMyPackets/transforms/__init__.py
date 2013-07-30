@@ -10,9 +10,10 @@ __maintainer__ = 'catalyst256'
 __email__ = 'catalyst256@gmail.com'
 __status__ = 'Development'
 __all__ = [
+    'pcap2udpstreams',
     'idservice',
     'pcapinfo',
-    'pcap2streams',
+    'pcap2tcpstreams',
     'pcap2email',
     'dns2server',
     'dns2client',

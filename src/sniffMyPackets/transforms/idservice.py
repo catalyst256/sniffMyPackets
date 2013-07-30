@@ -41,6 +41,8 @@ def dotransform(request, response):
     for row in services:
         if dport == row[1] and proto == row[2]:
             s_name = row[0]
+            if s_name == ' ':
+                s_name = 'Unknown'
 
 
     e = Service(s_name)

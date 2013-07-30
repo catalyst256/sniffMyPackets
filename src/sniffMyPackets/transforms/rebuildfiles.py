@@ -28,7 +28,7 @@ __all__ = [
     description='Rebuilds files from within pcap file',
     uuids=[ 'sniffMyPackets.v2.rebuildFilesFrompcap' ],
     inputs=[ ( 'sniffMyPackets', pcapFile ) ],
-    debug=True
+    debug=False
 )
 def dotransform(request, response):
     
