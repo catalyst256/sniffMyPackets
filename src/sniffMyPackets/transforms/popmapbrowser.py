@@ -25,7 +25,7 @@ __all__ = [
     description='Opens Map in default browser',
     uuids=[ 'sniffMyPackets.v2.openmap_in_browser' ],
     inputs=[ ( 'sniffMyPackets', GeoMap ) ],
-    debug=True
+    debug=False
 )
 def dotransform(request, response):
     

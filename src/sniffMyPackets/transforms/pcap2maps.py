@@ -29,7 +29,7 @@ __all__ = [
     description='Builds a Google Map based on IP address origin',
     uuids=[ 'sniffMyPackets.v2.pcapfile_2_googlemaps' ],
     inputs=[ ( 'sniffMyPackets', pcapFile ) ],
-    debug=True
+    debug=False
 )
 def dotransform(request, response):
 
@@ -71,6 +71,11 @@ def dotransform(request, response):
 
     pkts = rdpcap(request.value)
 
+    try:
+        tmpfolder = request.fields['sniffMyPackets.outputfld']
+    except:
+        return response + UIMessage('No output folder defined, run the L0 - Prepare pcap transform')
+
     ip_list = []
 
     # Create the IP list from the pcap file
@@ -108,7 +113,7 @@ def dotransform(request, response):
 
     # # Create the file and save the output from s using time as a filename
     t = int(ttime())
-    filename = '/tmp/' + str(t) + '.html'
+    filename = tmpfolder + '/' + str(t) + '.html'
     f = open(filename, 'w')
     f.write(s)
     f.close()
