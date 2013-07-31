@@ -26,7 +26,7 @@ __all__ = [
 
 #@superuser
 @configure(
-    label='IP Address to GeoLoc [pcap]',
+    label='L4 - IP Address to GeoLoc [SmP]',
     description='Searchs pcap file and performs GeoIP Lookup',
     uuids=[ 'sniffMyPackets.v2.ip_2_geolocation' ],
     inputs=[ ( 'sniffMyPackets', pcapFile ) ],

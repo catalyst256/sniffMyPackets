@@ -25,7 +25,7 @@ __all__ = [
 
 #@superuser
 @configure(
-    label='Look for NBT Announcements [pcap]',
+    label='L4 - Find NBT Announcements [SmP]',
     description='Reads a pcap file and looks for NBT Announcements',
     uuids=[ 'sniffMyPackets.v2.findnbtannouncements' ],
     inputs=[ ( 'sniffMyPackets', pcapFile ) ],

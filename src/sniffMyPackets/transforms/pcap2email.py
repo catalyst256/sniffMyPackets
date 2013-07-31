@@ -23,7 +23,7 @@ __all__ = [
 
 #@superuser
 @configure(
-    label='Find SMTP Emails [pcap]',
+    label='L4 - Find SMTP Emails [SmP]',
     description='Read pcap file and look for SMTP emails within',
     uuids=[ 'sniffMyPackets.v2.pcap2smtp' ],
     inputs=[ ( 'sniffMyPackets', pcapFile ) ],

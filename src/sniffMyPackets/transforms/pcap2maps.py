@@ -25,7 +25,7 @@ __all__ = [
 
 #@superuser
 @configure(
-    label='Build Geo IP Map [pcap]',
+    label='L3 - Build Geo IP Map [SmP]',
     description='Builds a Google Map based on IP address origin',
     uuids=[ 'sniffMyPackets.v2.pcapfile_2_googlemaps' ],
     inputs=[ ( 'sniffMyPackets', pcapFile ) ],

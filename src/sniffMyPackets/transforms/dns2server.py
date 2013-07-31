@@ -25,7 +25,7 @@ __all__ = [
 
 #@superuser
 @configure(
-    label='Map DNS request to Server IP [pcap]',
+    label='L3 - Map DNS request to Server IP [SmP]',
     description='Maps a DNS response made by client back to the server IP',
     uuids=[ 'sniffMyPackets.v2.dnsrequest_2_server' ],
     inputs=[ ( 'sniffMyPackets', Domain ) ],

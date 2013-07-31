@@ -22,7 +22,7 @@ __all__ = [
 
 #@superuser
 @configure(
-    label='Find SMTP Attachments [pcap]',
+    label='L4 - Find SMTP Attachments [SmP]',
     description='Looks for email attachments in rebuilt files and rebuilds them',
     uuids=[ 'sniffMyPackets.v2.unpackattachment2folder' ],
     inputs=[ ( 'sniffMyPackets', RebuiltFile ) ],

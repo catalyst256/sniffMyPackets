@@ -26,7 +26,7 @@ __all__ = [
 
 #@superuser
 @configure(
-    label='Find TCP/UDP Convo [pcap]',
+    label='L2 - Find TCP/UDP Convo [SmP]',
     description='Maps TCP/UDP Conversations',
     uuids=[ 'sniffMyPackets.v2.pcap2TCPConvo' ],
     inputs=[ ( 'sniffMyPackets', IPv4Address ) ],

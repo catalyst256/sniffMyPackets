@@ -20,7 +20,7 @@ __all__ = [
 
 #@superuser
 @configure(
-    label='Pop Open Window [pcap]',
+    label='L0 - Pop Open Window [SmP]',
     description='Opens a window to the folder location',
     uuids=[ 'sniffMyPackets.v2.Openswindow_2_folderlocation' ],
     inputs=[ ( 'sniffMyPackets', RebuiltFile ) ],

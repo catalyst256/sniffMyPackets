@@ -22,7 +22,7 @@ __all__ = [
 
 #@superuser
 @configure(
-    label='Convert a Location 2 IP [pcap]',
+    label='L4 - Convert a Location 2 IP [SmP]',
     description='Convert a sniffMyPackets Location to IP address',
     uuids=[ 'sniffMyPackets.v2.Location_2_IP' ],
     inputs=[ ( 'sniffMyPackets', Location ) ],

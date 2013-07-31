@@ -26,7 +26,7 @@ __all__ = [
 
 #@superuser
 @configure(
-    label='Find TCP/UDP Talkers [pcap]',
+    label='L2 - Find TCP/UDP Talkers [SmP]',
     description='Search a pcap file and return all TCP/UDP',
     uuids=[ 'sniffMyPackets.v2.pcap2talkers' ],
     inputs=[ ( 'sniffMyPackets', pcapFile ) ],

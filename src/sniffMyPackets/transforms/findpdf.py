@@ -23,7 +23,7 @@ __all__ = [
 
 #@superuser
 @configure(
-    label='Find & Rebuild PDF [pcap]',
+    label='L3 - Find & Rebuild PDF [SmP]',
     description='Looks for PDF files in pcap and rebuilds them',
     uuids=[ 'sniffMyPackets.v2.findpdf_rebuild' ],
     inputs=[ ( 'sniffMyPackets', pcapFile ) ],

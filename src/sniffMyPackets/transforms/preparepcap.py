@@ -20,11 +20,11 @@ __all__ = [
 
 #@superuser
 @configure(
-    label='Prepare pcap for use [pcap]',
+    label='L0 - Prepare pcap for use [SmP]',
     description='Runs some initial checks on pcapFile',
     uuids=[ 'sniffMyPackets.v2.preparepcap_for_use' ],
     inputs=[ ( 'sniffMyPackets', pcapFile ) ],
-    debug=True
+    debug=False
 )
 def dotransform(request, response):
 
@@ -36,8 +36,11 @@ def dotransform(request, response):
         os.makedirs(tmpfolder) 
 
     # Run the pcapFile through a convertor to ensure it's the correct libpcap format
-    cmd = 'editcap ' + pcap + ' -F libpcap ' + pcap
+    dumpfile = '/tmp/output.dmp'
+    cmd = 'editcap ' + pcap + ' -F libpcap ' + dumpfile
     os.system(cmd)
+    cmd2 = 'mv ' + dumpfile + ' ' + pcap
+    os.system(cmd2)
 
     # Hash the pcapFile and return both the SHA1 hash and the MD5 hash
     # sha1hash = ''

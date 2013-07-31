@@ -23,7 +23,7 @@ __all__ = [
 
 #@superuser
 @configure(
-    label='Find ARP Spoofing [pcap]',
+    label='L4 - Find ARP Spoofing [SmP]',
     description='Looks for traffic that might be due to ARP Spoofing',
     uuids=[ 'sniffMyPackets.v2.huntfor_arpspoof' ],
     inputs=[ ( 'sniffMyPackets', pcapFile ) ],

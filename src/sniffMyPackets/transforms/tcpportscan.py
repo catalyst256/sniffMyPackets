@@ -25,7 +25,7 @@ __all__ = [
 
 #@superuser
 @configure(
-    label='Find TCP Port Scan [pcap]',
+    label='L4 - Find TCP Port Scan [SmP]',
     description='Looks through pcap file and identities possible port scan attacks',
     uuids=[ 'sniffMyPackets.v2.findSYNattacks' ],
     inputs=[ ( 'sniffMyPackets', pcapFile ) ],

@@ -23,7 +23,7 @@ __all__ = [
 
 #@superuser
 @configure(
-    label='Check HTTP Hosts [pcap]',
+    label='L4 - Check HTTP Hosts [SmP]',
     description='Read a pcap file and return list of Hosts from GET requests',
     uuids=[ 'sniffMyPackets.v2.httpgetrequests2domain' ],
     inputs=[ ( 'sniffMyPackets', pcapFile ) ],

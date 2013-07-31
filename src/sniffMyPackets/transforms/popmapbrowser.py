@@ -21,7 +21,7 @@ __all__ = [
 
 #@superuser
 @configure(
-    label='Open Map in Browser [pcap]',
+    label='L3 - Open Map in Browser [SmP]',
     description='Opens Map in default browser',
     uuids=[ 'sniffMyPackets.v2.openmap_in_browser' ],
     inputs=[ ( 'sniffMyPackets', GeoMap ) ],

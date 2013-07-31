@@ -25,7 +25,7 @@ __all__ = [
 
 #@superuser
 @configure(
-    label='Find DNS Queries [pcap]',
+    label='L3 - Find DNS Queries [SmP]',
     description='Reads a pcap file looks for DNS queries',
     uuids=[ 'sniffmyPackets.v2.pcapFiletoDNS' ],
     inputs=[ ( 'sniffMyPackets', pcapFile ) ],

@@ -22,7 +22,7 @@ __all__ = [
 
 #@superuser
 @configure(
-    label='Unzip Attachment [pcap]',
+    label='L4 - Unzip Attachment [SmP]',
     description='Takes a email attachment and unzips content',
     uuids=[ 'sniffMyPackets.v2.unzip2files' ],
     inputs=[ ( 'sniffMyPackets', EmailMessage ) ],

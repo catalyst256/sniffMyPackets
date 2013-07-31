@@ -3,7 +3,7 @@ import logging, os, uuid, hashlib
 logging.getLogger("scapy.runtime").setLevel(logging.ERROR)
 from scapy.all import *
 from common.entities import pcapFile
-from canari.maltego.message import Field, Label
+from canari.maltego.message import Field, Label, UIMessage
 from canari.framework import configure #, superuser
 
 __author__ = 'catalyst256'
@@ -23,11 +23,11 @@ __all__ = [
 
 #@superuser
 @configure(
-    label='Extract UDP Streams [pcap]',
+    label='L1 - Extract UDP Streams [SmP]',
     description='Extracts all UDP streams from a pcap file',
     uuids=[ 'sniffMyPackets.v2.pcap_2_udp_streams' ],
     inputs=[ ( 'sniffMyPackets', pcapFile ) ],
-    debug=True
+    debug=False
 )
 def dotransform(request, response):
     
@@ -35,9 +35,10 @@ def dotransform(request, response):
 
     convos = []
     stream_file = []
-
-    tmpfolder = '/tmp/'+str(uuid.uuid4())
-    if not os.path.exists(tmpfolder): os.makedirs(tmpfolder)
+    try:
+        tmpfolder = request.fields['sniffMyPackets.outputfld']
+    except:
+        return response + UIMessage('No output folder defined, run the L0 - Prepare pcap transform')
 
     pkts = rdpcap(pcap)
 
@@ -83,12 +84,17 @@ def dotransform(request, response):
         pktcount = os.popen(cmd).read()
 
         # Hash the file and return a SHA1 sum
-        sha1sum = ''
         fh = open(cut, 'rb')
         sha1sum = hashlib.sha1(fh.read()).hexdigest()
 
+        # Hash the file and return a MD5 sum
+        fh = open(cut, 'rb')
+        md5sum = hashlib.md5(fh.read()).hexdigest()
+
         e = pcapFile(cut)
         e.sha1hash = sha1sum
+        e.outputfld = tmpfolder
+        e.md5hash = md5sum
         e += Field('pcapsrc', request.value, displayname='Original pcap File', matchingrule='loose')
         e += Field('pktcnt', pktcount, displayname='Number of packets', matchingrule='loose')
         e.linklabel = 'UDP - # of pkts:' + str(pktcount)

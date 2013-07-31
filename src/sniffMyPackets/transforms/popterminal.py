@@ -20,7 +20,7 @@ __all__ = [
 
 #@superuser
 @configure(
-    label='Pop Open Terminal [pcap]',
+    label='L0 - Pop Open Terminal [SmP]',
     description='Opens a terminal to the folder location',
     uuids=[ 'sniffMyPackets.v2.opentermina_2_folderlocation' ],
     inputs=[ ( 'sniffMyPackets', RebuiltFile ) ],

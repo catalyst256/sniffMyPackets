@@ -25,7 +25,7 @@ __all__ = [
 
 #@superuser
 @configure(
-    label='Find ARP packets [pcap]',
+    label='L4 - Find ARP packets [SmP]',
     description='Looks through a pcap file and returns IPs from ARP requests',
     uuids=[ 'sniffMyPackets.v2.readarppackets' ],
     inputs=[ ( 'sniffMyPackets', pcapFile ) ],

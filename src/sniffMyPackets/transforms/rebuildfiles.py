@@ -24,7 +24,7 @@ __all__ = [
 
 #@superuser
 @configure(
-    label='Rebuild files from pcap [pcap]',
+    label='L3 - Rebuild files from pcap [SmP]',
     description='Rebuilds files from within pcap file',
     uuids=[ 'sniffMyPackets.v2.rebuildFilesFrompcap' ],
     inputs=[ ( 'sniffMyPackets', pcapFile ) ],
@@ -32,9 +32,8 @@ __all__ = [
 )
 def dotransform(request, response):
     
-    tmpfolder = '/tmp/'+str(uuid.uuid4())
-    if not os.path.exists(tmpfolder): os.makedirs(tmpfolder)
-    
+    tmpfolder = request.fields['sniffMyPackets.outputfld']
+        
     list_files = []
     file_types = []
     objects = []
@@ -45,14 +44,16 @@ def dotransform(request, response):
     list_files = glob.glob(tmpfolder+'/*')
     
     for i in list_files:
-      cmd = 'file ' + i
-      x = os.popen(cmd).read()
-      fhash = ''
-      fh = open(i, 'rb')
-      fhash = hashlib.sha1(fh.read()).hexdigest()
-      file_details = x, fhash
-      if file_details not in file_types:
-        file_types.append(file_details)
+      if 'stream' not in i:
+        # list_files.remove(i)
+        cmd = 'file ' + i
+        x = os.popen(cmd).read()
+        fhash = ''
+        fh = open(i, 'rb')
+        fhash = hashlib.sha1(fh.read()).hexdigest()
+        file_details = x, fhash
+        if file_details not in file_types:
+          file_types.append(file_details)
       
     for x, fhash in file_types:
       for t in re.finditer('^([^:]*)',x):

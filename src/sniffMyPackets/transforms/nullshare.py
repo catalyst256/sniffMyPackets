@@ -24,7 +24,7 @@ __all__ = [
 
 #@superuser
 @configure(
-    label='Find Null Share Connections [pcap]',
+    label='L4 - Find Null Share Connections [SmP]',
     description='Looks for attackers mapping null share',
     uuids=[ 'sniffMyPackets.v2.pcap2null_shares' ],
     inputs=[ ( 'sniffMyPackets', pcapFile ) ],

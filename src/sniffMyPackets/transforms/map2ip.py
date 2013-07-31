@@ -22,7 +22,7 @@ __all__ = [
 
 #@superuser
 @configure(
-    label='Map to IPv4Address [pcap]',
+    label='L2 - Map to IPv4Address [SmP]',
     description='Maps entity to single IP address to show relationships',
     uuids=[ 'sniffMyPackets.v2.map2ip_host' ],
     inputs=[ ( 'sniffMyPackets', Host ) ],

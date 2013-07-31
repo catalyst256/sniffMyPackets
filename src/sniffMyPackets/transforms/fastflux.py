@@ -25,7 +25,7 @@ __all__ = [
 
 #@superuser
 @configure(
-    label='Check for FastFlux [pcap]',
+    label='L4 - Check for FastFlux [SmP]',
     description='Checks a pcap file and looks for fastflux domains',
     uuids=[ 'sniffMyPackets.v2.check4fastflux' ],
     inputs=[ ( 'sniffMyPackets', pcapFile ) ],

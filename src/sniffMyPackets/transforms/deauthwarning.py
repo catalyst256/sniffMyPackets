@@ -24,7 +24,7 @@ __all__ = [
 
 #@superuser
 @configure(
-    label='Find DeAuth Attack [pcap]',
+    label='L4 - Find DeAuth Attack [SmP]',
     description='Looks for large numbers of Deauth Packets',
     uuids=[ 'sniffMyPackets.v2.Findwifi_deatuhattack' ],
     inputs=[ ( 'sniffMyPackets', pcapFile ) ],

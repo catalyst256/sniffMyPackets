@@ -24,7 +24,7 @@ __all__ = [
 
 #@superuser
 @configure(
-    label='Find Tor Traffic [pcap]',
+    label='L4 - Find Tor Traffic [SmP]',
     description='Search a pcap file and look for suspected tor traffic',
     uuids=[ 'sniffMyPackets.v2.pcap2tor_traffic' ],
     inputs=[ ( 'sniffMyPackets', pcapFile ) ],

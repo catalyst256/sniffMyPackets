@@ -24,7 +24,7 @@ __all__ = [
 
 #@superuser
 @configure(
-    label='Write Convo [pcap]',
+    label='L2 - Write Convo [SmP]',
     description='Takes a TCP/UDP convo and saves out to pcap file',
     uuids=[ 'sniffMyPackets.v2.TCPConvo2pcapfile' ],
     inputs=[ ( 'sniffMyPackets', Host ) ],

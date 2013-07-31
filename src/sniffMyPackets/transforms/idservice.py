@@ -23,7 +23,7 @@ __all__ = [
 
 #@superuser
 @configure(
-    label='Identify Service [pcap]',
+    label='L2 - Identify Service [SmP]',
     description='Looks to match a service to a port',
     uuids=[ 'sniffMyPackets.v2.identify_2_service' ],
     inputs=[ ( 'sniffMyPackets', Host ) ],

@@ -25,7 +25,7 @@ __all__ = [
 
 #@superuser
 @configure(
-    label='SMTP Email Address Hunt [pcap]',
+    label='L4 - SMTP Email Address Hunt [SmP]',
     description='Reads a file and looks for email addresses',
     uuids=[ 'sniffMyPackets.v2.smtpemailaddress' ],
     inputs=[ ( 'sniffMyPackets', RebuiltFile ) ],

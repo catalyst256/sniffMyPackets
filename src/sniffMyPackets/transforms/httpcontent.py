@@ -26,7 +26,7 @@ __all__ = [
 
 #@superuser
 @configure(
-    label='Check HTTP Content [pcap]',
+    label='L4 - Check HTTP Content [SmP]',
     description='Checks pcap for HTTP content types',
     uuids=[ 'sniffMyPackets.v2.pullHTTPcontent' ],
     inputs=[ ( 'sniffMyPackets', pcapFile ) ],

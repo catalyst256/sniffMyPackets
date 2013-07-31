@@ -23,7 +23,7 @@ __all__ = [
 
 #@superuser
 @configure(
-    label='Map DNS request to Client IP [pcap]',
+    label='L3 - Map DNS request to Client IP [SmP]',
     description='Maps a IPv4 Address from a DNS query',
     uuids=[ 'sniffMyPackets.v2.dnsrequest_2_client' ],
     inputs=[ ( 'sniffMyPackets', Domain ) ],

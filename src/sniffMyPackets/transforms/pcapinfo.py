@@ -21,7 +21,7 @@ __all__ = [
 
 #@superuser
 @configure(
-    label='Display pcap info [pcap]',
+    label='L0 - Display pcap info [SmP]',
     description='Generate info about the pcap file',
     uuids=[ 'sniffMyPackets.v2.readpcap_2_info' ],
     inputs=[ ( 'sniffMyPackets', pcapFile ) ],

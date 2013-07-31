@@ -23,7 +23,7 @@ __all__ = [
 
 #@superuser
 @configure(
-    label='Find Wireless AP [pcap]',
+    label='L4 - Find Wireless AP [SmP]',
     description='Looks for Beacon frames from Wireless Access Points',
     uuids=[ 'sniffMyPackets.v2.pcap_to_wap' ],
     inputs=[ ( 'sniffMyPackets', pcapFile ) ],

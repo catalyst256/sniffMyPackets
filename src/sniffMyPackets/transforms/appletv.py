@@ -25,7 +25,7 @@ __all__ = [
 
 #@superuser
 @configure(
-    label='Find AppleTV Devices [pcap]',
+    label='L4 - Find AppleTV Devices [SmP]',
     description='Looks through pcap file for AppleTV devices and checks for password protection',
     uuids=[ 'sniffMyPackets.v2.pcapfile2appletv' ],
     inputs=[ ( 'sniffMyPackets', pcapFile ) ],

@@ -26,7 +26,7 @@ __all__ = [
 
 #@superuser
 @configure(
-    label='Find DHCP Servers [pcap]',
+    label='L4 - Find DHCP Servers [SmP]',
     description='Reads pcap file and returns DHCP servers and options',
     uuids=[ 'sniffMyPackets.v2.pcap2dhcpserver' ],
     inputs=[ ( 'sniffMyPackets', pcapFile ) ],

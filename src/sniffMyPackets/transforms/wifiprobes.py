@@ -25,7 +25,7 @@ __all__ = [
 
 #@superuser
 @configure(
-    label='Find Wireless Probes [pcap]',
+    label='L4 - Find Wireless Probes [SmP]',
     description='Looks for Wifi Probes and maps to client',
     uuids=[ 'sniffMyPackets.v2.pcapfindwifiprobes' ],
     inputs=[ ( 'sniffMyPackets', pcapFile ) ],
