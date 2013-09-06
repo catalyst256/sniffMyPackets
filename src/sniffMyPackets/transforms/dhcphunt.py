@@ -3,7 +3,7 @@
 import logging
 logging.getLogger("scapy.runtime").setLevel(logging.ERROR)
 from scapy.all import *
-from common.entities import pcapFile,DHCPServer
+from common.entities import pcapFile, DHCPServer
 from canari.maltego.message import Label, Field, UIMessage
 from canari.framework import configure #, superuser
 

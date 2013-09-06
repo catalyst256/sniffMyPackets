@@ -35,7 +35,7 @@ __all__ = [
 ]
 
 class SniffmypacketsEntity(Entity):
-    namespace = 'sniffMyPackets'
+    _namespace_ = 'sniffMyPackets'
 
 @EntityField(name='sniffMyPackets.outputfld', propname='outputfld', displayname='Output Folder', type=EntityFieldType.String)
 @EntityField(name='sniffMyPackets.md5hash', propname='md5hash', displayname='MD5 Hash', type=EntityFieldType.String)   
