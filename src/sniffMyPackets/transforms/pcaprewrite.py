@@ -5,6 +5,7 @@ logging.getLogger("scapy.runtime").setLevel(logging.ERROR)
 from scapy.all import *
 from canari.easygui import multenterbox
 from common.entities import pcapFile
+from canari.maltego.message import Field, Label
 from canari.framework import configure #, superuser
 
 __author__ = 'catalyst256'
@@ -34,17 +35,38 @@ def dotransform(request, response):
     pcap = request.value
     pkts = rdpcap(pcap)
 
+    folder = request.fields['sniffMyPackets.outputfld']
+    new_file = folder + '/replay-' + request.value[42:]
+
     msg = 'Enter the new IPs to rewrite the pcap file with'
     title = 'L0 - Rewrite pcap file for replay [SmP]'
-    fieldNames = ''
-    fieldValues = ''
+    fieldNames = ["New Source IP", "New Destination IP"]
+    fieldValues = []
+    fieldValues = multenterbox(msg, title, fieldNames)
+
+    new_src = fieldValues[0]
+    new_dst = fieldValues[1]
+
+    old_src = pkts[0][IP].src
+    old_dst = pkts[0][IP].dst
 
     for p in pkts:
         del p[IP].chksum
         del p[TCP].chksum
 
-    new_file = request.value[52:]
+    for p in pkts:
+        if p.haslayer(IP):
+            if p[IP].src == old_src:
+                p[IP].src = new_src
+                p[IP].dst = new_dst
+            if p[IP].dst == old_src:
+                p[IP].src = new_dst
+                p[IP].dst = new_src
 
-    print new_file
-
+    wrpcap(new_file, pkts)
+    
+    e = pcapFile(new_file)
+    e.linklabel = 'Rewrote pcap'
+    e.linkcolor = 0x33CC33
+    response += e
     return response
