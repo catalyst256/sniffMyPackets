@@ -66,7 +66,9 @@ def dotransform(request, response):
     wrpcap(new_file, pkts)
     
     e = pcapFile(new_file)
-    e.linklabel = 'Rewrote pcap'
+    e.linklabel = 'New pcap\nsrc:' + str(new_src) + '\ndst:' + str(new_dst)
     e.linkcolor = 0x33CC33
+    e.outputfld = folder
+    e += Field('pcapsrc', request.value, displayname='Original pcap File', matchingrule='loose')
     response += e
     return response

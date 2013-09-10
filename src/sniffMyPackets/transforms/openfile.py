@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import os, subprocess
 from common.entities import GenericFile
-# from canari.maltego.message import Field
+from canari.maltego.message import UIMessage
 from canari.framework import configure #, superuser
 
 __author__ = 'catalyst256'
@@ -29,5 +29,7 @@ __all__ = [
 def dotransform(request, response):
 
     filepath = request.value
-    subprocess.call(('gnome-open', filepath))
-    return response
+    # print filepath
+    cmd = 'xdg-open ' + filepath
+    subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    return response + UIMessage('Application has opened in a seperate process!!')
