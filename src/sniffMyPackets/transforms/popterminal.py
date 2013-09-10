@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 import subprocess
-from common.entities import RebuiltFile
+from common.entities import RebuiltFile, GenericFile
 from canari.maltego.message import Field, UIMessage
 from canari.framework import configure #, superuser
 
@@ -22,8 +22,8 @@ __all__ = [
 @configure(
     label='L0 - Pop Open Terminal [SmP]',
     description='Opens a terminal to the folder location',
-    uuids=[ 'sniffMyPackets.v2.opentermina_2_folderlocation' ],
-    inputs=[ ( 'sniffMyPackets', RebuiltFile ) ],
+    uuids=[ 'sniffMyPackets.v2.opentermina_2_folderlocation', 'sniffMyPackets.v2.opentermina_2_generic' ],
+    inputs=[ ( 'sniffMyPackets', RebuiltFile ), ( 'sniffMyPackets', GenericFile ) ],
     debug=False
 )
 def dotransform(request, response):

@@ -68,5 +68,6 @@ def dotransform(request, response):
     w.close
     e = GenericFile(new_file)
     e.linklabel = 'JPG File'
+    e += Field('tmpfolder', tmpfolder, displayname='Folder Location')
     response += e
     return response
