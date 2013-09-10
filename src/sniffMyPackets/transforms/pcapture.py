@@ -5,7 +5,6 @@ logging.getLogger("scapy.runtime").setLevel(logging.ERROR)
 from scapy.all import *
 from time import time
 from common.entities import Interface, pcapFile
-#from canari.maltego.utils import debug, progress
 from canari.framework import configure #, superuser
 
 __author__ = 'catalyst256'
@@ -24,7 +23,7 @@ __all__ = [
 
 #@superuser
 @configure(
-    label='Capture Packets [pcap]',
+    label='L0 - Capture Packets [SmP]]',
     description='Sniffs packets on interface and saves to file',
     uuids=[ 'sniffMyPackets.v2.interface2pcap' ],
     inputs=[ ( 'sniffMyPackets', Interface ) ],

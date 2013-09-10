@@ -10,6 +10,9 @@ __maintainer__ = 'catalyst256'
 __email__ = 'catalyst256@gmail.com'
 __status__ = 'Development'
 __all__ = [
+    'openfile',
+    'conversations',
+    'pcap2pdf',
     'pcaprewrite',
     'preparepcap',
     'pcap2udpstreams',
