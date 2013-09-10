@@ -61,7 +61,7 @@ def dotransform(request, response):
 
     gr = 'digraph "conv" {\n'
     for s,d in conv:
-        gr += '\t "%s" -> "%s"\n' % (s,d)l
+        gr += '\t "%s" -> "%s"\n' % (s,d)
     gr += "}\n"
     w,r = os.popen2("dot -T%s -o%s" % (format, new_file))
     w.write(gr)

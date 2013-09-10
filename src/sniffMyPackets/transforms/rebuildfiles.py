@@ -32,8 +32,10 @@ __all__ = [
 )
 def dotransform(request, response):
     
-    tmpfolder = request.fields['sniffMyPackets.outputfld']
-        
+    folder = request.fields['sniffMyPackets.outputfld']
+    tmpfolder = folder + '/files'
+    if not os.path.exists(tmpfolder):
+        os.makedirs(tmpfolder) 
     list_files = []
     file_types = []
     objects = []
@@ -45,7 +47,6 @@ def dotransform(request, response):
     
     for i in list_files:
       if 'stream' not in i:
-        # list_files.remove(i)
         cmd = 'file ' + i
         x = os.popen(cmd).read()
         fhash = ''

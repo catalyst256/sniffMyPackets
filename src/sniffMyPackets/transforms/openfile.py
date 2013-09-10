@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 import os, subprocess
-from common.entities import GenericFile
+from common.entities import GenericFile, RebuiltFile
 from canari.maltego.message import UIMessage
 from canari.framework import configure #, superuser
 
@@ -20,16 +20,15 @@ __all__ = [
 
 #@superuser
 @configure(
-    label='L4 - Open file in application [SmP]',
+    label='L0 - Open file in application [SmP]',
     description='Tries to open the file in its default application',
-    uuids=[ 'sniffMyPackets.v2.Opensfile_in_application' ],
-    inputs=[ ( 'sniffMyPackets', GenericFile ) ],
-    debug=True
+    uuids=[ 'sniffMyPackets.v2.Opensfile_in_application', 'sniffMyPackets.v2.openany_file' ],
+    inputs=[ ( 'sniffMyPackets', GenericFile ), ( 'sniffMyPackets', RebuiltFile ) ],
+    debug=False
 )
 def dotransform(request, response):
 
     filepath = request.value
-    # print filepath
     cmd = 'xdg-open ' + filepath
     subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     return response + UIMessage('Application has opened in a seperate process!!')

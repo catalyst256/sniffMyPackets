@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import subprocess
 from common.entities import RebuiltFile
-from canari.maltego.message import Field
+from canari.maltego.message import Field, UIMessage
 from canari.framework import configure #, superuser
 
 __author__ = 'catalyst256'
@@ -29,6 +29,6 @@ __all__ = [
 def dotransform(request, response):
 
     folder = request.fields['tmpfolder']
-    cmd_variable = '--working-directory=' + folder
-    subprocess.Popen(['gnome-terminal',cmd_variable])
-    return response
+    cmd = '--working-directory=' + folder
+    subprocess.Popen(['gnome-terminal',cmd])
+    return response + UIMessage('Application has opened in a seperate process!!')

@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 
-import os
+import os, subprocess
 from common.entities import GeoMap
+from canari.maltego.message import UIMessage
 from canari.framework import configure #, superuser
 
 __author__ = 'catalyst256'
@@ -31,5 +32,5 @@ def dotransform(request, response):
     
     gmap = request.value
     cmd = 'xdg-open ' + gmap
-    os.system(cmd)
-    return response
+    subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    return response + UIMessage('Application has opened in a seperate process!!')
