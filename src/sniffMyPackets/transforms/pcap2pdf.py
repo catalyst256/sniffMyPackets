@@ -2,6 +2,7 @@
 
 from pyx import *
 import logging
+from time import time as clock
 logging.getLogger("scapy.runtime").setLevel(logging.ERROR)
 from scapy.all import *
 from common.entities import pcapFile, GenericFile
@@ -34,18 +35,21 @@ def dotransform(request, response):
     conf.verb = 0 # turn off the annoying....'s'
     pcap = request.value
     pkts = rdpcap(pcap)
-
+    new_file = ''
+    tstamp = int(clock())
+    
     try:
         tmpfolder = request.fields['sniffMyPackets.outputfld']
     except:
         return response + UIMessage('No output folder defined, run the L0 - Prepare pcap transform')
 
     if 'stream' not in pcap:
-        return response + UIMessage('You should only really run this on tcp/udp stream outputs')
+        new_file = tmpfolder + '/' + str(tstamp) + '.pdf'
     else:
         new_file = tmpfolder + '/' + request.value[42:-5] + '.pdf'
-        pkts.pdfdump(filename=new_file)
-        e = GenericFile(new_file)
-        e.linklabel = 'PDF File'
-        response += e
+
+    pkts.pdfdump(filename=new_file)
+    e = GenericFile(new_file)
+    e.linklabel = 'PDF File'
+    response += e
     return response
