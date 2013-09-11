@@ -23,7 +23,7 @@ __all__ = [
 
 #@superuser
 @configure(
-    label='L0 - Capture Packets [SmP]]',
+    label='L0 - Capture Packets [SmP]',
     description='Sniffs packets on interface and saves to file',
     uuids=[ 'sniffMyPackets.v2.interface2pcap' ],
     inputs=[ ( 'sniffMyPackets', Interface ) ],
@@ -32,8 +32,9 @@ __all__ = [
 def dotransform(request, response):
   
     interface = request.value
+    tmpfolder = request.fields['sniffMyPackets.tmpfolder']
     tstamp = int(time())
-    fileName = '/tmp/'+str(tstamp)+'.pcap' 
+    fileName = tmpfolder + '/' +str(tstamp)+'.pcap' 
     
     if 'sniffMyPackets.count' in request.fields:
       pktcount = int(request.fields['sniffMyPackets.count'])
