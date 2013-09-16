@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import os, hashlib, uuid
 from common.entities import pcapFile
+from canari.maltego.message import Label
 from canari.framework import configure #, superuser
 
 __author__ = 'catalyst256'
@@ -31,9 +32,12 @@ def dotransform(request, response):
     pcap = request.value
 
     # Create a temporary folder for this particular pcap file and return as part of the pcapFile entity
-    tmpfolder = '/tmp/'+str(uuid.uuid4())
-    if not os.path.exists(tmpfolder):
-        os.makedirs(tmpfolder) 
+    try:
+        tmpfolder = request.fields['sniffMyPackets.outputfld']
+    except:
+        tmpfolder = '/tmp/'+str(uuid.uuid4())
+        if not os.path.exists(tmpfolder):
+            os.makedirs(tmpfolder) 
 
     # Run the pcapFile through a convertor to ensure it's the correct libpcap format
     dumpfile = '/tmp/output.dmp'
@@ -43,17 +47,16 @@ def dotransform(request, response):
     os.system(cmd2)
 
     # Hash the pcapFile and return both the SHA1 hash and the MD5 hash
-    # sha1hash = ''
     fh = open(pcap, 'r')
     sha1hash = hashlib.sha1(fh.read()).hexdigest()
 
     fh = open(pcap, 'r')
     md5hash = hashlib.md5(fh.read()).hexdigest()
-    # md5hash = ''
 
     e = pcapFile(pcap)
     e.sha1hash = sha1hash
     e.md5hash = md5hash
     e.outputfld = tmpfolder
+    e.linklabel = 'Ready for use!! :)'
     response += e
     return response

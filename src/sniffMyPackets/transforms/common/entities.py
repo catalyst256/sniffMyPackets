@@ -118,3 +118,7 @@ class pcapInfo(SniffmypacketsEntity):
 
 class Service(SniffmypacketsEntity):
     pass
+
+@EntityField(name='sniffMyPackets.interface', propname='interface', displayname='Original Interface', type=EntityFieldType.String)
+class Folder(SniffmypacketsEntity):
+    pass

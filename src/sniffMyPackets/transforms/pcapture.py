@@ -4,7 +4,7 @@ import logging, hashlib
 logging.getLogger("scapy.runtime").setLevel(logging.ERROR)
 from scapy.all import *
 from time import time
-from common.entities import Interface, pcapFile
+from common.entities import pcapFile, Folder
 from canari.framework import configure #, superuser
 
 __author__ = 'catalyst256'
@@ -26,13 +26,13 @@ __all__ = [
     label='L0 - Capture Packets [SmP]',
     description='Sniffs packets on interface and saves to file',
     uuids=[ 'sniffMyPackets.v2.interface2pcap' ],
-    inputs=[ ( 'sniffMyPackets', Interface ) ],
+    inputs=[ ( 'sniffMyPackets', Folder ) ],
     debug=True
 )
 def dotransform(request, response):
   
-    interface = request.value
-    tmpfolder = request.fields['sniffMyPackets.tmpfolder']
+    interface = request.fields['sniffMyPackets.interface']
+    tmpfolder = request.value
     tstamp = int(time())
     fileName = tmpfolder + '/' +str(tstamp)+'.pcap' 
     
@@ -45,11 +45,7 @@ def dotransform(request, response):
     
     wrpcap(fileName, pkts)
     
-    sha1hash = ''
-    fh = open(fileName, 'rb')
-    sha1hash = hashlib.sha1(fh.read()).hexdigest()
-        
     e = pcapFile(fileName)
-    e.sha1hash = sha1hash
+    e.outputfld = tmpfolder
     response += e
     return response

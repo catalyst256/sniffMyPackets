@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import os, uuid
 from canari.maltego.message import UIMessage, Field
-from common.entities import Interface
+from common.entities import Interface, Folder
 from canari.framework import configure #, superuser
 
 __author__ = 'catalyst256'
@@ -33,8 +33,8 @@ def dotransform(request, response):
     if not os.path.exists(tmpfolder):
         os.makedirs(tmpfolder)
 
-    e = Interface(iface)
+    e = Folder(tmpfolder)
     e.linklabel = 'Folder Created!'
-    e += Field('tmpfolder', tmpfolder, displayname='Folder Location')
+    e.interface = iface
     response += e
     return response

@@ -36,22 +36,27 @@ def dotransform(request, response):
   dns_names = []
   tor_traffic = []
   ip_convo = []
+
+  try:
+  	tmpfolder = request.fields['sniffMyPackets.outputfld']
+  except:
+  	pass
   
   
   for x in pkts:
-	if x.haslayer(TCP) and x.haslayer(Raw):
-	  if 'www.' in x.getlayer(Raw).load:
-		for s in re.finditer('www.\w*.\w*', str(x)):
-		  dnsrec = s.group()
-		  srcip = x.getlayer(IP).src
-		  dstip = x.getlayer(IP).dst
-		  sport = x.getlayer(TCP).sport
-		  dport = x.getlayer(TCP).dport
-		  ipaddr = srcip, dstip, sport, dport, dnsrec
-		  if sport or dport not in ip_convo:
-			ip_convo.append(ipaddr)
-		  if dnsrec not in tor_traffic:
-			tor_traffic.append(dnsrec)
+  	if x.haslayer(TCP) and x.haslayer(Raw):
+  		if 'www.' in x.getlayer(Raw).load:
+  			for s in re.finditer('www.\w*.\w*', str(x)):
+  				dnsrec = s.group()
+  				srcip = x.getlayer(IP).src
+  				dstip = x.getlayer(IP).dst
+  				sport = x.getlayer(TCP).sport
+  				dport = x.getlayer(TCP).dport
+  				ipaddr = srcip, dstip, sport, dport, dnsrec
+  				if sport or dport not in ip_convo:
+  					ip_convo.append(ipaddr)
+					if dnsrec not in tor_traffic:
+						tor_traffic.append(dnsrec)
   
   for pkt in pkts:
 	if pkt.haslayer(DNS) and pkt.getlayer(DNS).qr == 0:
@@ -75,6 +80,8 @@ def dotransform(request, response):
 		  e.hostsport = sport
 		  e.hostdport = dport
 		  e += Field('pcapsrc', request.value, displayname='Original pcap File')
+		  e += Field('proto', 'tcp', displayname='Protocol')
+		  e += Field('tmpfolder', tmpfolder, displayname='Folder Location')
 		  e.linklabel = dnsrec
 		  e.linkcolor = 0xCC33FF
 		  response += e
