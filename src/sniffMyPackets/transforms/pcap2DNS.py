@@ -39,15 +39,13 @@ def dotransform(request, response):
 	pkt = rdpcap(pcap)
 	
 	for pkts in pkt:
-	  if pkts.haslayer(DNS) and pkts.getlayer(DNS).qr == 0:
-		drec = pkts.getlayer(DNS).qd.qname
-		srcip = pkts.getlayer(IP).src
-		x = drec, srcip
-		if x not in dns_results:
-		  dns_results.append(x)
-	for drec, srcip in dns_results:
+	  if pkts.haslayer(DNSQR):
+		drec = pkts.getlayer(DNSQR).qname
+		if drec not in dns_results:
+		  dns_results.append(drec)
+	
+	for drec in dns_results:
 		e = Domain(drec)
-		e += Field('hostsrc', srcip, displayname='Source IP')
 		e += Field('pcapsrc', pcap, displayname='Original pcap File')
 		response += e
 	return response  

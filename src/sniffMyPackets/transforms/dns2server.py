@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
-import logging
+import logging, os, sys, re
+from subprocess import Popen
 logging.getLogger("scapy.runtime").setLevel(logging.ERROR)
 from scapy.all import *
 from canari.maltego.entities import Domain, IPv4Address
@@ -35,23 +36,39 @@ def dotransform(request, response):
     
     domain = request.value
     pcap = request.fields['pcapsrc']
-    domains = []
+    ans_ip = []
+    rec_count = ''
 
     pkts = rdpcap(pcap)
 
     for p in pkts:
-        if p.haslayer(DNS) and p.haslayer(DNSRR):
-            src_name = p.getlayer(DNSQR).qname
-            src_ip = p.getlayer(DNSRR).rdata
-            dtype = p.getlayer(DNSRR).type
-            dnsrec = src_name, src_ip, dtype
-            domains.append(dnsrec)
+        if p.haslayer(DNS) and p.haslayer(DNSQR):
+            if domain == p[DNSQR].qname:
+                rec_count = p[DNS].ancount
 
-    for dname, dip, dtype in domains:
-        if dname == domain and dtype == 1:
-            e = IPv4Address(dip)
-            e += Field('pcapsrc', pcap, displayname='Original pcap File')
-            e.linklabel = 'Server'
-            response += e
+    # print rec_count
+
+    if rec_count > 1:
+        domain = domain.strip('.')
+        cmd = 'tshark -r ' + pcap + ' -R "dns.qry.name == ' + domain + ' && dns.flags.response == 1" -V'
+        # print cmd
+        a = os.popen(cmd).readlines()
+        for s in re.finditer('Addr: (\d*.\d*.\d*.\d*)', str(a)):
+            x = s.group(1)
+            if x not in ans_ip:
+                ans_ip.append(x)
+    else:
+        for p in pkts:
+            if p.haslayer(DNS) and p.haslayer(DNSRR):
+                ip = p[DNSRR].rdata
+                if ip not in ans_ip:
+                    ans_ip.append(ip)
+
+    
+    for dip in ans_ip:
+        e = IPv4Address(dip)
+        e += Field('pcapsrc', pcap, displayname='Original pcap File')
+        e.linklabel = 'Server'
+        response += e
 
     return response
