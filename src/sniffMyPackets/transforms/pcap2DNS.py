@@ -45,7 +45,7 @@ def dotransform(request, response):
 		  dns_results.append(drec)
 	
 	for drec in dns_results:
-		e = Domain(drec)
+		e = Domain(drec.strip('.'))
 		e += Field('pcapsrc', pcap, displayname='Original pcap File')
 		response += e
 	return response  
