@@ -30,7 +30,7 @@ __all__ = [
     description='Maps a DNS response made by client back to the server IP',
     uuids=[ 'sniffMyPackets.v2.dnsrequest_2_server' ],
     inputs=[ ( 'sniffMyPackets', Domain ) ],
-    debug=True
+    debug=False
 )
 def dotransform(request, response):
     

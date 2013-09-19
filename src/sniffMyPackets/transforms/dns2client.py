@@ -27,27 +27,26 @@ __all__ = [
     description='Maps a IPv4 Address from a DNS query',
     uuids=[ 'sniffMyPackets.v2.dnsrequest_2_client' ],
     inputs=[ ( 'sniffMyPackets', Domain ) ],
-    debug=True
+    debug=False
 )
 def dotransform(request, response):
 
     domain = request.value
+    domain = str(domain) + '.'
     pcap = request.fields['pcapsrc']
-    clientip = []
+    client_ip = []
 
     pkts = rdpcap(pcap)
-
     for p in pkts:
         if p.haslayer(DNS) and p.haslayer(DNSRR):
-            dname = p.getlayer(DNSRR).rrname
-            cip = p.getlayer(IP).dst
-            ddata = dname, cip
-            clientip.append(ddata)
-
-    for dname, cip in clientip:
-        if dname == domain:
-            e = IPv4Address(cip)
-            e += Field('pcapsrc', pcap, displayname='Original pcap File')
-            e.linklabel = 'Client'
-            response += e
-        return response
+            if domain == p[DNSRR].rrname:
+                c_ip = p[IP].dst
+                if c_ip not in client_ip:
+                    client_ip.append(c_ip)
+    
+    for x in client_ip:
+        e = IPv4Address(x)
+        e += Field('pcapsrc', pcap, displayname='Original pcap File')
+        e.linklabel = 'Client'
+        response += e
+    return response
