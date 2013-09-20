@@ -31,7 +31,9 @@ __all__ = [
     'MacAddress',
     'SMTPEmail',
     'pcapInfo',
-    'Service'
+    'Service',
+    'Folder',
+    'ZipFile'
 ]
 
 class SniffmypacketsEntity(Entity):
@@ -121,4 +123,9 @@ class Service(SniffmypacketsEntity):
 
 @EntityField(name='sniffMyPackets.interface', propname='interface', displayname='Original Interface', type=EntityFieldType.String)
 class Folder(SniffmypacketsEntity):
+    pass
+
+@EntityField(name='sniffMyPackets.zipmd5hash', propname='zipmd5hash', displayname='MD5 Hash', type=EntityFieldType.String)
+@EntityField(name='sniffMyPackets.zipsha1hash', propname='zipsha1hash', displayname='SHA1 Hash', type=EntityFieldType.String)
+class ZipFile(SniffmypacketsEntity):
     pass
