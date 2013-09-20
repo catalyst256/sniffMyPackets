@@ -27,7 +27,7 @@ __all__ = [
     description='Zip contents of a folder based on folder',
     uuids=[ 'sniffMyPackets.v2.zip_from_pcap', 'sniffMyPackets.v2.zip_from_folder' ],
     inputs=[ ( 'sniffMyPackets', pcapFile ), ( 'sniffMyPackets', Folder ) ],
-    debug=True
+    debug=False
 )
 def dotransform(request, response):
     
