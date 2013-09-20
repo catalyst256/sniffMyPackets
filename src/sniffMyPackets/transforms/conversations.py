@@ -29,7 +29,7 @@ __all__ = [
     description='Creates a jpg of conversations in a pcap file',
     uuids=[ 'sniffMyPackets.v2.conversations' ],
     inputs=[ ( 'sniffMyPackets', pcapFile ) ],
-    debug=False
+    debug=True
 )
 def dotransform(request, response):
 
@@ -66,6 +66,7 @@ def dotransform(request, response):
     w,r = os.popen2("dot -T%s -o%s" % (format, new_file))
     w.write(gr)
     w.close
+    
     e = GenericFile(new_file)
     e.linklabel = 'JPG File'
     e += Field('tmpfolder', tmpfolder, displayname='Folder Location')
