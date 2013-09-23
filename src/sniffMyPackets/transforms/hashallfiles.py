@@ -72,6 +72,6 @@ def dotransform(request, response):
 
     e = GenericFile(hash_file)
     e.linklabel = 'Hash File'
-    e += Field('outputfld', folder, displayname='Folder Location')
+    e += Field('sniffMyPackets.outputfld', folder, displayname='Folder Location')
     response += e
     return response

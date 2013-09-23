@@ -28,7 +28,7 @@ __all__ = [
 )
 def dotransform(request, response):
 
-    folder = request.fields['tmpfolder']
-    cmd = '--working-directory=' + folder
+    folder = request.fields['sniffMyPackets.outputfld']
+    cmd = '--disable-factory --working-directory= ' + folder
     subprocess.Popen(['gnome-terminal',cmd])
     return response + UIMessage('Application has opened in a seperate process!!')
