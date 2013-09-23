@@ -5,7 +5,7 @@ logging.getLogger("scapy.runtime").setLevel(logging.ERROR)
 from scapy.all import *
 from common.entities import pcapFile, Host
 from canari.maltego.message import Label, Field
-#from canari.maltego.entities import IPv4Address
+from canari.maltego.entities import Domain
 from canari.framework import configure #, superuser
 
 __author__ = 'catalyst256'
@@ -25,7 +25,7 @@ __all__ = [
 #@superuser
 @configure(
     label='L4 - Find Tor Traffic [SmP]',
-    description='Search a pcap file and look for suspected tor traffic',
+    description='Search a pcap file and look for SSL traffic',
     uuids=[ 'sniffMyPackets.v2.pcap2tor_traffic' ],
     inputs=[ ( 'sniffMyPackets', pcapFile ) ],
     debug=True
@@ -81,7 +81,7 @@ def dotransform(request, response):
 		  e.hostdport = dport
 		  e += Field('pcapsrc', request.value, displayname='Original pcap File')
 		  e += Field('proto', 'tcp', displayname='Protocol')
-		  e += Field('tmpfolder', tmpfolder, displayname='Folder Location')
+		  e += Field('sniffMyPackets.outputfld', tmpfolder, displayname='Folder Location')
 		  e.linklabel = dnsrec
 		  e.linkcolor = 0xCC33FF
 		  response += e

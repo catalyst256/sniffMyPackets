@@ -38,7 +38,8 @@ def dotransform(request, response):
     srcip = request.fields['sniffMyPackets.hostsrc']
     sport = request.fields['sniffMyPackets.hostsport']
     dport = request.fields['sniffMyPackets.hostdport']
-    filename = '/tmp/' + str(srcip) + '-' + str(sport) + '.pcap'
+    folder = request.fields['sniffMyPackets.outputfld']
+    filename = folder + '/' + str(request.value) + '-' + str(srcip) + '.pcap'
    
     # Filter the traffic based on the entity values and save the pcap file with new name
     sharkit = 'tcpdump -r ' + pcap + ' host ' + srcip + ' and port ' + sport + ' -w ' + filename
