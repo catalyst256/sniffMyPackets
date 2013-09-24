@@ -44,11 +44,19 @@ def dotransform(request, response):
 
     # Find all the UDP streams within the pcap file
     for p in pkts:
-        if p.haslayer(UDP):
-            s_ip = p.getlayer(IP).src
-            d_ip = p.getlayer(IP).dst
-            s_port = p.getlayer(UDP).sport
-            d_port = p.getlayer(UDP).dport
+        s_ip = ''
+        d_ip = ''
+        s_port = ''
+        d_port = ''
+        if p.haslayer(IP) and p.haslayer(UDP):
+            if p[IP].src is not None:
+                s_ip = p[IP].src
+            if p[IP].dst is not None:
+                d_ip = p[IP].dst
+            if p[UDP].sport is not None:
+                s_port = p[UDP].sport
+            if p[UDP].dport is not None:
+                d_port = p[UDP].dport
             convo = s_ip, s_port, d_ip, d_port
             duplicate = d_ip, d_port, s_ip, s_port
             if convo not in convos:
@@ -57,6 +65,8 @@ def dotransform(request, response):
                 convos.remove(duplicate)
             else:
                 pass
+        else:
+            pass
 
     # Create the individual pcap files using tshark
 

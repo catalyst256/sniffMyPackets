@@ -28,6 +28,6 @@ __all__ = [
 )
 def dotransform(request, response):
 
-    folder = request.fields['tmpfolder']
+    folder = request.fields['sniffMyPackets.outputfld']
     subprocess.Popen(['xdg-open', folder])
     return response
