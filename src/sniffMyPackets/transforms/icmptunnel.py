@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 
-import logging, re
+import logging
 logging.getLogger("scapy.runtime").setLevel(logging.ERROR)
 from scapy.all import *
 from common.entities import pcapFile, WarningAlert
-from canari.maltego.message import Label
+from canari.maltego.message import Label, Field, UIMessage
 from canari.framework import configure #, superuser
 
 __author__ = 'catalyst256'
@@ -23,7 +23,7 @@ __all__ = [
 
 #@superuser
 @configure(
-    label='L4 - Look for ICMP Tunnels [SmP]',
+    label='L4 - Look for Suspicious ICMP Payloads [SmP]',
     description='Looks through pcap and tries to identify ICMP tunnels',
     uuids=[ 'sniffMyPackets.v2.pcap_2_icmptunnel' ],
     inputs=[ ( 'sniffMyPackets', pcapFile ) ],
@@ -33,34 +33,41 @@ def dotransform(request, response):
 
     pcap = request.value
     pkts = rdpcap(pcap)
+    folder = request.fields['sniffMyPackets.outputfld']
+    output_file = folder + '/suspicious-icmp.pcap'
 
-    icmp_req = []
-    icmp_rep = []
+    icmp_packets = []
+    # Common ICMP payload types for ping
     icmp_payload = ['0123567', 'abcdef']
     suspicious = 0
 
-
+    # Look for ICMP request and reply packets and store in new list
     for p in pkts:
         if p.haslayer(IP) and p.haslayer(ICMP):
             if p[ICMP].type == 8:
-                icmp_req.append(p)
+                icmp_packets.append(p)
             if p[ICMP].type == 0:
-                icmp_rep.append(p)
+                icmp_packets.append(p)
 
-        if p.haslayer(Raw):
-            load = str(p[Raw].load)
-            for x in icmp_payload:
-                if x in load:
+    # Look through ICMP packets stored in list and check the payload against common ping payloads
+    for x in icmp_packets:
+        if x.haslayer(Raw):
+            for s in icmp_payload:
+                load = str(x[Raw].load)
+                if s not in load:
                     suspicious = 1
 
-    a = len(icmp_req)
-    b = len(icmp_rep)
+    # Write files out to a new pcap
+    wrpcap(output_file, icmp_packets)
 
-    print suspicious
-    # print icmp_payload
-
-    if a > b and suspicious == 1:
-        e = WarningAlert('ICMP Tunnel')
+    # If there is something dodgy write it out to Maltego otherwise return message to UI
+    if suspicious == 1:
+        e = WarningAlert('Suspicious ICMP Payload')
+        e.linklabel = 'Output ' + output_file
+        e += Field('sniffMyPackets.outputfld', folder, displayname='Folder Location')
+        e += Field('dumpfile', output_file, displayname='Output File', matchingrule='loose')
+        e.linkcolor = 0xFF0000
         response += e
-
-    return response
+        return response
+    else:
+        return response + UIMessage('Nothing dodgy here')
