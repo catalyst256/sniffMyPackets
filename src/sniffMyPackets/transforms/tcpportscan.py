@@ -34,7 +34,7 @@ __all__ = [
 def dotransform(request, response):
   
   pkts = rdpcap(request.value)
-  tcpflags = {'SYN': 0x002, 'FIN': 0x001, 'XMAS': 0x029, 'ACK': 0x010, 'NULL': 0x000}
+  tcpflags = {'SYN': 02, 'FIN': 0x001, 'XMAS': 0x029, 'ACK': 0x010, 'NULL': 0x000}
   senders = []
   talkers = []
  
@@ -58,8 +58,8 @@ def dotransform(request, response):
         src = y[0]
         counter += y.count(y[1])
         flag = y[2]
-    e = WarningAlert(str(flag) + ' scan from: ' + str(src))
-    e.linklabel = '# of connections: ' + str(counter)
-    e.linkcolor = 0xFF0000
-    response += e
-  return response
+        e = WarningAlert(str(flag) + ' scan from: ' + str(src))
+        e.linklabel = '# of connections: ' + str(counter)
+        e.linkcolor = 0xFF0000
+        response += e
+      return response

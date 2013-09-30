@@ -70,7 +70,7 @@ def dotransform(request, response):
       e.ftype = ftype
       e.fhash = fhash
       e += Field('pcapsrc', request.value, displayname='Original pcap File', matchingrule='loose')
-      e += Field('tmpfolder', tmpfolder, displayname='Folder Location')
+      e += Field('sniffMyPackets.outputfld', folder, displayname='Folder Location')
       e.linklabel = ftype
       e.linkcolor = 0xFF9900
       response += e

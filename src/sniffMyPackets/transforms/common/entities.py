@@ -129,3 +129,6 @@ class Folder(SniffmypacketsEntity):
 @EntityField(name='sniffMyPackets.zipsha1hash', propname='zipsha1hash', displayname='SHA1 Hash', type=EntityFieldType.String)
 class ZipFile(SniffmypacketsEntity):
     pass
+
+class DecodeAs(SniffmypacketsEntity):
+    pass

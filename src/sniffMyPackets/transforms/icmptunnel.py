@@ -27,7 +27,7 @@ __all__ = [
     description='Looks through pcap and tries to identify ICMP tunnels',
     uuids=[ 'sniffMyPackets.v2.pcap_2_icmptunnel' ],
     inputs=[ ( 'sniffMyPackets', pcapFile ) ],
-    debug=True
+    debug=False
 )
 def dotransform(request, response):
 
