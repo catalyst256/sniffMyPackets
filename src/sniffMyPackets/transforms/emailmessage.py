@@ -34,7 +34,7 @@ def dotransform(request, response):
   filelist = []
   msgfile = request.value
   lookFor = 'DATA'
-  tmpfolder = request.fields['tmpfolder'] 
+  tmpfolder = request.fields['sniffMyPackets.outputfld']
   
   # split the original file into two parts, message and header and save as lists
   with open(msgfile, mode='r') as msgfile:

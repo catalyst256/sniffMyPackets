@@ -36,7 +36,7 @@ def dotransform(request, response):
   emailaddr = []
   msgfile = request.value
   lookFor = ['To', 'From']
-  tmpfolder = request.fields['tmpfolder']
+  tmpfolder = request.fields['sniffMyPackets.outputfld']
   
   with open(msgfile, mode='r') as msgfile:
     reader = msgfile.read()
