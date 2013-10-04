@@ -16,7 +16,8 @@ setup(
     install_requires=[
         'canari>=0.8',
         'pygeoip>=0.2.6',
-	'python-graph-core>=1.8.2'
+	'python-graph-core>=1.8.2',
+	'pyx'
     ],
     dependency_links=[
         # custom links for the install_requires
