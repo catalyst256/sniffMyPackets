@@ -36,10 +36,9 @@ def dotransform(request, response):
   ack = ''
   cfile = []
   start = str('%PDF-')
-  end = str('%%EOF')
+  end = ['%%EOF','.%%EOF', '.%%EOF.', '..%%EOF..']
   tmpfile = '/tmp/tmp.pdf'
-  tmpfolder = '/tmp/' + str(uuid.uuid4())
-  if not os.path.exists(tmpfolder): os.makedirs(tmpfolder)
+  tmpfolder = request.fields['sniffMyPackets.outputfld']
 
   pdffile = tmpfolder + '/output.pdf'
 
@@ -69,7 +68,7 @@ def dotransform(request, response):
   secondcut = ''
   final_cut = ''
 
-  f = open(tmpfile, 'r').readlines()
+  f = open(tmpfile, 'rb').readlines()
 
   total_lines = len(f)
 
@@ -77,9 +76,11 @@ def dotransform(request, response):
     if start in line:
       firstcut = int(x)
 
-  for y, line in enumerate(f):	
-    if end in line:
-      secondcut = int(y) + 1
+  for y, line in enumerate(f):
+    for t in end:
+      if t in line:
+        # print t, y
+        secondcut = int(y)# + 1
 
   f = f[firstcut:]
 
@@ -95,7 +96,7 @@ def dotransform(request, response):
   e = RebuiltFile(pdffile)
   e.linklabel = 'PDF File'
   e += Field('pcapsrc', request.value, displayname='Original pcap File', matchingrule='loose')
-  e += Field('tmpfolder', tmpfolder, displayname='Folder Location')
+  e += Field('sniffMyPackets.outputfld', tmpfolder, displayname='Folder Location')
   e.linkcolor = 0xFF9900
   response += e
   return response
