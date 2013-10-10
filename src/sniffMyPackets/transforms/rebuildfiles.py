@@ -4,7 +4,7 @@ import logging, os, glob, uuid, re, hashlib
 logging.getLogger("scapy.runtime").setLevel(logging.ERROR)
 import scapy.all as scapy
 from common.dissectors.dissector import *
-from canari.maltego.message import Field, Label
+from canari.maltego.message import Field, Label, UIMessage
 from common.entities import pcapFile, RebuiltFile
 from canari.framework import configure #, superuser
 
@@ -32,8 +32,13 @@ __all__ = [
 )
 def dotransform(request, response):
     
-    folder = request.fields['sniffMyPackets.outputfld']
+    try:
+        folder = request.fields['sniffMyPackets.outputfld']
+    except:
+        return response + UIMessage('No output folder defined, run the L0 - Prepare pcap transform')
+    
     tmpfolder = folder + '/files'
+
     if not os.path.exists(tmpfolder):
         os.makedirs(tmpfolder) 
     list_files = []
