@@ -52,6 +52,7 @@ def dotransform(request, response):
             pass
         else:
             e = BuiltWithTechnology(s_os)
-            e += Field('source_ip', s_ip, displayname='Source IP', matchingrule='loose')
+            e += Field('source_ip', s_ip, displayname='Source IP', matchingrule='strict')
+            e += Field('pcapsrc', pcap, displayname='Original pcap File')
             response += e
     return response

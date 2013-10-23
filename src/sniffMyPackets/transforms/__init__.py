@@ -10,6 +10,7 @@ __maintainer__ = 'catalyst256'
 __email__ = 'catalyst256@gmail.com'
 __status__ = 'Development'
 __all__ = [
+    'ip2macaddr',
     'opsys2ip',
     'pcap2opsys',
     'opensharklau',

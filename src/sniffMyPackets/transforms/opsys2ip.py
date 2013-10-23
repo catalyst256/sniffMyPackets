@@ -29,9 +29,11 @@ def dotransform(request, response):
 
     try:
         s_ip = request.fields['source_ip']
+        pcap = request.fields['pcapsrc']
     except:
         return response + UIMessage('Sorry this isnt a SmP OS Type')
 
     e = IPv4Address(s_ip)
+    e += Field('pcapsrc', pcap, displayname='Original pcap File')
     response += e
     return response
