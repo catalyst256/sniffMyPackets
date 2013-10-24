@@ -41,7 +41,7 @@ def dotransform(request, response):
         s_os = ''
         for s in re.finditer('(\d{1,3}.\d{1,3}.\d{1,3}.\d{1,3})', x):
             s_ip = s.group(1)
-        for s in re.finditer(' - (\S*.\S*)', x):
+        for s in re.finditer(' - (\S*.\S*)\[', x):
             s_os = s.group(1)
         rec = s_ip, s_os
         if rec not in p0f_list:
