@@ -33,16 +33,16 @@ def dotransform(request, response):
     
     p0f = config['locations/p0f']
     pcap = request.value
-    cmd = p0f + ' -s ' + pcap
-    p0f_list = []    
+    cmd = p0f + ' -s ' + pcap + ' -NUql'
+    p0f_list = []
+    src_ip = []  
     p = os.popen(cmd).readlines()
     for x in p:
         s_ip = ''
         s_os = ''
-        for s in re.finditer('(\d{1,3}.\d{1,3}.\d{1,3}.\d{1,3})', x):
+        for s in re.finditer('(\d{1,3}.\d{1,3}.\d{1,3}.\d{1,3}):\d{1,5} - (\S*.\S*)', x):
             s_ip = s.group(1)
-        for s in re.finditer(' - (\S*.\S*)\[', x):
-            s_os = s.group(1)
+            s_os = s.group(2)
         rec = s_ip, s_os
         if rec not in p0f_list:
             p0f_list.append(rec)
