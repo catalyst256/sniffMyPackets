@@ -33,7 +33,8 @@ __all__ = [
     'pcapInfo',
     'Service',
     'Folder',
-    'ZipFile'
+    'ZipFile',
+    'SnortFile'
 ]
 
 class SniffmypacketsEntity(Entity):
@@ -131,4 +132,7 @@ class ZipFile(SniffmypacketsEntity):
     pass
 
 class DecodeAs(SniffmypacketsEntity):
+    pass
+
+class SnortFile(SniffmypacketsEntity):
     pass

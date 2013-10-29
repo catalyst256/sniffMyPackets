@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 import os, glob, subprocess
-from common.entities import pcapFile, GenericFile
+from common.entities import pcapFile, SnortFile
 from canari.maltego.message import Field, Label, UIMessage
 from canari.config import config
 from canari.framework import configure #, superuser
@@ -47,8 +47,9 @@ def dotransform(request, response):
     file_list = glob.glob(snort_folder+'/*')
     
     for x in file_list:
-        e = GenericFile(x)
+        e = SnortFile(x)
         e += Field('pcapsrc', request.value, displayname='Original pcap File', matchingrule='loose')
         e += Field('sniffMyPackets.outputfld', folder, displayname='Folder Location')
+        e += Field('disclaimer', 'Snort is a registered trademark of Sourcefire, Inc', displayname='Disclaimer')
         response += e
     return response
