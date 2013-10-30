@@ -1,11 +1,9 @@
 # README - Sniffmypackets
 
-This is a canari package for pcap file analysis.
+This is a canari package for pcap file analysis within Maltego.
 
-Uses scapy a lot for the packet sniffing and dissection. I've only tested this on BackTrack R3/Kali.
+Goto:
 
-Go read the wiki for more information:
-
-https://github.com/catalyst256/sniffMyPackets/wiki
+http://catalyst256.github.io/sniffMyPackets/ for more information
 
 Enjoy!!
