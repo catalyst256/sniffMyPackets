@@ -48,10 +48,11 @@
 
 <p>These instructions are to install sniffMyPackets onto your machine. In order for the transforms to work you need to have the following 2 components installed:</p>
 
-<p><strong>1. Maltego</strong>
-<strong>2. Canari Framework</strong></p>
-
 <p><strong>1. Maltego</strong></p>
+
+<p><strong>2. Canari Framework</strong></p>
+
+<hr><p><strong>1. Maltego</strong></p>
 
 <p>Download Maltego from their website or if you are using BackTrack/Kali its installed by default.</p>
 
@@ -59,7 +60,7 @@
 <li>Run Maltego so it creates the required folders and directory structure</li>
 <li>Go through the default configuration for the first run (that wizard thing)</li>
 <li>Close Maltego</li>
-</ul><p><strong>2. Canari Framework</strong></p>
+</ul><hr><p><strong>2. Canari Framework</strong></p>
 
 <p>The recommended method is to get Canari from the github repo here:</p>
 
@@ -93,7 +94,10 @@ cd sniffMyPackets/src
 canari create-profile sniffMyPackets -w [working directory] 
 </code></pre>
 
-<p><em><strong>so in my case -w /root/localTransforms/sniffMyPackets/src</strong></em></p>
+<p>so in my case:</p>
+
+<pre><code>-w /root/localTransforms/sniffMyPackets/src
+</code></pre>
 
 <p>This will create a <strong>sniffMyPackets.mtz</strong> file</p>
 
