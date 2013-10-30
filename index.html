@@ -42,6 +42,70 @@
 <a name="welcome-to-sniffmypackets" class="anchor" href="#welcome-to-sniffmypackets"><span class="octicon octicon-link"></span></a>Welcome to sniffMyPackets.</h3>
 
 <p>sniffMyPackets is a set of Maltego transforms using the Canari Framework that allow for the rapid analysis of pcap files.</p>
+
+<h1>
+<a name="installation-guide" class="anchor" href="#installation-guide"><span class="octicon octicon-link"></span></a>Installation Guide:</h1>
+
+<p>These instructions are to install sniffMyPackets onto your machine. In order for the transforms to work you need to have the following 2 components installed:</p>
+
+<p><strong>1. Maltego</strong>
+<strong>2. Canari Framework</strong></p>
+
+<p><strong>1. Maltego</strong></p>
+
+<p>Download Maltego from their website or if you are using BackTrack/Kali its installed by default.</p>
+
+<ul>
+<li>Run Maltego so it creates the required folders and directory structure</li>
+<li>Go through the default configuration for the first run (that wizard thing)</li>
+<li>Close Maltego</li>
+</ul><p><strong>2. Canari Framework</strong></p>
+
+<p>The recommended method is to get Canari from the github repo here:</p>
+
+<p><a href="https://github.com/allfro/canari.git">Canari Framework</a></p>
+
+<p>From the directory you wish to have Canari installed run the following commands:</p>
+
+<pre><code>git clone https://github.com/allfro/canari.git
+cd canari
+python setup.py install
+</code></pre>
+
+<p>This will install Canari and download the required dependencies.</p>
+
+<p>Once installed you can test by running: </p>
+
+<pre><code>canari version
+</code></pre>
+
+<p>You should see something like this:</p>
+
+<pre><code>Your running *Canari Framework v1.0*
+</code></pre>
+
+<p>You are now ready to install sniffMyPackets...</p>
+
+<p>From your working directory clone the github repo using:</p>
+
+<pre><code>git clone https://github.com/catalyst256/sniffMyPackets.git
+cd sniffMyPackets/src
+canari create-profile sniffMyPackets -w [working directory] 
+</code></pre>
+
+<p><em><strong>so in my case -w /root/localTransforms/sniffMyPackets/src</strong></em></p>
+
+<p>This will create a <strong>sniffMyPackets.mtz</strong> file</p>
+
+<p>Open Maltego, click on the Maltego Icon in the toolbar, then Import - Import Configuration</p>
+
+<p>Follow the wizard to install the transforms, entities and machine into Maltego</p>
+
+<p>All the sniffMyPackets transforms and entities are under the sniffMyPackets heading</p>
+
+<p>You can find some YouTube videos showing the features <a href="http://www.youtube.com/playlist?list=PLOBHdguRGCqxMfmtb6VyFPboS1ExqkXk-">HERE</a></p>
+
+<p>Enjoy!! :)</p>
       </section>
 
     </div>
