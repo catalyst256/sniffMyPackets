@@ -29,6 +29,8 @@ __all__ = [
 def dotransform(request, response):
     
     iface = request.value
+    pkt_count = request.fields['sniffMyPackets.count']
+
     tmpfolder = '/tmp/'+str(uuid.uuid4())
     if not os.path.exists(tmpfolder):
         os.makedirs(tmpfolder)
@@ -36,5 +38,6 @@ def dotransform(request, response):
     e = Folder(tmpfolder)
     e.linklabel = 'Folder Created!'
     e.interface = iface
+    e += Field('sniffMyPackets.count', pkt_count, displayname='Folder Location')
     response += e
     return response
