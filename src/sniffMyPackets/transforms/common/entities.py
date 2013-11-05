@@ -34,7 +34,8 @@ __all__ = [
     'Service',
     'Folder',
     'ZipFile',
-    'SnortFile'
+    'SnortFile',
+    'MobilePhone'
 ]
 
 class SniffmypacketsEntity(Entity):
@@ -135,4 +136,7 @@ class DecodeAs(SniffmypacketsEntity):
     pass
 
 class SnortFile(SniffmypacketsEntity):
+    pass
+
+class MobilePhone(SniffmypacketsEntity):
     pass

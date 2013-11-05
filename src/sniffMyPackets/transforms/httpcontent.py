@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 
-import re
-import logging
+import logging, re
 logging.getLogger("scapy.runtime").setLevel(logging.ERROR)
 from scapy.all import *
 from common.entities import pcapFile, FileDump
