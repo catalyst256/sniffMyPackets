@@ -33,22 +33,31 @@ __all__ = [
 def dotransform(request, response):
     
     s_ip = request.value
+    layers = ['IP', 'ARP']
     try:
         pcap = request.fields['pcapsrc']
     except:
         return response + UIMessage('Sorry this isnt a SmP IP Address')
     
     mac_list = []
-
     pkts = rdpcap(pcap)
+
     for x in pkts:
-        if x.haslayer(IP) and s_ip == x[IP].src:
-            mac = x[Ether].src
-            if mac not in mac_list:
-                mac_list.append(mac)
+        for s in layers:
+            if x.haslayer(s) and s == 'ARP':
+                if x[ARP].psrc == s_ip:
+                    mac = x[Ether].src
+                    if mac not in mac_list:
+                        mac_list.append(mac)
+            if x.haslayer(s) and s == 'IP':
+                if x[IP].src == s_ip:
+                    mac = x[Ether].src
+                    if mac not in mac_list:
+                        mac_list.append(mac)
 
     for x in mac_list:
         e = MacAddress(x)
         e += Field('pcapsrc', pcap, displayname='Original pcap File')
+        e += Field('ipaddrsrc', s_ip, displayname='Original IP Address')
         response += e
     return response

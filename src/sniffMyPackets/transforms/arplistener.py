@@ -38,16 +38,16 @@ def dotransform(request, response):
   
   for p in pkts:
     if p.haslayer(ARP):
-      src = p.getlayer(ARP).psrc
-      dst = p.getlayer(ARP).pdst
-      if src not in hosts:
-        hosts.append(src)
-      if dst not in hosts:
-        hosts.append(dst)
-  
-  for x in hosts:
-    e = IPv4Address(x)
+      e_src = p[ARP].psrc
+      i_src = p[Ether].src
+      host = i_src, e_src
+      if host not in hosts:
+        hosts.append(host)
+
+  for mac, ip in hosts:
+    e = IPv4Address(ip)
     e.linklabel = 'ARP'
     e += Field('pcapsrc', request.value, displayname='Original pcap File')
+    e += Field('macaddrsrc', mac, displayname='MAC Address')
     response += e
   return response
