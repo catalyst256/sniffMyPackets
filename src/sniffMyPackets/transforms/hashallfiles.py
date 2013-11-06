@@ -31,8 +31,12 @@ __all__ = [
 )
 def dotransform(request, response):
     
+    folder = ''
     try:
-        folder = request.fields['sniffMyPackets.outputfld']
+        if 'sniffMyPackets.outputfld' in request.fields:
+            folder = request.fields['sniffMyPackets.outputfld']
+        else:
+            folder = request.value
     except:
         return response + UIMessage('No folder created or specified')
 
