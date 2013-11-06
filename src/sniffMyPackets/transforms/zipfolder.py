@@ -31,12 +31,16 @@ __all__ = [
 )
 def dotransform(request, response):
     
+    folder = ''
     try:
-        folder = request.fields['sniffMyPackets.outputfld']
+        if 'sniffMyPackets.outputfld' in request.fields:
+            folder = request.fields['sniffMyPackets.outputfld']
+        else:
+            folder = request.value
     except:
         return response + UIMessage('No folder created or specified')
 
-    msg = 'Enter output folder'
+    msg = 'Enter output filename (including path)'
     title = 'L0 - Zip pcap folder [SmP]'
     fieldNames = ["File Name"]
     fieldValues = []
@@ -53,10 +57,10 @@ def dotransform(request, response):
     zipdir(folder, myzip)
     myzip.close()
 
-    fh = open(save_file, 'r')
+    fh = open(save_file, 'rb')
     sha1hash = hashlib.sha1(fh.read()).hexdigest()
 
-    fh = open(save_file, 'r')
+    fh = open(save_file, 'rb')
     md5hash = hashlib.md5(fh.read()).hexdigest()
 
     e = ZipFile(save_file)
