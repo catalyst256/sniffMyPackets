@@ -140,3 +140,6 @@ class SnortFile(SniffmypacketsEntity):
 
 class MobilePhone(SniffmypacketsEntity):
     pass
+
+class Vendor(SniffmypacketsEntity):
+    pass
