@@ -1,5 +1,7 @@
 #!/usr/bin/env python
-import csv, logging
+import csv
+import sqlite3 as lite
+import logging
 logging.getLogger("scapy.runtime").setLevel(logging.ERROR)
 from scapy.all import *
 from common.entities import Host, Service
@@ -31,25 +33,29 @@ __all__ = [
 )
 def dotransform(request, response):
     
-    services = csv.reader(open('sniffMyPackets/transforms/common/services.csv', 'r'))
+    svc_db = 'sniffMyPackets/resources/databases/utilities.db'
     pcap = request.fields['pcapsrc']
     dport = request.fields['sniffMyPackets.hostdport']
     proto = request.fields['proto']
 
-    s_name = ''
+    service = []
 
-    for row in services:
-        if dport == row[1] and proto == row[2]:
-            s_name = row[0]
-            if s_name == ' ':
-                s_name = 'Unknown'
+    con = lite.connect(svc_db)
+    with con:
+        cur = con.cursor()
+        cur.execute('SELECT * FROM services WHERE port like ' + "\"" + dport + "\"" + ' AND proto like ' + "\"" + proto + "\"")
+        while True:
+            row = cur.fetchone()
+            if row == None:
+                break
+            if row[0] not in service:
+                service.append(row[0])
 
-
-    e = Service(s_name)
-    e.linklabel = proto + ':' + dport
-    e.linkcolor = 0x0B615E
-    e += Field('pcapsrc', pcap, displayname='Original pcap File')
-    e += Field('id_dport', dport, displayname='Original Destination port')
-    response += e
-
+    for s in service:
+        e = Service(s)
+        e.linklabel = proto + ':' + dport
+        e.linkcolor = 0x0B615E
+        e += Field('pcapsrc', pcap, displayname='Original pcap File')
+        e += Field('id_dport', dport, displayname='Original Destination port')
+        response += e
     return response
